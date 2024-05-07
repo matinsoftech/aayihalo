@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .background,
                               title: Center(
                                   child: Container(
-                                padding: EdgeInsets.only(top: 10),
+                                padding: const EdgeInsets.only(top: 10),
                                 width: Dimensions.webMaxWidth,
                                 color: Theme.of(context).colorScheme.background,
                                 child: Row(children: [
@@ -326,6 +326,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 bottom: 4.0,
                                               ),
                                               child: Row(children: [
+                                                const Icon(
+                                                  Icons.location_on,
+                                                  color: Colors.green,
+                                                  size: 18,
+                                                ),
                                                 Text(
                                                   locationController
                                                       .getUserAddress()!
@@ -474,15 +479,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          isGrocery
-                                              ? const GroceryHomeScreen()
-                                              : isPharmacy
-                                                  ? const PharmacyHomeScreen()
-                                                  : isFood
-                                                      ? const FoodHomeScreen()
-                                                      : isShop
-                                                          ? const ShopHomeScreen()
-                                                          : const SizedBox(),
+                                          // isGrocery
+                                          //     ?
+                                          const GroceryHomeScreen()
+                                          // : isPharmacy
+                                          //     ? const PharmacyHomeScreen()
+                                          //     : isFood
+                                          //         ? const FoodHomeScreen()
+                                          //         : isShop
+                                          //             ? const ShopHomeScreen()
+                                          //             : const SizedBox(),
                                           // Padding(
                                           //   padding: EdgeInsets.fromLTRB(
                                           //       Get.find<LocalizationController>()
