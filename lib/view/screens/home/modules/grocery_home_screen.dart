@@ -17,7 +17,6 @@ import 'package:sixam_mart/view/screens/home/widget/grocery/special_offer_view.d
 import 'package:sixam_mart/view/screens/home/widget/grocery/promotional_banner_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/visit_again_view.dart';
 
-
 class GroceryHomeScreen extends StatelessWidget {
   const GroceryHomeScreen({Key? key}) : super(key: key);
 
@@ -25,14 +24,12 @@ class GroceryHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
       Container(
         width: MediaQuery.of(context).size.width,
         color: Theme.of(context).disabledColor.withOpacity(0.1),
-        child:  const Column(
+        child: const Column(
           children: [
             BadWeatherWidget(),
-
             BannerView(isFeatured: false),
             SizedBox(height: 12),
           ],
@@ -43,7 +40,7 @@ class GroceryHomeScreen extends StatelessWidget {
       isLoggedIn ? const VisitAgainView() : const SizedBox(),
       const SpecialOfferView(isFood: false, isShop: false),
       const FlashSaleView(),
-      const BestStoreNearbyView(),
+      // const BestStoreNearbyView(),
       const MostPopularItemView(isFood: false, isShop: false),
       const MiddleSectionBannerView(),
       const BestReviewItemView(),
@@ -51,8 +48,12 @@ class GroceryHomeScreen extends StatelessWidget {
       const JustForYouView(),
       const ItemThatYouLoveView(forShop: false),
       isLoggedIn ? const PromoCodeBannerView() : const SizedBox(),
-      const NewOnMartView(isPharmacy: false, isShop: false),
-      const PromotionalBannerView(),
+      // const NewOnMartView(isPharmacy: false, isShop: false),
+
+      SizedBox(
+        height: 100,
+      )
+      // const PromotionalBannerView(),
     ]);
   }
 }

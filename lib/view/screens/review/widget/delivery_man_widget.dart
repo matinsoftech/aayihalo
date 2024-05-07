@@ -36,7 +36,7 @@ class DeliveryManWidget extends StatelessWidget {
             '${deliveryMan!.fName} ${deliveryMan!.lName}',
             style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
           ),
-          subtitle: RatingBar(rating: deliveryMan!.avgRating, size: 15, ratingCount: deliveryMan!.ratingCount ?? 0),
+          // subtitle: RatingBar(rating: deliveryMan!.avgRating, size: 15, ratingCount: deliveryMan!.ratingCount ?? 0),
         ),
       ]),
     );

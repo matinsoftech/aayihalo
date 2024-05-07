@@ -157,11 +157,11 @@ class _WebNewOnMartViewState extends State<WebNewOnMartView> {
                                             ),
                                           ),
 
-                                          RatingBar(
-                                            rating: storeList[index].avgRating,
-                                            ratingCount: storeList[index].ratingCount,
-                                            size: 12,
-                                          ),
+                                          // RatingBar(
+                                          //   rating: storeList[index].avgRating,
+                                          //   ratingCount: storeList[index].ratingCount,
+                                          //   size: 12,
+                                          // ),
 
                                           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
 

@@ -432,10 +432,10 @@ class OrderInfoWidget extends StatelessWidget {
                     '${order.deliveryMan!.fName} ${order.deliveryMan!.lName}', maxLines: 1, overflow: TextOverflow.ellipsis,
                     style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
                   ),
-                  RatingBar(
-                    rating: order.deliveryMan!.avgRating, size: 10,
-                    ratingCount: order.deliveryMan!.ratingCount,
-                  ),
+                  // RatingBar(
+                  //   rating: order.deliveryMan!.avgRating, size: 10,
+                  //   ratingCount: order.deliveryMan!.ratingCount,
+                  // ),
                 ])),
 
                 (order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refunded') ? Row(children: [

@@ -131,11 +131,11 @@ class WebPopularStoreView extends StatelessWidget {
                               ),
                               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                              RatingBar(
-                                rating: storeList[index].avgRating,
-                                ratingCount: storeList[index].ratingCount,
-                                size: 15,
-                              ),
+                              // RatingBar(
+                              //   rating: storeList[index].avgRating,
+                              //   ratingCount: storeList[index].ratingCount,
+                              //   size: 15,
+                              // ),
                             ]),
                           ),
                         ),

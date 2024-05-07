@@ -37,7 +37,7 @@ class ReviewDialog extends StatelessWidget {
               style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall),
             ),
 
-            RatingBar(rating: review.rating!.toDouble(), ratingCount: null, size: 15),
+            // RatingBar(rating: review.rating!.toDouble(), ratingCount: null, size: 15),
 
             Text(
               review.customerName ?? '',

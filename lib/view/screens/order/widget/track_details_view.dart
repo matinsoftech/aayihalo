@@ -119,10 +119,10 @@ class TrackDetailsView extends StatelessWidget {
               maxLines: 1, overflow: TextOverflow.ellipsis,
               style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
             ),
-            RatingBar(
-              rating: takeAway ? track.store != null ? track.store!.avgRating : '' as double? : track.deliveryMan!.avgRating, size: 10,
-              ratingCount: takeAway ? track.store != null ? track.store!.ratingCount : '' as int? : track.deliveryMan!.ratingCount,
-            ),
+            // RatingBar(
+            //   rating: takeAway ? track.store != null ? track.store!.avgRating : '' as double? : track.deliveryMan!.avgRating, size: 10,
+            //   ratingCount: takeAway ? track.store != null ? track.store!.ratingCount : '' as int? : track.deliveryMan!.ratingCount,
+            // ),
           ])),
           InkWell(
             onTap: () async {

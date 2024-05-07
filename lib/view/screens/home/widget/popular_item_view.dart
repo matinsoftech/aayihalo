@@ -109,10 +109,10 @@ class PopularItemView extends StatelessWidget {
                                     maxLines: 1, overflow: TextOverflow.ellipsis,
                                   ),
 
-                                  RatingBar(
-                                    rating: itemList[index].avgRating, size: 12,
-                                    ratingCount: itemList[index].ratingCount,
-                                  ),
+                                  // RatingBar(
+                                  //   rating: itemList[index].avgRating, size: 12,
+                                  //   ratingCount: itemList[index].ratingCount,
+                                  // ),
 
                                   (Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && itemList[index].unitType != null) ? Text(
                                     '(${ itemList[index].unitType ?? ''})',

@@ -171,10 +171,10 @@ class ItemCampaignShimmer extends StatelessWidget {
                     Container(height: 10, width: 130, color: Colors.grey[300]),
                     const SizedBox(height: 5),
 
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Container(height: 10, width: 30, color: Colors.grey[300]),
-                      const RatingBar(rating: 0.0, size: 12, ratingCount: 0),
-                    ]),
+                    // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    //   Container(height: 10, width: 30, color: Colors.grey[300]),
+                    //   const RatingBar(rating: 0.0, size: 12, ratingCount: 0),
+                    // ]),
                   ]),
                 ),
               ),

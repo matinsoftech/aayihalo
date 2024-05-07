@@ -87,11 +87,13 @@ class StoreCard extends StatelessWidget {
                       ),
                       const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                      !isPharmacy ? RatingBar(
-                        rating: store.avgRating,
-                        ratingCount: store.ratingCount,
-                        size: 12,
-                      ) : Row(children: [
+                      // !isPharmacy ? RatingBar(
+                      //   rating: store.avgRating,
+                      //   ratingCount: store.ratingCount,
+                      //   size: 12,
+                      // )
+                      //  :
+                        Row(children: [
 
                         Icon(Icons.storefront, size: 15, color: Theme.of(context).primaryColor),
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),

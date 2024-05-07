@@ -118,11 +118,11 @@ class WebStoreWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                      RatingBar(
-                        rating: store!.avgRating,
-                        ratingCount: store!.ratingCount,
-                        size: 15,
-                      ),
+                      // RatingBar(
+                      //   rating: store!.avgRating,
+                      //   ratingCount: store!.ratingCount,
+                      //   size: 15,
+                      // ),
                     ]),
                   ),
                 ),
@@ -168,7 +168,7 @@ class WebStoreShimmer extends StatelessWidget {
                 Container(height: 10, width: 130, color: Colors.grey[300]),
                 const SizedBox(height: 5),
 
-                const RatingBar(rating: 0.0, size: 12, ratingCount: 0),
+                // const RatingBar(rating: 0.0, size: 12, ratingCount: 0),
               ]),
             ),
           ),

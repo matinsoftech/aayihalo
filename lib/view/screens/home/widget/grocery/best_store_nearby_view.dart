@@ -366,11 +366,13 @@ class BestStoreNearbyShimmer extends StatelessWidget {
                           ),
                           const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                          !isPharmacy ? const RatingBar(
-                            rating: 0,
-                            ratingCount: 0,
-                            size: 12,
-                          ) : Row(children: [
+                          // !isPharmacy ? const RatingBar(
+                          //   rating: 0,
+                          //   ratingCount: 0,
+                          //   size: 12,
+                          // ) : 
+                          
+                          Row(children: [
 
                             Icon(Icons.storefront, size: 15, color: Theme.of(context).primaryColor),
                             const SizedBox(width: Dimensions.paddingSizeExtraSmall),

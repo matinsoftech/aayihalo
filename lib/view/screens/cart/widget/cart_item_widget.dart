@@ -126,9 +126,9 @@ class CartItemWidget extends StatelessWidget {
                           ),
                         ) : const SizedBox(),
                       ]),
-                      const SizedBox(height: 2),
+                      // const SizedBox(height: 2),
 
-                      RatingBar(rating: cart.item!.avgRating, size: 12, ratingCount: cart.item!.ratingCount),
+                      // RatingBar(rating: cart.item!.avgRating, size: 12, ratingCount: cart.item!.ratingCount),
                       const SizedBox(height: 5),
 
                       Wrap(children: [

@@ -174,11 +174,11 @@ class WebPopularItemView extends StatelessWidget {
                               ),
                               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                              RatingBar(
-                                rating: itemList[index].avgRating, size: 15,
-                                ratingCount: itemList[index].ratingCount,
-                              ),
-                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                              // RatingBar(
+                              //   rating: itemList[index].avgRating, size: 15,
+                              //   ratingCount: itemList[index].ratingCount,
+                              // ),
+                              // const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
                               Row(
                                 children: [
@@ -300,10 +300,10 @@ Widget itemCartWidget(BuildContext context, int index, ItemController itemContro
                   ),
                   const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                  RatingBar(
-                    rating: itemList[index].avgRating, size: 15,
-                    ratingCount: itemList[index].ratingCount,
-                  ),
+                  // RatingBar(
+                  //   rating: itemList[index].avgRating, size: 15,
+                  //   ratingCount: itemList[index].ratingCount,
+                  // ),
                   const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
                   Row(
@@ -380,7 +380,7 @@ class WebCampaignShimmer extends StatelessWidget {
                     Container(height: 10, width: 130, color: Colors.grey[300]),
                     const SizedBox(height: 5),
 
-                    const RatingBar(rating: 0.0, size: 12, ratingCount: 0),
+                    // const RatingBar(rating: 0.0, size: 12, ratingCount: 0),
                     const SizedBox(height: 5),
 
                     Container(height: 10, width: 30, color: Colors.grey[300]),

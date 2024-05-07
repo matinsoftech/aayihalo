@@ -138,11 +138,11 @@ class PopularStoreView extends StatelessWidget {
                               ),
                               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
-                              RatingBar(
-                                rating: storeList[index].avgRating,
-                                ratingCount: storeList[index].ratingCount,
-                                size: 12,
-                              ),
+                              // RatingBar(
+                              //   rating: storeList[index].avgRating,
+                              //   ratingCount: storeList[index].ratingCount,
+                              //   size: 12,
+                              // ),
                             ]),
                           ),
                         ),
