@@ -48,7 +48,6 @@ class BannerView extends StatelessWidget {
                             options: CarouselOptions(
                               autoPlay: true,
                               enlargeCenterPage: false,
-                          
                               viewportFraction: 0.92,
                               autoPlayInterval: const Duration(seconds: 7),
                               onPageChanged: (index, reason) {
@@ -147,27 +146,27 @@ class BannerView extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(height: Dimensions.paddingSizeDefault),
+                        // const SizedBox(height: Dimensions.paddingSizeDefault),
 
                         /// show the indications for each banner
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            bannerController.bannerImageList!.length,
-                            (index) => Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 2),
-                              height: 5,
-                              width: 14,
-                              decoration: BoxDecoration(
-                                color: index == bannerController.currentIndex
-                                    ? Colors.green
-                                    : Colors.grey,
-                                borderRadius: BorderRadius.circular(
-                                    Dimensions.radiusDefault),
-                              ),
-                            ),
-                          ),
-                        )
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: List.generate(
+                        //     bannerController.bannerImageList!.length,
+                        //     (index) => Container(
+                        //       margin: const EdgeInsets.symmetric(horizontal: 2),
+                        //       height: 5,
+                        //       width: 14,
+                        //       decoration: BoxDecoration(
+                        //         color: index == bannerController.currentIndex
+                        //             ? Colors.green
+                        //             : Colors.grey,
+                        //         borderRadius: BorderRadius.circular(
+                        //             Dimensions.radiusDefault),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // )
 
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.center,

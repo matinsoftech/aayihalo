@@ -299,17 +299,16 @@ class FoodCategoryView extends StatelessWidget {
                       // child: Text('campaigns'.tr, style: robotoMedium.copyWith(fontSize: 24)),
                       child: TitleWidget(
                         title: 'Categories'.tr,
-                        onTap: () {
-                          Get.to(CategoryViewAllScreen(
-                            categories: categoryController.categoryList!,
-                          ));
-                        },
+                        // onTap: () {
+                        //   Get.to(CategoryViewAllScreen(
+                        //     categories: categoryController.categoryList!,
+                        //   ));
+                        // },
                       ),
                     ),
 
                     Wrap(
-                      alignment: WrapAlignment.start, 
-
+                      alignment: WrapAlignment.start,
                       children: [
                         for (int i = 0;
                             i < categoryController.categoryList!.length;
@@ -331,7 +330,8 @@ class FoodCategoryView extends StatelessWidget {
                                 width: 80,
                                 child: Column(children: [
                                   Container(
-                                   
+                                    height: 75,
+                                    width: 75,
                                     margin: EdgeInsets.only(
                                       left: i == 0
                                           ? 0
@@ -531,48 +531,53 @@ class FoodCategoryShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      padding:
-          const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
-      itemCount: 8,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(
-              bottom: Dimensions.paddingSizeDefault,
-              left: Dimensions.paddingSizeDefault,
-              top: Dimensions.paddingSizeDefault),
-          child: Shimmer(
-            duration: const Duration(seconds: 2),
-            enabled: true,
-            child: SizedBox(
-              width: 60,
-              child: Column(children: [
-                Container(
-                    height: 60,
-                    width: double.infinity,
-                    margin: const EdgeInsets.only(
-                        bottom: Dimensions.paddingSizeSmall),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(100)),
+    return Container( 
+      constraints: BoxConstraints(
+        maxHeight: 160,
+      ),
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        padding:
+            const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
+        itemCount: 8,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(
+                bottom: Dimensions.paddingSizeDefault,
+                left: Dimensions.paddingSizeDefault,
+                top: Dimensions.paddingSizeDefault),
+            child: Shimmer(
+              duration: const Duration(seconds: 2),
+              enabled: true,
+              child: SizedBox(
+                width: 60,
+                child: Column(children: [
+                  Container(
+                      height: 60,
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(
+                          bottom: Dimensions.paddingSizeSmall),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(100)),
+                        color: Colors.grey[300],
+                      )),
+                  const SizedBox(height: Dimensions.paddingSizeSmall),
+                  Expanded(
+                    child: Container(
+                      height: 10,
+                      width: 50,
                       color: Colors.grey[300],
-                    )),
-                const SizedBox(height: Dimensions.paddingSizeSmall),
-                Expanded(
-                  child: Container(
-                    height: 10,
-                    width: 50,
-                    color: Colors.grey[300],
+                    ),
                   ),
-                ),
-              ]),
+                ]),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

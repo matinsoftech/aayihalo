@@ -19,9 +19,10 @@ class FavItemView extends StatelessWidget {
           onRefresh: () async {
             await wishController.getWishList();
           },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: FooterView(
+          child: Wrap(
+            // physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+               FooterView(
               child: SizedBox(
                 width: Dimensions.webMaxWidth,
                 child: Padding(
@@ -33,6 +34,9 @@ class FavItemView extends StatelessWidget {
                 ),
               ),
             ),
+         
+            ]
+            
           ),
         );
       }),

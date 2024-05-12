@@ -201,7 +201,7 @@ class ReviewItemCard extends StatelessWidget {
                               image:
                                   '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
                                   '/${item!.image}',
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                               width: double.infinity,
                               height: double.infinity,
                             ),
@@ -268,10 +268,12 @@ class ReviewItemCard extends StatelessWidget {
                                                   fontSize:
                                                       Dimensions.fontSizeSmall),
                                             ),
-                                            Text(item!.name!,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: robotoBold),
+                                            Text(
+                                              item!.name!,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: robotoBold,
+                                            ),
                                             // Row(
                                             //     mainAxisAlignment: isFeatured
                                             //         ? MainAxisAlignment.start
@@ -348,141 +350,326 @@ class ReviewItemCard extends StatelessWidget {
                                                 ]),
                                           ],
                                         )
-                                      : Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const SizedBox(
-                                                height: Dimensions
-                                                    .paddingSizeExtraSmall),
-                                            Text(item!.name!,
-                                                style: robotoBold,
-                                                maxLines: 1,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                // Icon(Icons.star,
-                                                //     size: 15,
-                                                //     color: Theme.of(context)
-                                                //         .primaryColor),
-                                                // const SizedBox(
-                                                //     width: Dimensions
-                                                //         .paddingSizeExtraSmall),
-                                                // Text(
-                                                //     item!.avgRating!
-                                                //         .toStringAsFixed(1),
-                                                //     style: robotoRegular),
-                                                // const SizedBox(
-                                                //     width: Dimensions
-                                                //         .paddingSizeExtraSmall),
-                                                // Text("(${item!.ratingCount})",
-                                                //     style:
-                                                //         robotoRegular.copyWith(
-                                                //             fontSize: Dimensions
-                                                //                 .fontSizeSmall,
-                                                //             color: Theme.of(
-                                                //                     context)
-                                                //                 .disabledColor)),
-                                              ],
-                                            ),
-                                            (Get.find<SplashController>()
-                                                        .configModel!
-                                                        .moduleConfig!
-                                                        .module!
-                                                        .unit! &&
-                                                    item!.unitType != null)
-                                                ? Text(
-                                                    '(${item!.unitType ?? ''})',
-                                                    style: robotoRegular.copyWith(
-                                                        fontSize: Dimensions
-                                                            .fontSizeExtraSmall,
-                                                        color: Theme.of(context)
-                                                            .disabledColor),
-                                                  )
-                                                : const SizedBox(),
-                                            Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                      : Expanded(
+                                          flex: 4,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                left:
+                                                    Dimensions.paddingSizeSmall,
+                                                right: isShop
+                                                    ? 0
+                                                    : Dimensions
+                                                        .paddingSizeSmall,
+                                                top:
+                                                    Dimensions.paddingSizeSmall,
+                                                bottom: isShop
+                                                    ? 0
+                                                    : Dimensions
+                                                        .paddingSizeSmall),
+                                            child: Stack(
+                                                clipBehavior: Clip.none,
                                                 children: [
-                                                  item!.discount! > 0
-                                                      ? Text(
-                                                          PriceConverter
-                                                              .convertPrice(
-                                                            Get.find<
-                                                                    ItemController>()
-                                                                .getStartingPrice(
-                                                                    item!),
-                                                          ),
-                                                          style: robotoRegular
-                                                              .copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeExtraSmall,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .disabledColor,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .lineThrough,
-                                                          ),
-                                                        )
-                                                      : const SizedBox(),
-                                                  // SizedBox(height: item!.discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
+                                                  Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        // (isFood || isShop)
+                                                        //     ? Text(
+                                                        //         item!.storeName ??
+                                                        //             '',
+                                                        //         style: robotoRegular.copyWith(
+                                                        //             color: Theme.of(
+                                                        //                     context)
+                                                        //                 .disabledColor))
+                                                        //     :
 
-                                                  Text(
-                                                    PriceConverter.convertPrice(
-                                                      Get.find<ItemController>()
-                                                          .getStartingPrice(
-                                                              item!),
-                                                      discount: item!.discount,
-                                                      discountType:
-                                                          item!.discountType,
-                                                    ),
-                                                    style: robotoMedium,
-                                                    textDirection:
-                                                        TextDirection.ltr,
-                                                  ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                                item!.name ??
+                                                                    '',
+                                                                style:
+                                                                    robotoBold,
+                                                                maxLines: 1,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis),
+                                                            CartCountView(
+                                                              item: item!,
+                                                            ),
+                                                          ],
+                                                        ),
+
+                                                        //      Flexible(
+                                                        //   child: Text(
+                                                        //     item.name ?? '',
+                                                        //     style: robotoBold,
+                                                        //     maxLines: 1,
+                                                        //     overflow:
+                                                        //         TextOverflow
+                                                        //             .ellipsis,
+                                                        //   ),
+                                                        // )
+
+                                                        // (isFood || isShop)
+                                                        //     ?
+                                                        //  Flexible(
+                                                        //     child: Text(
+                                                        //       item.name ??
+                                                        //           '',
+                                                        //       style:
+                                                        //           robotoBold,
+                                                        //       maxLines: 1,
+                                                        //       overflow:
+                                                        //           TextOverflow
+                                                        //               .ellipsis,
+                                                        //     ),
+                                                        //   )
+                                                        // :
+                                                        //  Row(
+                                                        //     mainAxisAlignment: isPopularItem
+                                                        //         ? MainAxisAlignment
+                                                        //             .center
+                                                        //         : MainAxisAlignment
+                                                        //             .start,
+                                                        //     children: [
+                                                        //         // Icon(Icons.star,
+                                                        //         //     size: 14,
+                                                        //         //     color:
+                                                        //         //         Theme.of(context).primaryColor),
+
+                                                        //         // const SizedBox(
+                                                        //         //     width:
+                                                        //         //         Dimensions.paddingSizeExtraSmall),
+                                                        //         // Text(
+                                                        //         //     (item.description ?? ' ').substring(
+                                                        //         //         0,
+                                                        //         //         (item.description ?? '').length <
+                                                        //         //                 20
+                                                        //         //             ? (item.description ?? '')
+                                                        //         //                 .length
+                                                        //         //             : 20),
+                                                        //         //     style: robotoRegular.copyWith(
+                                                        //         //         fontSize:
+                                                        //         //             Dimensions.fontSizeSmall)),
+                                                        //         // const SizedBox(
+                                                        //         //     width:
+                                                        //         //         Dimensions.paddingSizeExtraSmall),
+                                                        //         // Text("(${item.ratingCount})",
+                                                        //         //     style: robotoRegular.copyWith(
+                                                        //         //         fontSize:
+                                                        //         //             Dimensions.fontSizeSmall,
+                                                        //         //         color: Theme.of(context)
+                                                        //         //             .disabledColor)),
+                                                        //       ]),
+
+                                                        // (isFood || isShop)
+                                                        //     ?
+                                                        //      Row(
+                                                        //         mainAxisAlignment: isPopularItem
+                                                        //             ? MainAxisAlignment
+                                                        //                 .center
+                                                        //             : MainAxisAlignment
+                                                        //                 .start,
+                                                        //         children: [
+                                                        //             Icon(
+                                                        //                 Icons
+                                                        //                     .star,
+                                                        //                 size:
+                                                        //                     14,
+                                                        //                 color: Theme.of(context)
+                                                        //                     .primaryColor),
+                                                        //             const SizedBox(
+                                                        //                 width: Dimensions
+                                                        //                     .paddingSizeExtraSmall),
+                                                        //             Text(
+                                                        //                 item!.avgRating!
+                                                        //                     .toStringAsFixed(
+                                                        //                         1),
+                                                        //                 style: robotoRegular.copyWith(
+                                                        //                     fontSize:
+                                                        //                         Dimensions.fontSizeSmall)),
+                                                        //             const SizedBox(
+                                                        //                 width: Dimensions
+                                                        //                     .paddingSizeExtraSmall),
+                                                        //             Text(
+                                                        //                 "(${item!.ratingCount})",
+                                                        //                 style: robotoRegular.copyWith(
+                                                        //                     fontSize:
+                                                        //                         Dimensions.fontSizeSmall,
+                                                        //                     color: Theme.of(context).disabledColor)),
+                                                        //           ])
+                                                        //     :
+
+                                                        // ?
+
+                                                        Text(
+                                                          '(${item!.unitType ?? ''})',
+                                                          style: robotoRegular.copyWith(
+                                                              fontSize: Dimensions
+                                                                  .fontSizeExtraSmall,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .hintColor),
+                                                        ),
+                                                        // : const SizedBox(),
+
+                                                        item!.discount !=
+                                                                    null &&
+                                                                item!.discount! >
+                                                                    0
+                                                            ? Text(
+                                                                PriceConverter.convertPrice(Get
+                                                                        .find<
+                                                                            ItemController>()
+                                                                    .getStartingPrice(
+                                                                        item!)),
+                                                                style:
+                                                                    robotoMedium
+                                                                        .copyWith(
+                                                                  fontSize:
+                                                                      Dimensions
+                                                                          .fontSizeExtraSmall,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .disabledColor,
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .lineThrough,
+                                                                ),
+                                                                textDirection:
+                                                                    TextDirection
+                                                                        .ltr,
+                                                              )
+                                                            : const SizedBox(),
+                                                        // SizedBox(height: item.discount != null && item.discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
+
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              PriceConverter
+                                                                  .convertPrice(
+                                                                Get.find<
+                                                                        ItemController>()
+                                                                    .getStartingPrice(
+                                                                        item!),
+                                                                discount: item!
+                                                                    .discount,
+                                                                discountType: item!
+                                                                    .discountType,
+                                                              ),
+                                                              textDirection:
+                                                                  TextDirection
+                                                                      .ltr,
+                                                              style:
+                                                                  robotoMedium,
+                                                            ),
+                                                            // delivery in
+                                                            Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Icon(
+                                                                    Icons.timer,
+                                                                    size: 14,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .primaryColor),
+                                                                const SizedBox(
+                                                                    width: 2),
+                                                                const Text(
+                                                                  "10m",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+
+                                                        const SizedBox(
+                                                            height: Dimensions
+                                                                .paddingSizeExtraSmall),
+                                                      ]),
+                                                  // isShop
+                                                  //     ? Positioned(
+                                                  //         bottom: 0,
+                                                  //         right: 0,
+                                                  //         child:
+
+                                                  //          CartCountView(
+                                                  //           item: item,
+                                                  //           child: Container(
+                                                  //             height: 35,
+                                                  //             width: 38,
+                                                  //             decoration: BoxDecoration(
+                                                  //               color: Theme.of(context).primaryColor,
+                                                  //               borderRadius: const BorderRadius.only(
+                                                  //                 topLeft:
+                                                  //                     Radius.circular(Dimensions.radiusLarge),
+                                                  //                 bottomRight:
+                                                  //                     Radius.circular(Dimensions.radiusLarge),
+                                                  //               ),
+                                                  //             ),
+                                                  //             child: Icon(
+                                                  //                 isPopularItemCart
+                                                  //                     ? Icons.add_shopping_cart
+                                                  //                     : Icons.add,
+                                                  //                 color: Theme.of(context).cardColor,
+                                                  //                 size: 20),
+                                                  //           ),
+                                                  //         ),
+                                                  //       )
+                                                  //     : const SizedBox(),
                                                 ]),
-                                          ],
+                                          ),
                                         ),
                                 ),
-                                Positioned(
-                                  top: -15,
-                                  left: 0,
-                                  right: 0,
-                                  child: CartCountView(
-                                    item: item!,
-                                    child: Center(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: 65,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(112),
-                                          color: Theme.of(context).cardColor,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(0.1),
-                                                spreadRadius: 1,
-                                                blurRadius: 5,
-                                                offset: const Offset(0, 1))
-                                          ],
-                                        ),
-                                        child: Text("add".tr,
-                                            style: robotoBold.copyWith(
-                                                color: Theme.of(context)
-                                                    .primaryColor)),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                // Positioned(
+                                //   top: -15,
+                                //   left: 0,
+                                //   right: 0,
+                                //   child: CartCountView(
+                                //     item: item!,
+                                //     child: Center(
+                                //       child: Container(
+                                //         alignment: Alignment.center,
+                                //         width: 65,
+                                //         height: 30,
+                                //         decoration: BoxDecoration(
+                                //           borderRadius:
+                                //               BorderRadius.circular(112),
+                                //           color: Theme.of(context).cardColor,
+                                //           boxShadow: [
+                                //             BoxShadow(
+                                //                 color: Theme.of(context)
+                                //                     .primaryColor
+                                //                     .withOpacity(0.1),
+                                //                 spreadRadius: 1,
+                                //                 blurRadius: 5,
+                                //                 offset: const Offset(0, 1))
+                                //           ],
+                                //         ),
+                                //         child: Text("add".tr,
+                                //             style: robotoBold.copyWith(
+                                //                 color: Theme.of(context)
+                                //                     .primaryColor)),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),

@@ -18,7 +18,6 @@ import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/custom_text_field.dart';
 import 'package:sixam_mart/view/base/menu_drawer.dart';
 import 'package:sixam_mart/view/screens/auth/sign_up_screen.dart';
-import 'package:sixam_mart/view/screens/auth/verify_otp_screen.dart';
 import 'package:sixam_mart/view/screens/auth/widget/condition_check_box.dart';
 import 'package:sixam_mart/view/screens/auth/widget/guest_button.dart';
 import 'package:flutter/material.dart';
@@ -26,21 +25,22 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/view/screens/auth/widget/social_login_widget.dart';
 
-class SignInScreen extends StatefulWidget {
+class VerifyOTPScreen extends StatefulWidget {
   final bool exitFromApp;
   final bool backFromThis;
-  const SignInScreen(
-      {Key? key, required this.exitFromApp, required this.backFromThis})
+  final String phoneNumber; 
+  const VerifyOTPScreen(
+      {Key? key, required this.exitFromApp, required this.backFromThis, required this.phoneNumber,})
       : super(key: key);
 
   @override
-  SignInScreenState createState() => SignInScreenState();
+  VerifyOTPScreenState createState() => VerifyOTPScreenState();
 }
 
-class SignInScreenState extends State<SignInScreen> {
+class VerifyOTPScreenState extends State<VerifyOTPScreen> {
   final FocusNode _phoneFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
-  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _countryDialCode;
   bool _canExit = GetPlatform.isWeb ? true : false;
@@ -55,7 +55,7 @@ class SignInScreenState extends State<SignInScreen> {
             : CountryCode.fromCountryCode(
                     Get.find<SplashController>().configModel!.country!)
                 .dialCode;
-    _phoneController.text = Get.find<AuthController>().getUserNumber();
+    _codeController.text = Get.find<AuthController>().getUserNumber();
     _passwordController.text = Get.find<AuthController>().getUserPassword();
     if (Get.find<AuthController>().showPassView) {
       Get.find<AuthController>().showHidePass(isUpdate: false);
@@ -124,7 +124,7 @@ class SignInScreenState extends State<SignInScreen> {
               padding: context.width > 700
                   ? const EdgeInsets.symmetric(horizontal: 0)
                   : const EdgeInsets.all(Dimensions.paddingSizeExtremeLarge),
-              //margin: context.width > 700 ? const EdgeInsets.all(Dimensions.paddingSizeDefault) : EdgeInsets.zero,
+            
               decoration: context.width > 700
                   ? BoxDecoration(
                       color: Theme.of(context).cardColor,
@@ -168,8 +168,7 @@ class SignInScreenState extends State<SignInScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(Images.logo, width: 125),
-                                // SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                                // Center(child: Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge))),
+                             
                                 const SizedBox(
                                     height: Dimensions.paddingSizeExtraLarge),
 
@@ -178,7 +177,7 @@ class SignInScreenState extends State<SignInScreen> {
                                       Get.find<LocalizationController>().isLtr
                                           ? Alignment.topLeft
                                           : Alignment.topRight,
-                                  child: Text('sign_in'.tr,
+                                  child: Text('Verify OTP'.tr,
                                       style: robotoBold.copyWith(
                                           fontSize:
                                               Dimensions.fontSizeExtraLarge)),
@@ -189,83 +188,58 @@ class SignInScreenState extends State<SignInScreen> {
                                 CustomTextField(
                                   titleText: ResponsiveHelper.isDesktop(context)
                                       ? 'phone'.tr
-                                      : 'enter_phone_number'.tr,
+                                      : 'Enter otp sent to your phone'.tr,
                                   hintText: '',
-                                  controller: _phoneController,
+                                  controller: _codeController,
                                   focusNode: _phoneFocus,
                                   nextFocus: _passwordFocus,
                                   inputType: TextInputType.phone,
-                                  isPhone: true,
+                               
                                   showTitle:
                                       ResponsiveHelper.isDesktop(context),
-                                  onCountryChanged: (CountryCode countryCode) {
-                                    _countryDialCode = countryCode.dialCode;
-                                  },
-                                  countryDialCode: _countryDialCode ??
-                                      Get.find<LocalizationController>()
-                                          .locale
-                                          .countryCode,
+                                  // onCountryChanged: (CountryCode countryCode) {
+                                  //   _countryDialCode = countryCode.dialCode;
+                                  // },
+                                  // countryDialCode: _countryDialCode ??
+                                  //     Get.find<LocalizationController>()
+                                  //         .locale
+                                  //         .countryCode,
                                 ),
 
                                 const SizedBox(
                                   height: Dimensions.paddingSizeExtraLarge,
                                 ),
 
-                                // CustomTextField(
-                                //   titleText: ResponsiveHelper.isDesktop(context) ? 'password'.tr : 'enter_your_password'.tr,
-                                //   hintText: 'enter_your_password'.tr,
-                                //   controller: _passwordController,
-                                //   focusNode: _passwordFocus,
-                                //   inputAction: TextInputAction.done,
-                                //   inputType: TextInputType.visiblePassword,
-                                //   prefixIcon: Icons.lock,
-                                //   isPassword: true,
-                                //   showTitle: ResponsiveHelper.isDesktop(context),
-                                //   onSubmit: (text) => (GetPlatform.isWeb) ? _login(authController, _countryDialCode!) : null,
-                                //   onChanged: (value){
-                                //     if(value != null && value.isNotEmpty){
-                                //       if(!authController.showPassView){
-                                //         authController.showHidePass();
-                                //       }
-                                //       authController.validPassCheck(value);
-                                //     }else{
-                                //       if(authController.showPassView){
-                                //         authController.showHidePass();
-                                //       }
-                                //     }
-                                //   },
-                                // ),
-                                // const SizedBox(height: Dimensions.paddingSizeSmall),
 
-                                // Row(
-                                //   children: [
-                                //     Expanded(
-                                //       child: ListTile(
-                                //         onTap: () =>
-                                //             authController.toggleRememberMe(),
-                                //         leading: Checkbox(
-                                //           visualDensity: const VisualDensity(
-                                //               horizontal: -4, vertical: -4),
-                                //           activeColor:
-                                //               Theme.of(context).primaryColor,
-                                //           value:
-                                //               authController.isActiveRememberMe,
-                                //           onChanged: (bool? isChecked) =>
-                                //               authController.toggleRememberMe(),
-                                //         ),
-                                //         title: Text('remember_me'.tr),
-                                //         contentPadding: EdgeInsets.zero,
-                                //         visualDensity: const VisualDensity(
-                                //             horizontal: 0, vertical: -4),
-                                //         dense: true,
-                                //         horizontalTitleGap: 0,
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ListTile(
+                                        onTap: () =>
+                                            authController.toggleRememberMe(),
+                                        leading: Checkbox(
+                                          visualDensity: const VisualDensity(
+                                              horizontal: -4, vertical: -4),
+                                          activeColor:
+                                              Theme.of(context).primaryColor,
+                                          value:
+                                              authController.isActiveRememberMe,
+                                          onChanged: (bool? isChecked) =>
+                                              authController.toggleRememberMe(),
+                                        ),
+                                        title: Text('remember_me'.tr),
+                                        contentPadding: EdgeInsets.zero,
+                                        visualDensity: const VisualDensity(
+                                            horizontal: 0, vertical: -4),
+                                        dense: true,
+                                        horizontalTitleGap: 0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
 
-                                // const SizedBox(
-                                //     height: Dimensions.paddingSizeLarge),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeLarge),
 
                                 Align(
                                     alignment: Alignment.center,
@@ -288,7 +262,7 @@ class SignInScreenState extends State<SignInScreen> {
                                           ? 'login'.tr
                                           : 'sign_in'.tr,
                                   onPressed: () =>
-                                      _login(authController, _countryDialCode!),
+                                      _login(authController, code: _codeController.text.trim(), phone: widget.phoneNumber ),
                                   isLoading: authController.isLoading,
                                   radius: ResponsiveHelper.isDesktop(context)
                                       ? Dimensions.radiusSmall
@@ -357,54 +331,43 @@ class SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  void _login(AuthController authController, String countryDialCode) async {
-    String phone = _phoneController.text.trim();
-    String password = _passwordController.text.trim();
-    String numberWithCountryCode = countryDialCode + phone;
-    PhoneValid phoneValid =
-        await CustomValidator.isPhoneValid(numberWithCountryCode);
-    numberWithCountryCode = phoneValid.phone;
+  void _login(AuthController authController, {required String phone, required  String code}) async {
+    
+  
+    
 
     if (phone.isEmpty) {
       showCustomSnackBar('enter_phone_number'.tr);
-    } else if (!phoneValid.isValid) {
+    } else if (code.isEmpty) {
       showCustomSnackBar('invalid_phone_number'.tr);
     } else {
       authController
-          .loginWithPhoneNumber(phone)
+          .verifyOtp( phone: phone, otp:   code)
           .then((status) async {
         if (status.isSuccess) {
-          showCustomSnackBar("OTP sent to your number", isError: false);
-          Get.find<CartController>().getCartDataOnline(); 
-          Get.to(  VerifyOTPScreen(exitFromApp: false, backFromThis: true, phoneNumber: phone,));
-          // if (authController.isActiveRememberMe) {
-          //   authController.saveUserNumberAndPassword(
-          //     phone,
-          //     password,
-          //     countryDialCode,
-          //   );
-          // } else {
-          //   authController.clearUserNumberAndPassword();
-          // }
-          // String token = status.message!.substring(1, status.message!.length);
-          // if (Get.find<SplashController>().configModel!.customerVerification! &&
-          //     int.parse(status.message![0]) == 0) {
-          //   List<int> encoded = utf8.encode(password);
-          //   String data = base64Encode(encoded);
-          //   Get.toNamed(RouteHelper.getVerificationRoute(
-          //       numberWithCountryCode, token, RouteHelper.signUp, data));
-          // } else {
-          //   if (widget.backFromThis) {
-          //     if (ResponsiveHelper.isDesktop(context)) {
-          //       Get.offAllNamed(RouteHelper.getInitialRoute(fromSplash: false));
-          //     } else {
-          //       Get.back();
-          //     }
-          //   } else {
-          //     Get.find<LocationController>()
-          //         .navigateToLocationScreen('sign-in', offNamed: true);
-          //   }
-          // }
+          Get.find<CartController>().getCartDataOnline();
+          if (authController.isActiveRememberMe) {
+            authController.saveUserNumberAndPassword(
+              phone,
+              "password",
+              "+977",
+            );
+          } else {
+            authController.clearUserNumberAndPassword();
+          }
+          String token = status.message!.substring(1, status.message!.length);
+          if (Get.find<SplashController>().configModel!.customerVerification! &&
+              int.parse(status.message![0]) == 0) {
+            List<int> encoded = utf8.encode("password");
+            String data = base64Encode(encoded);
+            Get.toNamed(RouteHelper.getVerificationRoute(
+                phone, token, RouteHelper.signUp, data));
+          } else {
+          
+              Get.find<LocationController>()
+                  .navigateToLocationScreen('sign-in', offNamed: true);
+            
+          }
         } else {
           showCustomSnackBar(status.message);
         }

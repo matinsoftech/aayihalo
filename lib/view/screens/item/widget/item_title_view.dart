@@ -13,7 +13,6 @@ import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/organic_tag.dart';
-import 'package:sixam_mart/view/base/rating_bar.dart';
 
 class ItemTitleView extends StatelessWidget {
   final Item? item;

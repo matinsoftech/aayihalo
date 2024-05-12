@@ -33,7 +33,8 @@ class AppConstants {
   static const String verifyEmailUri = '/api/v1/auth/verify-email';
   static const String registerUri = '/api/v1/auth/sign-up';
   static const String loginUri = '/api/v1/auth/login';
-  static const String tokenUri = '/api/v1/customer/cm-firebase-token';
+ static const String customerUri ='/api/v1/customer-register';
+   static const String tokenUri = '/api/v1/customer/cm-firebase-token';
   static const String placeOrderUri = '/api/v1/customer/order/place';
   static const String placePrescriptionOrderUri =
       '/api/v1/customer/order/prescription/place';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
@@ -53,7 +54,7 @@ class ItemCard extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
-                flex: 5,
+                flex: 9,
                 child: Stack(children: [
                   Padding(
                     padding: EdgeInsets.only(
@@ -116,20 +117,12 @@ class ItemCard extends StatelessWidget {
                             ),
                             child: Text('out_of_stock'.tr,
                                 style: robotoRegular.copyWith(
-                                    color: Theme.of(context).cardColor,
-                                    fontSize: Dimensions.fontSizeSmall)),
+                                  color: Theme.of(context).cardColor,
+                                  fontSize: Dimensions.fontSizeSmall,
+                                )),
                           ),
                         )
                       : const SizedBox(),
-                  isShop
-                      ? const SizedBox()
-                      : Positioned(
-                          bottom: 10,
-                          right: 20,
-                          child: CartCountView(
-                            item: item,
-                          ),
-                        ),
                   Get.find<ItemController>().isAvailable(item)
                       ? const SizedBox()
                       : NotAvailableWidget(
@@ -147,24 +140,38 @@ class ItemCard extends StatelessWidget {
                       bottom: isShop ? 0 : Dimensions.paddingSizeSmall),
                   child: Stack(clipBehavior: Clip.none, children: [
                     Column(
-                        crossAxisAlignment: isPopularItem
-                            ? CrossAxisAlignment.center
-                            : CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           (isFood || isShop)
                               ? Text(item.storeName ?? '',
                                   style: robotoRegular.copyWith(
                                       color: Theme.of(context).disabledColor))
-                              : Text(item.name ?? '',
-                                  style: robotoBold,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis),
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    FittedBox(
+                                      child: Text(
+                                          item.name!.length > 8
+                                              ? '${item.name!.substring(0, 8)}..'
+                                              : item.name ?? '',
+                                          style: robotoBold,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                    CartCountView(
+                                      item: item,
+                                    ),
+                                  ],
+                                ),
 
                           (isFood || isShop)
                               ? Flexible(
                                   child: Text(
-                                    item.name ?? '',
+                                    item.name!.length > 10
+                                        ? '${item.name!.substring(0, 10)}..'
+                                        : item.name ?? '',
                                     style: robotoBold,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -180,23 +187,23 @@ class ItemCard extends StatelessWidget {
                                       //     color:
                                       //         Theme.of(context).primaryColor),
 
-                                      const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall),
-                                      Text(
-                                          (item.description ?? ' ').substring(
-                                              0,
-                                              (item.description ?? '').length <
-                                                      20
-                                                  ? (item.description ?? '')
-                                                      .length
-                                                  : 20),
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall)),
-                                      const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall),
+                                      // const SizedBox(
+                                      //     width:
+                                      //         Dimensions.paddingSizeExtraSmall),
+                                      // Text(
+                                      //     (item.description ?? ' ').substring(
+                                      //         0,
+                                      //         (item.description ?? '').length <
+                                      //                 20
+                                      //             ? (item.description ?? '')
+                                      //                 .length
+                                      //             : 20),
+                                      //     style: robotoRegular.copyWith(
+                                      //         fontSize:
+                                      //             Dimensions.fontSizeSmall)),
+                                      // const SizedBox(
+                                      //     width:
+                                      //         Dimensions.paddingSizeExtraSmall),
                                       // Text("(${item.ratingCount})",
                                       //     style: robotoRegular.copyWith(
                                       //         fontSize:
@@ -262,47 +269,69 @@ class ItemCard extends StatelessWidget {
                               : const SizedBox(),
                           // SizedBox(height: item.discount != null && item.discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
 
-                          Text(
-                            PriceConverter.convertPrice(
-                              Get.find<ItemController>().getStartingPrice(item),
-                              discount: item.discount,
-                              discountType: item.discountType,
-                            ),
-                            textDirection: TextDirection.ltr,
-                            style: robotoMedium,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                PriceConverter.convertPrice(
+                                  Get.find<ItemController>()
+                                      .getStartingPrice(item),
+                                  discount: item.discount,
+                                  discountType: item.discountType,
+                                ),
+                                textDirection: TextDirection.ltr,
+                                style: robotoMedium,
+                              ),
+                              // delivery in
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.timer,
+                                      size: 14,
+                                      color: Theme.of(context).primaryColor),
+                                  const SizedBox(width: 2),
+                                  const Text(
+                                    "10m",
+                                    style: TextStyle(fontSize: 12),
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
 
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraSmall),
                         ]),
-                    isShop
-                        ? Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: CartCountView(
-                              item: item,
-                              child: Container(
-                                height: 35,
-                                width: 38,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft:
-                                        Radius.circular(Dimensions.radiusLarge),
-                                    bottomRight:
-                                        Radius.circular(Dimensions.radiusLarge),
-                                  ),
-                                ),
-                                child: Icon(
-                                    isPopularItemCart
-                                        ? Icons.add_shopping_cart
-                                        : Icons.add,
-                                    color: Theme.of(context).cardColor,
-                                    size: 20),
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
+                    // isShop
+                    //     ? Positioned(
+                    //         bottom: 0,
+                    //         right: 0,
+                    //         child:
+
+                    //          CartCountView(
+                    //           item: item,
+                    //           child: Container(
+                    //             height: 35,
+                    //             width: 38,
+                    //             decoration: BoxDecoration(
+                    //               color: Theme.of(context).primaryColor,
+                    //               borderRadius: const BorderRadius.only(
+                    //                 topLeft:
+                    //                     Radius.circular(Dimensions.radiusLarge),
+                    //                 bottomRight:
+                    //                     Radius.circular(Dimensions.radiusLarge),
+                    //               ),
+                    //             ),
+                    //             child: Icon(
+                    //                 isPopularItemCart
+                    //                     ? Icons.add_shopping_cart
+                    //                     : Icons.add,
+                    //                 color: Theme.of(context).cardColor,
+                    //                 size: 20),
+                    //           ),
+                    //         ),
+                    //       )
+                    //     : const SizedBox(),
                   ]),
                 ),
               ),

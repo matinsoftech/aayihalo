@@ -6,13 +6,12 @@ import 'package:sixam_mart/view/screens/home/widget/bad_weather_widget.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/banner_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/best_reviewed_item_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/category_view.dart';
+import 'package:sixam_mart/view/screens/home/widget/grocery/middle_section_banner_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/promo_code_banner_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/item_that_you_love_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/just_for_you_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/most_popular_item_view.dart';
-import 'package:sixam_mart/view/screens/home/widget/grocery/middle_section_banner_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/special_offer_view.dart';
-import 'package:sixam_mart/view/screens/home/widget/grocery/visit_again_view.dart';
 
 class GroceryHomeScreen extends StatelessWidget {
   const GroceryHomeScreen({Key? key}) : super(key: key);
@@ -36,16 +35,15 @@ class GroceryHomeScreen extends StatelessWidget {
       const CategoryView(),
       // isLoggedIn ? const VisitAgainView() : const SizedBox(),
       const SpecialOfferView(isFood: false, isShop: false),
-      const FlashSaleView(),
+      // const FlashSaleView(),
       // const BestStoreNearbyView(),
       const MostPopularItemView(isFood: false, isShop: false),
-      // const MiddleSectionBannerView(),
       const BannerView(isFeatured: false),
       const BestReviewItemView(),
       // const StoreWiseBannerView(),
-      const JustForYouView(),
-      const ItemThatYouLoveView(forShop: false),
-      isLoggedIn ? const PromoCodeBannerView() : const SizedBox(),
+      // const JustForYouView(),
+      // const ItemThatYouLoveView(forShop: false),
+      // isLoggedIn ? const PromoCodeBannerView() : const SizedBox(),
       // const NewOnMartView(isPharmacy: false, isShop: false),
 
       SizedBox(

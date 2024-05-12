@@ -37,6 +37,30 @@ class AuthRepo {
     return await apiClient.postData(AppConstants.loginUri, data);
   }
 
+    Future<Response> loginWithPhoneNumber({String? phone}) async {
+    String guestId = getGuestId();
+    Map<String, String> data = {
+      "phone_number": phone!,
+    };
+    if(guestId.isNotEmpty) {
+      data.addAll({"guest_id": guestId});
+    }
+    return await apiClient.postData(AppConstants.customerUri, data);
+  }
+
+   Future<Response> verifyOTP({required String phone, required String code}) async {
+    String guestId = getGuestId();
+    Map<String, dynamic> data = {
+      "phone_number": phone, 
+      "code": code
+
+    };
+    if(guestId.isNotEmpty) {
+      data.addAll({"guest_id": guestId});
+    }
+    return await apiClient.postData(AppConstants.customerUri, data);
+  }
+
   Future<Response> loginWithSocialMedia(SocialLogInBody socialLogInBody, int timeout) async {
     return await apiClient.postData(AppConstants.socialLoginUri, socialLogInBody.toJson(), timeout: timeout);
   }
@@ -120,13 +144,13 @@ class AuthRepo {
       AddressModel? addressModel = AddressModel.fromJson(jsonDecode(sharedPreferences.getString(AppConstants.userAddress)!));
       apiClient.updateHeader(
           token, addressModel.zoneIds, addressModel.areaIds, sharedPreferences.getString(AppConstants.languageCode),
-          Get.find<SplashController>().module != null ? Get.find<SplashController>().module!.id : null,
+          Get.find<SplashController>().module?.id,
           addressModel.latitude, addressModel.longitude,
       );
     }else{
       apiClient.updateHeader(
           token, null, null, sharedPreferences.getString(AppConstants.languageCode),
-          Get.find<SplashController>().module != null ? Get.find<SplashController>().module!.id : null,
+          Get.find<SplashController>().module?.id,
           null, null
       );
     }

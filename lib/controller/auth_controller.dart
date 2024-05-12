@@ -243,6 +243,43 @@ class AuthController extends GetxController implements GetxService {
     return responseModel;
   }
 
+   Future<ResponseModel> loginWithPhoneNumber(String phone) async {
+    _isLoading = true;
+    update();
+    Response response = await authRepo.loginWithPhoneNumber(phone: phone);
+    ResponseModel responseModel;
+    if (response.statusCode == 200) {
+     
+      responseModel = ResponseModel(true, response.body['message']);
+    } else {
+      responseModel = ResponseModel(false, response.statusText);
+    }
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
+
+  Future<ResponseModel> verifyOtp({required String phone,required String otp}) async {
+    _isLoading = true;
+    update();
+    Response response = await authRepo.verifyOTP(phone: phone, code: otp);
+    ResponseModel responseModel;
+    if (response.statusCode == 200) {
+     
+        authRepo.saveUserToken(response.body['token']);
+        await authRepo.updateToken();
+        authRepo.clearGuestId();
+        Get.find<UserController>().getUserInfo();
+      
+      responseModel = ResponseModel(true, '${response.body['message']}${response.body['token']}');
+    } else {
+      responseModel = ResponseModel(false, response.statusText);
+    }
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
+
   Future<void> loginWithSocialMedia(SocialLogInBody socialLogInBody) async {
     _isLoading = true;
     update();
