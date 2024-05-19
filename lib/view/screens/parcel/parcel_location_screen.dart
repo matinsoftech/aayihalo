@@ -1,7 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:phone_number/phone_number.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 import 'package:sixam_mart/controller/auth_controller.dart';
 import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/controller/parcel_controller.dart';
@@ -92,9 +92,9 @@ class _ParcelLocationScreenState extends State<ParcelLocationScreen> with Ticker
     String pNumber = '';
      if(GetPlatform.isAndroid || GetPlatform.isIOS) {
        try {
-         PhoneNumber phoneNumber = await PhoneNumberUtil().parse(number);
+         PhoneNumber phoneNumber =  PhoneNumber.parse(number);
          code = '+${phoneNumber.countryCode}';
-         pNumber = phoneNumber.nationalNumber;
+         pNumber = phoneNumber.nsn;
          Get.find<ParcelController>().setCountryCode(code, true);
          Get.find<ParcelController>().setCountryCode(code, false);
        } catch (_) {}

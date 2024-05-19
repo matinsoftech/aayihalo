@@ -11,6 +11,7 @@ import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';
+import 'package:sixam_mart/view/base/cart_count_view.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/organic_tag.dart';
 
@@ -224,6 +225,7 @@ class ItemTitleView extends StatelessWidget {
                         robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge),
                     textDirection: TextDirection.ltr,
                   ),
+                   
                 ]),
               ],
             );
@@ -289,6 +291,8 @@ class ItemTitleView extends StatelessWidget {
                                   ],
                                 );
                               }),
+
+                               CartCountView(item: item!, fromItemDetail: true,),
                       ]),
                       // const SizedBox(height: 5),
 
@@ -308,11 +312,17 @@ class ItemTitleView extends StatelessWidget {
                       //     ),
                       //   ),
                       // ),
-                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                    item!.variations!.isNotEmpty ?  
+                           
+                          const  SizedBox() :   const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
+                         
+                           item!.variations!.isNotEmpty ?  
+                           
+                          const  SizedBox() :
                             Expanded(
                                 child: Column(
                                     crossAxisAlignment:
@@ -342,16 +352,16 @@ class ItemTitleView extends StatelessWidget {
                                   SizedBox(height: discount > 0 ? 5 : 0),
                                   !isCampaign
                                       ? Row(children: [
-                                          Text(
-                                              item!.avgRating!
-                                                  .toStringAsFixed(1),
-                                              style: robotoRegular.copyWith(
-                                                color:
-                                                    Theme.of(context).hintColor,
-                                                fontSize:
-                                                    Dimensions.fontSizeLarge,
-                                              )),
-                                          const SizedBox(width: 5),
+                                          // Text(
+                                          //     item!.avgRating!
+                                          //         .toStringAsFixed(1),
+                                          //     style: robotoRegular.copyWith(
+                                          //       color:
+                                          //           Theme.of(context).hintColor,
+                                          //       fontSize:
+                                          //           Dimensions.fontSizeLarge,
+                                          //     )),
+                                          // const SizedBox(width: 5),
                                           // RatingBar(
                                           //     rating: item!.avgRating,
                                           //     ratingCount: item!.ratingCount),
@@ -404,26 +414,32 @@ class ItemTitleView extends StatelessWidget {
                                       ),
                                     )
                                   : const SizedBox(),
-                              const SizedBox(
+                     item!.variations!.isNotEmpty ?  
+                           
+                          const  SizedBox() :          const SizedBox(
                                   height: Dimensions.paddingSizeDefault),
                               OrganicTag(item: item!, fromDetails: true),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: Dimensions.paddingSizeSmall,
-                                    vertical: Dimensions.paddingSizeExtraSmall),
-                                decoration: BoxDecoration(
-                                  color: inStock ? Colors.red : Colors.green,
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radiusSmall),
-                                ),
-                                child: Text(
-                                    inStock ? 'out_of_stock'.tr : 'in_stock'.tr,
-                                    style: robotoRegular.copyWith(
-                                      color: Colors.white,
-                                      fontSize: Dimensions.fontSizeSmall,
-                                    )),
-                              ),
-                            ]),
+                              // Container(
+                              //   padding: const EdgeInsets.symmetric(
+                              //       horizontal: Dimensions.paddingSizeSmall,
+                              //       vertical: Dimensions.paddingSizeExtraSmall),
+                              //   decoration: BoxDecoration(
+                              //     color: inStock ? Colors.red : Colors.green,
+                              //     borderRadius: BorderRadius.circular(
+                              //         Dimensions.radiusSmall),
+                              //   ),
+                              //   child: Text(
+                              //       inStock ? 'out_of_stock'.tr : 'in_stock'.tr,
+                              //       style: robotoRegular.copyWith(
+                              //         color: Colors.white,
+                              //         fontSize: Dimensions.fontSizeSmall,
+                              //       )),
+                              // ),
+                            ]), 
+                           
+                          
+                             
+                          
                           ]),
                     ]);
               },

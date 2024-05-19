@@ -22,7 +22,6 @@ class HtmlViewerScreen extends StatefulWidget {
 }
 
 class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -30,59 +29,105 @@ class _HtmlViewerScreenState extends State<HtmlViewerScreen> {
     Get.find<SplashController>().getHtmlText(widget.htmlType);
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: widget.htmlType == HtmlType.termsAndCondition ? 'terms_conditions'.tr
-          : widget.htmlType == HtmlType.aboutUs ? 'about_us'.tr : widget.htmlType == HtmlType.privacyPolicy
-          ? 'privacy_policy'.tr : widget.htmlType == HtmlType.shippingPolicy ? 'shipping_policy'.tr
-          : widget.htmlType == HtmlType.refund ? 'refund_policy'.tr :  widget.htmlType == HtmlType.cancellation
-          ? 'cancellation_policy'.tr : 'no_data_found'.tr),
-      endDrawer: const MenuDrawer(),endDrawerEnableOpenDragGesture: false,
+      appBar: CustomAppBar(
+          title: widget.htmlType == HtmlType.termsAndCondition
+              ? 'terms_conditions'.tr
+              : widget.htmlType == HtmlType.aboutUs
+                  ? 'about_us'.tr
+                  : widget.htmlType == HtmlType.privacyPolicy
+                      ? 'privacy_policy'.tr
+                      : widget.htmlType == HtmlType.shippingPolicy
+                          ? 'shipping_policy'.tr
+                          : widget.htmlType == HtmlType.refund
+                              ? 'refund_policy'.tr
+                              : widget.htmlType == HtmlType.cancellation
+                                  ? 'cancellation_policy'.tr
+                                  : 'no_data_found'.tr),
+      endDrawer: const MenuDrawer(),
+      endDrawerEnableOpenDragGesture: false,
       body: GetBuilder<SplashController>(builder: (splashController) {
         return Center(
-          child: splashController.htmlText != null ? SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                WebScreenTitleWidget( title: widget.htmlType == HtmlType.termsAndCondition ? 'terms_conditions'.tr
-                  : widget.htmlType == HtmlType.aboutUs ? 'about_us'.tr : widget.htmlType == HtmlType.privacyPolicy
-                  ? 'privacy_policy'.tr : widget.htmlType == HtmlType.shippingPolicy ? 'shipping_policy'.tr
-                  : widget.htmlType == HtmlType.refund ? 'refund_policy'.tr :  widget.htmlType == HtmlType.cancellation
-                  ? 'cancellation_policy'.tr : 'no_data_found'.tr),
+          child: splashController.htmlText != null
+              ? SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      WebScreenTitleWidget(
+                          title: widget.htmlType == HtmlType.termsAndCondition
+                              ? 'terms_conditions'.tr
+                              : widget.htmlType == HtmlType.aboutUs
+                                  ? 'about_us'.tr
+                                  : widget.htmlType == HtmlType.privacyPolicy
+                                      ? 'privacy_policy'.tr
+                                      : widget.htmlType ==
+                                              HtmlType.shippingPolicy
+                                          ? 'shipping_policy'.tr
+                                          : widget.htmlType == HtmlType.refund
+                                              ? 'refund_policy'.tr
+                                              : widget.htmlType ==
+                                                      HtmlType.cancellation
+                                                  ? 'cancellation_policy'.tr
+                                                  : 'no_data_found'.tr),
+                      FooterView(
+                          child: Ink(
+                        width: Dimensions.webMaxWidth,
+                        color: Theme.of(context).cardColor,
+                        padding:
+                            const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              (splashController.htmlText!.contains('<ol>') ||
+                                      splashController.htmlText!
+                                          .contains('<ul>'))
+                                  ? HtmlWidget(
+                                      splashController.htmlText ?? '',
+                                      key: Key(widget.htmlType.toString()),
+                                      onTapUrl: (String url) {
+                                        return launchUrlString(url,
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      },
+                                    )
+                                  : Html(
+                                      data: splashController.htmlText ?? '',
+                                      // onTapUrl: (p0) {
+                                      //   return launchUrlString(p0,
+                                      //     mode: LaunchMode.externalApplication);
+                                      // }
 
-                FooterView(child: Ink(
-                  width: Dimensions.webMaxWidth,
-                  color: Theme.of(context).cardColor,
-                  padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                  child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                                      onLinkTap: (url, attributes, element) {
+                                        if (url!.startsWith('www.')) {
+                                          url = 'https://$url';
+                                        }
+                                        if (kDebugMode) {
+                                          print('Redirect to url: $url');
+                                        }
+                                        html.window.open(url, "_blank");
+                                      },
 
-                    (splashController.htmlText!.contains('<ol>') || splashController.htmlText!.contains('<ul>')) ? HtmlWidget(
-                      splashController.htmlText ?? '',
-                      key: Key(widget.htmlType.toString()),
-                      onTapUrl: (String url) {
-                        return launchUrlString(url, mode: LaunchMode.externalApplication);
-                      },
-                    ) : SelectableHtml(
-                      data: splashController.htmlText, shrinkWrap: true,
-                      onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) {
-                        if(url!.startsWith('www.')) {
-                          url = 'https://$url';
-                        }
-                        if (kDebugMode) {
-                          print('Redirect to url: $url');
-                        }
-                        html.window.open(url, "_blank");
-                      },
-                    ),
-
-                  ]),
-                ))
-              ],
-            ),
-          ) : const CircularProgressIndicator(),
+                                      // onLinkTap: (String? url,
+                                      //     RenderContext context,
+                                      //     Map<String, String> attributes,
+                                      //     element) {
+                                      //   if (url!.startsWith('www.')) {
+                                      //     url = 'https://$url';
+                                      //   }
+                                      //   if (kDebugMode) {
+                                      //     print('Redirect to url: $url');
+                                      //   }
+                                      //   html.window.open(url, "_blank");
+                                      // },
+                                    ),
+                            ]),
+                      ))
+                    ],
+                  ),
+                )
+              : const CircularProgressIndicator(),
         );
       }),
     );

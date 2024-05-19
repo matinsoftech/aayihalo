@@ -18,6 +18,8 @@ class ItemShimmer extends StatelessWidget {
     bool desktop = ResponsiveHelper.isDesktop(context);
 
     return Container(
+      height: 300,
+                  width: 180,
       padding: ResponsiveHelper.isDesktop(context)
           ? const EdgeInsets.all(Dimensions.paddingSizeSmall)
           : null,

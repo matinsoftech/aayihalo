@@ -17,8 +17,8 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/category_view_all.dart';
 
-class CategoryView extends StatelessWidget {
-  const CategoryView({Key? key}) : super(key: key);
+class CategoryViewWidget extends StatelessWidget {
+  const CategoryViewWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -340,13 +340,23 @@ class FoodCategoryView extends StatelessWidget {
                                     ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(
-                                        Dimensions.radiusSmall,
+                                        Dimensions.radiusLarge,
                                       ),
-                                      image: DecorationImage(
-                                          image: CachedNetworkImageProvider(
-                                        '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![i].image}',
-                                      )),
+                                      border: Border.all(
+                                        color: Theme.of(context).dividerColor,
+                                        width: 1,
+                                      ),
+                                      // image: DecorationImage(
+                                      //   image: CachedNetworkImageProvider(
+                                      //     '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![i].image}',
+                                      //   ),
+                                      // ),
                                       color: const Color(0xFFFAFCEF),
+                                    ),
+
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CachedNetworkImage(imageUrl: '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![i].image}',),
                                     ),
                                   ),
                                   const SizedBox(
@@ -531,7 +541,7 @@ class FoodCategoryShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container( 
+    return Container(
       constraints: BoxConstraints(
         maxHeight: 160,
       ),

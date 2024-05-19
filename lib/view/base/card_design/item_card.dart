@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -48,34 +49,22 @@ class ItemCard extends StatelessWidget {
           child: Container(
             width: 150,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-              color: Theme.of(context).cardColor,
-            ),
+                borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                color: Theme.of(context).cardColor,
+                border: Border.all(
+                  color: Theme.of(context).dividerColor,
+                  width: 0.5,
+                )),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
-                flex: 9,
+                flex: 6,
                 child: Stack(children: [
                   Padding(
-                    padding: EdgeInsets.only(
-                        top: isPopularItem
-                            ? Dimensions.paddingSizeExtraSmall
-                            : 0,
-                        left: isPopularItem
-                            ? Dimensions.paddingSizeExtraSmall
-                            : 0,
-                        right: isPopularItem
-                            ? Dimensions.paddingSizeExtraSmall
-                            : 0),
+                     padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall
+                    ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(Dimensions.radiusLarge),
-                        topRight: const Radius.circular(Dimensions.radiusLarge),
-                        bottomLeft: Radius.circular(
-                            isPopularItem ? Dimensions.radiusLarge : 0),
-                        bottomRight: Radius.circular(
-                            isPopularItem ? Dimensions.radiusLarge : 0),
-                      ),
+                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                       child: CustomImage(
                         placeholder: Images.placeholder,
                         image:
@@ -143,28 +132,24 @@ class ItemCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          (isFood || isShop)
-                              ? Text(item.storeName ?? '',
-                                  style: robotoRegular.copyWith(
-                                      color: Theme.of(context).disabledColor))
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    FittedBox(
-                                      child: Text(
-                                          item.name!.length > 8
-                                              ? '${item.name!.substring(0, 8)}..'
-                                              : item.name ?? '',
-                                          style: robotoBold,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    CartCountView(
-                                      item: item,
-                                    ),
-                                  ],
+                          // (isFood || isShop)
+                          //     ? Text(item.storeName ?? '',
+                          //         style: robotoRegular.copyWith(
+                          //             color: Theme.of(context).disabledColor))
+                          //     :
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                child: Text(
+                                  item.name!,
+                                  style: robotoBold.copyWith(fontSize: 12),
+                                  overflow: TextOverflow.visible,
                                 ),
+                              ),
+                            ],
+                          ),
 
                           (isFood || isShop)
                               ? Flexible(
@@ -239,20 +224,24 @@ class ItemCard extends StatelessWidget {
                                               color: Theme.of(context)
                                                   .disabledColor)),
                                     ])
-                              : (Get.find<SplashController>()
-                                          .configModel!
-                                          .moduleConfig!
-                                          .module!
-                                          .unit! &&
-                                      item.unitType != null)
-                                  ? Text(
-                                      '(${item.unitType ?? ''})',
-                                      style: robotoRegular.copyWith(
-                                          fontSize:
-                                              Dimensions.fontSizeExtraSmall,
-                                          color: Theme.of(context).hintColor),
-                                    )
-                                  : const SizedBox(),
+                              :
+
+                              // (Get.find<SplashController>()
+                              //             .configModel!
+                              //             .moduleConfig!
+                              //             .module!
+                              //             .unit! &&
+                              //         item.unitType != null)
+                              //     ? Text(
+                              //         '(${item.unitType ?? ''})',
+                              //         style: robotoRegular.copyWith(
+                              //             fontSize:
+                              //                 Dimensions.fontSizeExtraSmall,
+                              //             color: Theme.of(context).hintColor),
+                              //       )
+                              //     :
+
+                              const SizedBox(),
 
                           item.discount != null && item.discount! > 0
                               ? Text(
@@ -283,19 +272,8 @@ class ItemCard extends StatelessWidget {
                                 style: robotoMedium,
                               ),
                               // delivery in
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.timer,
-                                      size: 14,
-                                      color: Theme.of(context).primaryColor),
-                                  const SizedBox(width: 2),
-                                  const Text(
-                                    "10m",
-                                    style: TextStyle(fontSize: 12),
-                                  )
-                                ],
-                              ),
+
+                              CartCountView(item: item)
                             ],
                           ),
 

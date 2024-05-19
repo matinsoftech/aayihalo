@@ -305,8 +305,8 @@ class _WebLandingPageState extends State<WebLandingPage> {
                             physics: const BouncingScrollPhysics(),
                             padding: EdgeInsets.zero,
                             child: Html(
-                              data: splashController.moduleList![index].description ?? '', shrinkWrap: true,
-                              onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) {
+                              data: splashController.moduleList![index].description ?? '', shrinkWrap: true, 
+                              onLinkTap: (url, attributes, element) {
                                 if(url!.startsWith('www.')) {
                                   url = 'https://$url';
                                 }
@@ -315,6 +315,15 @@ class _WebLandingPageState extends State<WebLandingPage> {
                                 }
                                 html.window.open(url, "_blank");
                               },
+                              // onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) {
+                              //   if(url!.startsWith('www.')) {
+                              //     url = 'https://$url';
+                              //   }
+                              //   if (kDebugMode) {
+                              //     print('Redirect to url: $url');
+                              //   }
+                              //   html.window.open(url, "_blank");
+                              // },
                             ),
                           )),
                         ])),

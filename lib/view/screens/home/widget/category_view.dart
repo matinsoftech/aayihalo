@@ -323,16 +323,17 @@ class FoodCategoryView extends StatelessWidget {
                         child: SizedBox(
                           width: 60,
                           child: Column(children: [
-                            ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(40)),
-                              child: CustomImage(
-                                image:
-                                    '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![index].image}',
-                                height: 60,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
+                            Container( 
+                                 height: 60,
+                                  width: double.infinity,
+                              decoration: BoxDecoration(  
+                              
+                                borderRadius:
+                                  const BorderRadius.all(Radius.circular(40)), 
+
+                                  image: DecorationImage(image: NetworkImage('${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![index].image}')),
                               ),
+                              
                             ),
                             const SizedBox(height: Dimensions.paddingSizeSmall),
                             Expanded(

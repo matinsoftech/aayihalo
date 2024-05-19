@@ -78,7 +78,7 @@ class _WebItemThatYouLoveViewState extends State<WebItemThatYouLoveView> {
                           width: 210, height: 285,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                            color: Theme.of(context).errorColor,
+                            color: Colors.red,
                           ),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 

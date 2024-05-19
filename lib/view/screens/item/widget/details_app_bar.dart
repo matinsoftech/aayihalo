@@ -62,7 +62,7 @@ class DetailsAppBarState extends State<DetailsAppBar>
       leading: IconButton(
           icon: Icon(Icons.arrow_back_ios,
               color: Theme.of(context).textTheme.bodyLarge!.color),
-          onPressed: () => Navigator.pop(context)),
+          onPressed: () => Get.back(),),
       backgroundColor: Theme.of(context).cardColor,
       elevation: 0,
       title: Text(
@@ -73,42 +73,7 @@ class DetailsAppBarState extends State<DetailsAppBar>
       ),
       centerTitle: true,
       actions: [
-        AnimatedBuilder(
-          animation: offsetAnimation,
-          builder: (buildContext, child) {
-            return Container(
-              padding: EdgeInsets.only(
-                left: offsetAnimation.value + 15.0,
-              ),
-              child: Stack(children: [
-                IconButton(
-                    icon: Icon(Icons.shopping_cart,
-                        color: Theme.of(context).primaryColor),
-                    onPressed: () {
-                      Navigator.pushNamed(context, RouteHelper.getCartRoute());
-                    }),
-                Positioned(
-                  top: 5,
-                  right: 5,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.red),
-                    child:
-                        GetBuilder<CartController>(builder: (cartController) {
-                      return Text(
-                        cartController.cartList.length.toString(),
-                        style: robotoMedium.copyWith(
-                            color: Colors.white, fontSize: 8),
-                      );
-                    }),
-                  ),
-                ),
-              ]),
-            );
-          },
-        ),
+        
         GetBuilder<WishListController>(builder: (wishController) {
           return InkWell(
             onTap: () {
@@ -136,7 +101,7 @@ class DetailsAppBarState extends State<DetailsAppBar>
           onTap: () => Share.share('Share this product https://example.com'),
           child: Icon(
             Icons.share,
-            color: Theme.of(context).textTheme.bodyLarge!.color,
+            color: Theme.of(context).primaryColor,
           ),
         ),
         const SizedBox(width: 10),

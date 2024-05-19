@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/view/screens/cart/widget/web_cart_items_widget.dart';
 import 'package:sixam_mart/view/screens/cart/widget/web_suggested_item_view.dart';
+import 'package:sixam_mart/view/screens/checkout/checkout_screen.dart';
 import 'package:sixam_mart/view/screens/home/home_screen.dart';
 import 'package:sixam_mart/view/screens/store/store_screen.dart';
 
@@ -154,7 +155,9 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
 
-            ResponsiveHelper.isDesktop(context) ? const SizedBox.shrink() : CheckoutButton(cartController: cartController, availableList: cartController.availableList),
+            ResponsiveHelper.isDesktop(context) ? const SizedBox.shrink() : CheckoutButton(cartController: cartController, availableList: cartController.availableList), 
+
+           
           ],
         ) : const NoDataScreen(isCart: true, text: '', showFooter: true);
       },

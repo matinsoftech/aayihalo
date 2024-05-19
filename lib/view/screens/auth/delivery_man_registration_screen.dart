@@ -5,7 +5,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:phone_number/phone_number.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 import 'package:sixam_mart/controller/auth_controller.dart';
 import 'package:sixam_mart/controller/localization_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
@@ -1079,8 +1079,8 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
               bool isValid = GetPlatform.isAndroid ? false : true;
               if(GetPlatform.isAndroid) {
                 try {
-                  PhoneNumber phoneNumber = await PhoneNumberUtil().parse(numberWithCountryCode);
-                  numberWithCountryCode = '+${phoneNumber.countryCode}${phoneNumber.nationalNumber}';
+                  PhoneNumber phoneNumber =  PhoneNumber.parse(numberWithCountryCode);
+                  numberWithCountryCode = phoneNumber.nsn;
                   isValid = true;
                 } catch (_) {}
               }

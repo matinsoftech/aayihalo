@@ -60,95 +60,99 @@ class _ItemsViewState extends State<ItemsView> {
       }
     }
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      !isNull
-          ? length > 0
-              ? Padding(
-                  padding: const EdgeInsets.only(left: 24),
-                  child: GridView.builder(
-                    key: UniqueKey(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 0.70,
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 4,
-                    ),
-                    physics: widget.isScrollable
-                        ? const BouncingScrollPhysics()
-                        : const NeverScrollableScrollPhysics(),
-                    shrinkWrap: widget.isScrollable ? false : true,
-                    itemCount: length,
-                    padding: widget.padding,
-                    itemBuilder: (context, index) {
-                      return
-                          // widget.stores != null && widget.isStore
-                          //     ?
-
-                          //     widget.isFoodOrGrocery! && widget.isStore
-                          //         ? StoreCardWidget(store: widget.stores![index])
-                          //         : StoreCardWithDistance(
-                          //             store: widget.stores![index]!,
-                          //             fromAllStore: true)
-                          //     :
-
-                          ItemCard(
-                        // isStore: widget.isStore,
-                        item: widget.items![index]!,
-                        isShop: false,
-                        isFood: false,
-                        // isFeatured: widget.isFeatured,
-                        // store:
-                        // widget.isStore ? widget.stores![index] : null,
-                        // index: index,
-                        // length: length,
-                        // isCampaign: widget.isCampaign,
-                        // inStore: widget.inStorePage,
-                      );
-                    },
+    return Padding( 
+      padding: widget.padding,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        !isNull
+            ? length > 0
+                ? GridView.builder(
+                  key: UniqueKey(),
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 0.70,
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 4,
                   ),
+                  physics: widget.isScrollable
+                      ? const BouncingScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
+                  shrinkWrap: widget.isScrollable ? false : true,
+                  itemCount: length,
+                  padding: widget.padding,
+                  itemBuilder: (context, index) {
+                    return
+                        // widget.stores != null && widget.isStore
+                        //     ?
+                
+                        //     widget.isFoodOrGrocery! && widget.isStore
+                        //         ? StoreCardWidget(store: widget.stores![index])
+                        //         : StoreCardWithDistance(
+                        //             store: widget.stores![index]!,
+                        //             fromAllStore: true)
+                        //     :
+                
+                        Center(
+                          child: ItemCard(
+                                                // isStore: widget.isStore,
+                                                item: widget.items![index]!,
+                                                isShop: false,
+                                                isFood: false,
+                                                // isFeatured: widget.isFeatured,
+                                                // store:
+                                                // widget.isStore ? widget.stores![index] : null,
+                                                // index: index,
+                                                // length: length,
+                                                // isCampaign: widget.isCampaign,
+                                                // inStore: widget.inStorePage,
+                                              ),
+                        );
+                  },
                 )
-              : NoDataScreen(
-                  text: widget.noDataText ??
-                      (widget.isStore
-                          ? Get.find<SplashController>()
-                                  .configModel!
-                                  .moduleConfig!
-                                  .module!
-                                  .showRestaurantText!
-                              ? 'no_restaurant_available'.tr
-                              : 'no_store_available'.tr
-                          : 'no_item_available'.tr),
-                )
-          : SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: double.infinity,
-              child: GridView.builder(
-                key: UniqueKey(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.70,
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 2,
+                : NoDataScreen(
+                    text: widget.noDataText ??
+                        (widget.isStore
+                            ? Get.find<SplashController>()
+                                    .configModel!
+                                    .moduleConfig!
+                                    .module!
+                                    .showRestaurantText!
+                                ? 'no_restaurant_available'.tr
+                                : 'no_store_available'.tr
+                            : 'no_item_available'.tr),
+                  )
+            : SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: GridView.builder(
+                  key: UniqueKey(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 0.70,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 2,
+                  ),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: widget.isScrollable ? false : true,
+                  itemCount: 9,
+                  padding: widget.padding,
+                  itemBuilder: (context, index) {
+                    return
+                        //  widget.isStore
+                        //     ? widget.isFoodOrGrocery!
+                        //         ? const StoreCardShimmer()
+                        //         : const NewOnShimmerView()
+                        //     :
+      
+                        Center(
+                          child: ItemShimmer(
+                              isEnabled: isNull,
+                              isStore: widget.isStore,
+                              hasDivider: index != widget.shimmerLength - 1),
+                        );
+                  },
                 ),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: widget.isScrollable ? false : true,
-                itemCount: 9,
-                padding: widget.padding,
-                itemBuilder: (context, index) {
-                  return
-                      //  widget.isStore
-                      //     ? widget.isFoodOrGrocery!
-                      //         ? const StoreCardShimmer()
-                      //         : const NewOnShimmerView()
-                      //     :
-
-                      ItemShimmer(
-                          isEnabled: isNull,
-                          isStore: widget.isStore,
-                          hasDivider: index != widget.shimmerLength - 1);
-                },
               ),
-            ),
-    ]);
+      ]),
+    );
   }
 }
 

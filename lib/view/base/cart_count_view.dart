@@ -8,8 +8,10 @@ import 'package:sixam_mart/util/styles.dart';
 
 class CartCountView extends StatelessWidget {
   final Item item;
+  final bool fromItemDetail;
   final Widget? child;
-  const CartCountView({Key? key, required this.item, this.child})
+  const CartCountView(
+      {Key? key, required this.item, this.child, this.fromItemDetail = false})
       : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class CartCountView extends StatelessWidget {
       return cartQty != 0
           ? Center(
               child: Container(
+                width: fromItemDetail ? 100 : null,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius:
@@ -55,32 +58,32 @@ class CartCountView extends StatelessWidget {
                                 color: Theme.of(context).primaryColor),
                           ),
                           padding: const EdgeInsets.all(
-                              Dimensions.paddingSizeExtraSmall),
+                            Dimensions.paddingSizeExtraSmall,
+                          ),
                           child: Icon(
                             Icons.remove,
-                            size: 8,
+                            size:  fromItemDetail ? null :  16  ,
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 2,
-                          vertical: 4,
-                        ),
-                        child: !cartController.isLoading
-                            ? Text(
+                      !cartController.isLoading
+                          ? Padding(
+                            padding:  EdgeInsets.all(fromItemDetail ? 0:  2.0),
+                            child: Text(
                                 cartQty.toString(),
                                 style: robotoMedium.copyWith(
-                                    fontSize: Dimensions.fontSizeSmall,
+                                    fontSize: fromItemDetail
+                                        ? Dimensions.fontSizeLarge
+                                        : Dimensions.fontSizeSmall,
                                     color: Theme.of(context).cardColor),
-                              )
-                            : SizedBox(
-                                height: 10,
-                                width: 10,
-                                child: CircularProgressIndicator(
-                                    color: Theme.of(context).cardColor)),
-                      ),
+                              ),
+                          )
+                          : SizedBox(
+                              height: 10,
+                              width: 10,
+                              child: CircularProgressIndicator(
+                                  color: Theme.of(context).cardColor)),
                       InkWell(
                         onTap: cartController.isLoading
                             ? null
@@ -102,8 +105,8 @@ class CartCountView extends StatelessWidget {
                           padding: const EdgeInsets.all(
                               Dimensions.paddingSizeExtraSmall),
                           child: Icon(
-                            Icons.add,
-                            size: 8,
+                            Icons.add, 
+                            size:  fromItemDetail ? null :  16  ,
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
@@ -117,8 +120,8 @@ class CartCountView extends StatelessWidget {
               },
               child: child ??
                   Container(
-                    height: 25,
-                    width: 25,
+                    height: fromItemDetail ? 40:  25,
+                    width: fromItemDetail ? 40: 25,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Theme.of(context).cardColor,
@@ -128,7 +131,7 @@ class CartCountView extends StatelessWidget {
                               blurRadius: 10)
                         ]),
                     child: Icon(Icons.add,
-                        size: 20, color: Theme.of(context).primaryColor),
+                        size:fromItemDetail ? 24: 20, color: Theme.of(context).primaryColor),
                   ),
             );
     });

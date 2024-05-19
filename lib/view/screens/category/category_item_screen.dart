@@ -268,7 +268,7 @@ class CategoryItemScreenState extends State<CategoryItemScreen>
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: Dimensions.paddingSizeSmall,
-                                  vertical: Dimensions.paddingSizeExtraSmall),
+                                  vertical: Dimensions.paddingSizeExtraSmall,),
                               margin: const EdgeInsets.only(
                                   right: Dimensions.paddingSizeSmall),
                               decoration: BoxDecoration(

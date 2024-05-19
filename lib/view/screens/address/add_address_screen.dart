@@ -1,5 +1,5 @@
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:phone_number/phone_number.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 import 'package:sixam_mart/controller/auth_controller.dart';
 import 'package:sixam_mart/controller/localization_controller.dart';
 import 'package:sixam_mart/controller/location_controller.dart';
@@ -99,9 +99,9 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
   void splitPhoneNumber(String number) async {
     if(GetPlatform.isAndroid || GetPlatform.isIOS) {
       try {
-        PhoneNumber phoneNumber = await PhoneNumberUtil().parse(number);
+        PhoneNumber phoneNumber =  PhoneNumber.parse(number);
         _countryDialCode = '+${phoneNumber.countryCode}';
-        _contactPersonNumberController.text = phoneNumber.nationalNumber;
+        _contactPersonNumberController.text = phoneNumber.nsn;
       } catch (_) {}
     } else if(GetPlatform.isWeb) {
       if(number.contains(_countryDialCode!)) {

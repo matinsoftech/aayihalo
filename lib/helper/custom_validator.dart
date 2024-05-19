@@ -1,6 +1,7 @@
 import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:flutter/foundation.dart';
-import 'package:phone_number/phone_number.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart';
+
 
 class CustomValidator {
 
@@ -9,8 +10,8 @@ class CustomValidator {
     bool isValid = !(GetPlatform.isAndroid && !kIsWeb);
     if(GetPlatform.isAndroid && !kIsWeb) {
       try {
-        PhoneNumber phoneNumber = await PhoneNumberUtil().parse(number);
-        phone = '+${phoneNumber.countryCode}${phoneNumber.nationalNumber}';
+        PhoneNumber phoneNumber = await PhoneNumber.parse(number);
+        phone = '+${phoneNumber.countryCode}${phoneNumber.isoCode}';
         isValid = true;
       } catch (_) {}
     }

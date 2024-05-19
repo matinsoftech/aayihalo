@@ -37,23 +37,29 @@ class LocationController extends GetxController implements GetxService {
   LocationController({required this.locationRepo});
 
   Position _position = Position(
-      longitude: 0,
-      latitude: 0,
-      timestamp: DateTime.now(),
-      accuracy: 1,
-      altitude: 1,
-      heading: 1,
-      speed: 1,
-      speedAccuracy: 1);
+    longitude: 0,
+    latitude: 0,
+    timestamp: DateTime.now(),
+    accuracy: 1,
+    altitude: 1,
+    heading: 1,
+    speed: 1,
+    speedAccuracy: 1,
+    altitudeAccuracy: 1,
+    headingAccuracy: 1,
+  );
   Position _pickPosition = Position(
-      longitude: 0,
-      latitude: 0,
-      timestamp: DateTime.now(),
-      accuracy: 1,
-      altitude: 1,
-      heading: 1,
-      speed: 1,
-      speedAccuracy: 1);
+    longitude: 0,
+    latitude: 0,
+    timestamp: DateTime.now(),
+    accuracy: 1,
+    altitude: 1,
+    heading: 1,
+    speed: 1,
+    speedAccuracy: 1,
+    altitudeAccuracy: 1,
+    headingAccuracy: 1,
+  );
   bool _loading = false;
   String? _address = '';
   String? _pickAddress = '';
@@ -148,6 +154,8 @@ class LocationController extends GetxController implements GetxService {
         heading: 1,
         speed: 1,
         speedAccuracy: 1,
+        altitudeAccuracy: 1,
+        headingAccuracy: 1,
       );
     }
     if (fromAddress) {
@@ -197,6 +205,8 @@ class LocationController extends GetxController implements GetxService {
       heading: 1,
       speed: 1,
       speedAccuracy: 1,
+      altitudeAccuracy: 1,
+      headingAccuracy: 1,
     );
     String addressFromGeocode = await getAddressFromGeocode(
         LatLng(storeAddress.latitude, storeAddress.longitude));
@@ -315,6 +325,8 @@ class LocationController extends GetxController implements GetxService {
             altitude: 1,
             speedAccuracy: 1,
             speed: 1,
+            altitudeAccuracy: 1,
+            headingAccuracy: 1,
           );
         } else {
           _pickPosition = Position(
@@ -326,6 +338,8 @@ class LocationController extends GetxController implements GetxService {
             altitude: 1,
             speedAccuracy: 1,
             speed: 1,
+            altitudeAccuracy: 1,
+            headingAccuracy: 1,
           );
         }
         ZoneResponseModel responseModel = await getZone(
@@ -618,6 +632,8 @@ class LocationController extends GetxController implements GetxService {
       heading: 1,
       speed: 1,
       speedAccuracy: 1,
+      altitudeAccuracy: 1,
+      headingAccuracy: 1,
     );
 
     _pickAddress = address;
@@ -661,6 +677,8 @@ class LocationController extends GetxController implements GetxService {
       speedAccuracy: 1,
       floor: 1,
       accuracy: 1,
+      altitudeAccuracy: 1,
+      headingAccuracy: 1,
     );
     _address = address.address;
     _addressTypeIndex = _addressTypeList.indexOf(address.addressType);
@@ -742,6 +760,8 @@ class LocationController extends GetxController implements GetxService {
           heading: 1,
           speed: 1,
           speedAccuracy: 1,
+          altitudeAccuracy: 1,
+          headingAccuracy: 1,
         );
       }
 
@@ -773,7 +793,7 @@ class LocationController extends GetxController implements GetxService {
     if (!fromHome && Get.find<LocationController>().getUserAddress() != null) {
       Get.dialog(const CustomLoader(), barrierDismissible: false);
       Get.find<LocationController>().autoNavigate(
-      Get.find<LocationController>().getUserAddress(),
+        Get.find<LocationController>().getUserAddress(),
         fromSignup,
         null,
         false,
@@ -796,11 +816,12 @@ class LocationController extends GetxController implements GetxService {
                   height: 300,
                   width: 300,
                   child: PickMapScreen(
-                      fromSignUp: (page == RouteHelper.signUp),
-                      canRoute: false,
-                      fromAddAddress: false,
-                      route: null,
-                      googleMapController: mapController,),
+                    fromSignUp: (page == RouteHelper.signUp),
+                    canRoute: false,
+                    fromAddAddress: false,
+                    route: null,
+                    googleMapController: mapController,
+                  ),
                 );
               });
         } else {

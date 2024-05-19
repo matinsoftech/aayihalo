@@ -32,13 +32,14 @@ class GroceryHomeScreen extends StatelessWidget {
         ),
       ),
 
-      const CategoryView(),
+      const CategoryViewWidget(),
       // isLoggedIn ? const VisitAgainView() : const SizedBox(),
       const SpecialOfferView(isFood: false, isShop: false),
       // const FlashSaleView(),
       // const BestStoreNearbyView(),
       const MostPopularItemView(isFood: false, isShop: false),
       const BannerView(isFeatured: false),
+      const SizedBox(height: 16),
       const BestReviewItemView(),
       // const StoreWiseBannerView(),
       // const JustForYouView(),
@@ -46,9 +47,7 @@ class GroceryHomeScreen extends StatelessWidget {
       // isLoggedIn ? const PromoCodeBannerView() : const SizedBox(),
       // const NewOnMartView(isPharmacy: false, isShop: false),
 
-      SizedBox(
-        height: 100,
-      )
+      const SizedBox(height: 160)
       // const PromotionalBannerView(),
     ]);
   }

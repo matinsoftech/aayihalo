@@ -44,7 +44,7 @@ class ShopHomeScreen extends StatelessWidget {
         ),
       ),
 
-      const CategoryView(),
+      const CategoryViewWidget(),
       isLoggedIn ? const VisitAgainView() : const SizedBox(),
       const MostPopularItemView(isFood: false, isShop: true),
       const FlashSaleView(),
