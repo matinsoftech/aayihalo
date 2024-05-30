@@ -93,11 +93,17 @@ class ApiClient extends GetxService {
             Uri.parse(appBaseUrl + uri),
             headers: headers ?? _mainHeaders,
           )
-          .timeout(Duration(seconds: timeoutInSeconds));
+          .timeout(Duration(seconds: timeoutInSeconds)); 
+
+          if(uri == AppConstants.homeScreenDataUrl){
+            print('====> API Call: $uri\nHeader: $_mainHeaders');
+          } 
+
+
       return handleResponse(response, uri);
     } catch (e) {
       if (kDebugMode) {
-        print('------------${e.toString()}');
+        print('{$uri}------------${e.toString()}');
       }
       return Response(statusCode: 1, statusText: noInternetMessage);
     }

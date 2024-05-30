@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
-import 'package:sixam_mart/data/model/response/cart_model.dart';
+import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/data/model/response/store_model.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
@@ -11,8 +11,8 @@ import 'package:sixam_mart/view/screens/cart/widget/cart_item_widget.dart';
 import 'package:sixam_mart/view/screens/store/store_screen.dart';
 
 class WebCardItemsWidget extends StatelessWidget {
-  final List<CartModel> cartList;
-  const WebCardItemsWidget({Key? key, required this.cartList}) : super(key: key);
+  final List<CartDataModel> cartList;
+  const WebCardItemsWidget({key, required this.cartList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

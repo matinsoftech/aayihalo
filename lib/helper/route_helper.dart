@@ -432,13 +432,13 @@ class RouteHelper {
         contactNumber: number,
       ));
     }),
-    GetPage(name: checkout, page: () {
-      CheckoutScreen? checkoutScreen = Get.arguments;
-      bool fromCart = Get.parameters['page'] == 'cart';
-      return getRoute(checkoutScreen ?? (!fromCart ? const NotFound() : CheckoutScreen(
-        cartList: null, fromCart: Get.parameters['page'] == 'cart', storeId: Get.parameters['store-id'] != 'null' ? int.parse(Get.parameters['store-id']!) : null,
-      )));
-    }),
+    // GetPage(name: checkout, page: () {
+    //   CheckoutScreen? checkoutScreen = Get.arguments;
+    //   bool fromCart = Get.parameters['page'] == 'cart';
+    //   return getRoute(checkoutScreen ?? (!fromCart ? const NotFound() : CheckoutScreen(
+    //     cartList: null, fromCart: Get.parameters['page'] == 'cart', storeId: Get.parameters['store-id'] != 'null' ? int.parse(Get.parameters['store-id']!) : null,
+    //   )));
+    // }),
     GetPage(name: orderTracking, page: () => getRoute(OrderTrackingScreen(orderID: Get.parameters['id'], contactNumber: Get.parameters['number'],))),
     GetPage(name: basicCampaign, page: () {
       BasicCampaignModel data = BasicCampaignModel.fromJson(jsonDecode(utf8.decode(base64Decode(Get.parameters['data']!.replaceAll(' ', '+')))));

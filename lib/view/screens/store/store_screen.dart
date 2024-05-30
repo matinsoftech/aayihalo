@@ -776,10 +776,10 @@ class _StoreScreenState extends State<StoreScreen> {
                 ),
 
                 InkWell(
-                  onTap: () => Get.toNamed(
-                    RouteHelper.getCheckoutRoute('prescription', storeId: storeController.store!.id),
-                    arguments: CheckoutScreen(fromCart: false, cartList: null, storeId: storeController.store!.id),
-                  ),
+                  // onTap: () => Get.toNamed(
+                  //   RouteHelper.getCheckoutRoute('prescription', storeId: storeController.store!.id),
+                  //   arguments: CheckoutScreen(fromCart: false, cartList: null, storeId: storeController.store!.id),
+                  // ),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,

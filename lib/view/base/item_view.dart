@@ -60,54 +60,52 @@ class _ItemsViewState extends State<ItemsView> {
       }
     }
 
-    return Padding( 
+    return Padding(
       padding: widget.padding,
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         !isNull
             ? length > 0
                 ? GridView.builder(
-                  key: UniqueKey(),
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.70,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 4,
-                  ),
-                  physics: widget.isScrollable
-                      ? const BouncingScrollPhysics()
-                      : const NeverScrollableScrollPhysics(),
-                  shrinkWrap: widget.isScrollable ? false : true,
-                  itemCount: length,
-                  padding: widget.padding,
-                  itemBuilder: (context, index) {
-                    return
-                        // widget.stores != null && widget.isStore
-                        //     ?
-                
-                        //     widget.isFoodOrGrocery! && widget.isStore
-                        //         ? StoreCardWidget(store: widget.stores![index])
-                        //         : StoreCardWithDistance(
-                        //             store: widget.stores![index]!,
-                        //             fromAllStore: true)
-                        //     :
-                
-                        Center(
-                          child: ItemCard(
-                                                // isStore: widget.isStore,
-                                                item: widget.items![index]!,
-                                                isShop: false,
-                                                isFood: false,
-                                                // isFeatured: widget.isFeatured,
-                                                // store:
-                                                // widget.isStore ? widget.stores![index] : null,
-                                                // index: index,
-                                                // length: length,
-                                                // isCampaign: widget.isCampaign,
-                                                // inStore: widget.inStorePage,
-                                              ),
-                        );
-                  },
-                )
+                    key: UniqueKey(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 0.70,
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 4,
+                    ),
+                    physics: widget.isScrollable
+                        ? const BouncingScrollPhysics()
+                        : const NeverScrollableScrollPhysics(),
+                    shrinkWrap: widget.isScrollable ? false : true,
+                    itemCount: length,
+                    padding: widget.padding,
+                    itemBuilder: (context, index) {
+                      // widget.stores != null && widget.isStore
+                      //     ?
+
+                      //     widget.isFoodOrGrocery! && widget.isStore
+                      //         ? StoreCardWidget(store: widget.stores![index])
+                      //         : StoreCardWithDistance(
+                      //             store: widget.stores![index]!,
+                      //             fromAllStore: true)
+                      //     :
+                      return Center(
+                        child: ItemCard(
+                          // isStore: widget.isStore,
+                          item: widget.items![index]!,
+                          isShop: false,
+                          isFood: false,
+                          // isFeatured: widget.isFeatured,
+                          // store:
+                          // widget.isStore ? widget.stores![index] : null,
+                          // index: index,
+                          // length: length,
+                          // isCampaign: widget.isCampaign,
+                          // inStore: widget.inStorePage,
+                        ),
+                      );
+                    },
+                  )
                 : NoDataScreen(
                     text: widget.noDataText ??
                         (widget.isStore
@@ -141,13 +139,13 @@ class _ItemsViewState extends State<ItemsView> {
                         //         ? const StoreCardShimmer()
                         //         : const NewOnShimmerView()
                         //     :
-      
+
                         Center(
-                          child: ItemShimmer(
-                              isEnabled: isNull,
-                              isStore: widget.isStore,
-                              hasDivider: index != widget.shimmerLength - 1),
-                        );
+                      child: ItemShimmer(
+                          isEnabled: isNull,
+                          isStore: widget.isStore,
+                          hasDivider: index != widget.shimmerLength - 1),
+                    );
                   },
                 ),
               ),

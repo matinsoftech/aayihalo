@@ -5,8 +5,9 @@ import 'package:sixam_mart/data/api/api_checker.dart';
 import 'package:sixam_mart/data/model/body/place_order_body.dart';
 import 'package:sixam_mart/data/model/body/review_body.dart';
 import 'package:sixam_mart/data/model/response/basic_medicine_model.dart';
-import 'package:sixam_mart/data/model/response/cart_model.dart';
+import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/data/model/response/common_condition_model.dart';
+import 'package:sixam_mart/data/model/response/home_screen_model.dart';
 import 'package:sixam_mart/data/model/response/order_details_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/data/model/response/response_model.dart';
@@ -59,6 +60,8 @@ class ItemController extends GetxController implements GetxService {
   ItemModel? _featuredCategoriesItem;
   int _selectedCategory = 0;
 
+  HomeScreenDataModel? _homeScreenDataModel;
+  HomeScreenDataModel? get homeScreenDataModel => _homeScreenDataModel;
 
   List<Item>? get popularItemList => _popularItemList;
   List<Item>? get reviewedItemList => _reviewedItemList;
@@ -94,6 +97,18 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
+  void getHomeScreenData({required String lat, required String long}) async {
+    _homeScreenDataModel = null;
+    Response response =
+        await itemRepo.getHomeScreenData(latitude: lat, longitude: long);
+    if (response.statusCode == 200) {
+      _homeScreenDataModel = HomeScreenDataModel.fromJson(response.body);
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    update();
+  }
+
   void selectCommonCondition(int index) {
     _selectedCommonCondition = index;
     getConditionsWiseItem(_commonConditions![index].id!, true);
@@ -107,20 +122,20 @@ class ItemController extends GetxController implements GetxService {
 
   void setCurrentIndex(int index, bool notify) {
     _currentIndex = index;
-    if(notify) {
+    if (notify) {
       update();
     }
   }
 
   Future<void> getPopularItemList(bool reload, String type, bool notify) async {
     _popularType = type;
-    if(reload) {
+    if (reload) {
       _popularItemList = null;
     }
-    if(notify) {
+    if (notify) {
       update();
     }
-    if(_popularItemList == null || reload) {
+    if (_popularItemList == null || reload) {
       Response response = await itemRepo.getPopularItemList(type);
       if (response.statusCode == 200) {
         _popularItemList = [];
@@ -133,21 +148,23 @@ class ItemController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getReviewedItemList(bool reload, String type, bool notify) async {
+  Future<void> getReviewedItemList(
+      bool reload, String type, bool notify) async {
     _reviewedType = type;
-    if(reload) {
+    if (reload) {
       _reviewedItemList = null;
     }
-    if(notify) {
+    if (notify) {
       update();
     }
-    if(_reviewedItemList == null || reload) {
+    if (_reviewedItemList == null || reload) {
       Response response = await itemRepo.getReviewedItemList(type);
       if (response.statusCode == 200) {
         _reviewedItemList = [];
         _reviewedCategoriesList = [];
         _reviewedItemList!.addAll(ItemModel.fromJson(response.body).items!);
-        _reviewedCategoriesList!.addAll(ItemModel.fromJson(response.body).categories!);
+        _reviewedCategoriesList!
+            .addAll(ItemModel.fromJson(response.body).categories!);
         _isLoading = false;
       } else {
         ApiChecker.checkApi(response);
@@ -157,13 +174,13 @@ class ItemController extends GetxController implements GetxService {
   }
 
   Future<void> getFeaturedCategoriesItemList(bool reload, bool notify) async {
-    if(reload) {
+    if (reload) {
       _featuredCategoriesItem = null;
     }
-    if(notify) {
+    if (notify) {
       update();
     }
-    if(_featuredCategoriesItem == null || reload) {
+    if (_featuredCategoriesItem == null || reload) {
       Response response = await itemRepo.getFeaturedCategoriesItemList();
       if (response.statusCode == 200) {
         _featuredCategoriesItem = ItemModel.fromJson(response.body);
@@ -174,14 +191,15 @@ class ItemController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getRecommendedItemList(bool reload, String type, bool notify) async {
-    if(reload) {
+  Future<void> getRecommendedItemList(
+      bool reload, String type, bool notify) async {
+    if (reload) {
       _recommendedItemList = null;
     }
-    if(notify) {
+    if (notify) {
       update();
     }
-    if(_recommendedItemList == null || reload) {
+    if (_recommendedItemList == null || reload) {
       Response response = await itemRepo.getRecommendedItemList(type);
       if (response.statusCode == 200) {
         _recommendedItemList = [];
@@ -195,13 +213,13 @@ class ItemController extends GetxController implements GetxService {
   }
 
   Future<void> getBasicMedicine(bool reload, bool notify) async {
-    if(reload) {
+    if (reload) {
       _basicMedicineModel = null;
     }
-    if(notify) {
+    if (notify) {
       update();
     }
-    if(_basicMedicineModel == null || reload) {
+    if (_basicMedicineModel == null || reload) {
       Response response = await itemRepo.getBasicMedicine();
       if (response.statusCode == 200) {
         _basicMedicineModel = BasicMedicineModel.fromJson(response.body);
@@ -215,7 +233,7 @@ class ItemController extends GetxController implements GetxService {
 
   Future<void> getConditionsWiseItem(int id, bool notify) async {
     _conditionWiseProduct = null;
-    if(notify) {
+    if (notify) {
       update();
     }
     Response response = await itemRepo.getConditionsWiseItem(id);
@@ -231,12 +249,13 @@ class ItemController extends GetxController implements GetxService {
 
   Future<void> getCommonConditions(bool notify) async {
     _commonConditions = [];
-    if(notify) {
+    if (notify) {
       update();
     }
     Response response = await itemRepo.getCommonConditions();
     if (response.statusCode == 200) {
-      response.body.forEach((condition) => _commonConditions!.add(CommonConditionModel.fromJson(condition)));
+      response.body.forEach((condition) =>
+          _commonConditions!.add(CommonConditionModel.fromJson(condition)));
       _isLoading = false;
     } else {
       ApiChecker.checkApi(response);
@@ -245,13 +264,13 @@ class ItemController extends GetxController implements GetxService {
   }
 
   Future<void> getDiscountedItemList(bool reload, bool notify) async {
-    if(reload) {
+    if (reload) {
       _discountedItemList = null;
     }
-    if(notify) {
+    if (notify) {
       update();
     }
-    if(_discountedItemList == null || reload) {
+    if (_discountedItemList == null || reload) {
       Response response = await itemRepo.getDiscountedItemList();
       if (response.statusCode == 200) {
         _discountedItemList = [];
@@ -269,42 +288,46 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
-  void initData(Item? item, CartModel? cart) {
+  void initData(Item? item, CartDataModel? cart) {
     _variationIndex = [];
     _addOnQtyList = [];
     _addOnActiveList = [];
     _selectedVariations = [];
     _collapsVariation = [];
-    if(cart != null) {
+    if (cart != null) {
       _quantity = cart.quantity;
       List<int?> addOnIdList = [];
-      for (var addOnId in cart.addOnIds!) {
-        addOnIdList.add(addOnId.id);
-      }
+      // for (var addOnId in cart.addOnIds!) {
+      //   addOnIdList.add(addOnId.id);
+      // }
       for (var addOn in item!.addOns!) {
-        if(addOnIdList.contains(addOn.id)) {
+        if (addOnIdList.contains(addOn.id)) {
           _addOnActiveList.add(true);
-          _addOnQtyList.add(cart.addOnIds![addOnIdList.indexOf(addOn.id)].quantity);
-        }else {
+          // _addOnQtyList
+          //     .add(cart.addOnIds![addOnIdList.indexOf(addOn.id)].quantity);
+        } else {
           _addOnActiveList.add(false);
           _addOnQtyList.add(1);
         }
       }
 
-      if(Get.find<SplashController>().getModuleConfig(item.moduleType).newVariation!) {
-        _selectedVariations.addAll(cart.foodVariations!);
-        for(int index=0; index<item.foodVariations!.length; index++){
+      if (Get.find<SplashController>()
+          .getModuleConfig(item.moduleType)
+          .newVariation!) {
+        // _selectedVariations.addAll(cart.foodVariations!);
+        for (int index = 0; index < item.foodVariations!.length; index++) {
           _collapsVariation.add(true);
         }
-      }else {
+      } else {
         List<String> variationTypes = [];
-        if(cart.variation!.isNotEmpty && cart.variation![0].type != null) {
-          variationTypes.addAll(cart.variation![0].type!.split('-'));
-        }
+        // if (cart.variation!.isNotEmpty && cart.variation![0].type != null) {
+        //   variationTypes.addAll(cart.variation![0].type!.split('-'));
+        // }
         int varIndex = 0;
         for (var choiceOption in item.choiceOptions!) {
-          for(int index=0; index<choiceOption.options!.length; index++) {
-            if(choiceOption.options![index].trim().replaceAll(' ', '') == variationTypes[varIndex].trim()) {
+          for (int index = 0; index < choiceOption.options!.length; index++) {
+            if (choiceOption.options![index].trim().replaceAll(' ', '') ==
+                variationTypes[varIndex].trim()) {
               _variationIndex!.add(index);
               break;
             }
@@ -312,34 +335,37 @@ class ItemController extends GetxController implements GetxService {
           varIndex++;
         }
       }
-    }else {
-      if(Get.find<SplashController>().getModuleConfig(item!.moduleType).newVariation!) {
-        for(int index=0; index<item.foodVariations!.length; index++) {
+    } else {
+      if (Get.find<SplashController>()
+          .getModuleConfig(item!.moduleType)
+          .newVariation!) {
+        for (int index = 0; index < item.foodVariations!.length; index++) {
           _selectedVariations.add([]);
           _collapsVariation.add(true);
-          for(int i=0; i < item.foodVariations![index].variationValues!.length; i++) {
+          for (int i = 0;
+              i < item.foodVariations![index].variationValues!.length;
+              i++) {
             _selectedVariations[index].add(false);
           }
         }
-      }else {
-        for (var element in item.choiceOptions!) {
-          _variationIndex!.add(0);
-          if (kDebugMode) {
-            print(element);
-          }
-        }
+      } else {
+        // for (var element in item.choiceOptions!) {
+        //   _variationIndex!.add(0);
+        //   if (kDebugMode) {
+        //     print(element);
+        //   }
+        // }
       }
       _quantity = 1;
-      for (var addOn in item.addOns!) {
-        _addOnActiveList.add(false);
-        _addOnQtyList.add(1);
-        if (kDebugMode) {
-          print(addOn);
-        }
-      }
+      // for (var addOn in item.addOns!) {
+      //   _addOnActiveList.add(false);
+      //   _addOnQtyList.add(1);
+      //   if (kDebugMode) {
+      //     print(addOn);
+      //   }
+      // }
       setExistInCart(item, notify: false);
     }
-
   }
 
   void cartIndexSet() {
@@ -348,11 +374,15 @@ class ItemController extends GetxController implements GetxService {
 
   int setExistInCart(Item? item, {bool notify = false}) {
     String variationType = '';
-    if(!Get.find<SplashController>().getModuleConfig(Get.find<SplashController>().module != null ? Get.find<SplashController>().module!.moduleType : Get.find<SplashController>().cacheModule!.moduleType).newVariation!){
+    if (!Get.find<SplashController>()
+        .getModuleConfig(Get.find<SplashController>().module != null
+            ? Get.find<SplashController>().module!.moduleType
+            : Get.find<SplashController>().cacheModule!.moduleType)
+        .newVariation!) {
       List<String> variationList = [];
-      for (int index = 0; index < item!.choiceOptions!.length; index++) {
-        variationList.add(item.choiceOptions![index].options![_variationIndex![index]].replaceAll(' ', ''));
-      }
+      // for (int index = 0; index < item!.choiceOptions!.length; index++) {
+      //   variationList.add(item.choiceOptions![index].options![_variationIndex![index]].replaceAll(' ', ''));
+      // }
       bool isFirst = true;
       for (var variation in variationList) {
         if (isFirst) {
@@ -363,30 +393,39 @@ class ItemController extends GetxController implements GetxService {
         }
       }
     }
-    if(Get.find<SplashController>().getModuleConfig(Get.find<SplashController>().module != null ? Get.find<SplashController>().module!.moduleType : Get.find<SplashController>().cacheModule!.moduleType).newVariation!) {
+    if (Get.find<SplashController>()
+        .getModuleConfig(Get.find<SplashController>().module != null
+            ? Get.find<SplashController>().module!.moduleType
+            : Get.find<SplashController>().cacheModule!.moduleType)
+        .newVariation!) {
       _cartIndex = -1;
-    }else {
-      _cartIndex = Get.find<CartController>().isExistInCart(item!.id, variationType, false, null);
+    } else {
+      // _cartIndex = Get.find<CartController>()
+      //     .isExistInCart(item!.id, variationType, false, null);
     }
-    if(_cartIndex != -1) {
+    if (_cartIndex != -1) {
       _quantity = Get.find<CartController>().cartList[_cartIndex].quantity;
       _addOnActiveList = [];
       _addOnQtyList = [];
       List<int?> addOnIdList = [];
-      for (var addOnId in Get.find<CartController>().cartList[_cartIndex].addOnIds!) {
-        addOnIdList.add(addOnId.id);
-      }
-      for (var addOn in item!.addOns!) {
-        if(addOnIdList.contains(addOn.id)) {
-          _addOnActiveList.add(true);
-          _addOnQtyList.add(Get.find<CartController>().cartList[_cartIndex].addOnIds![addOnIdList.indexOf(addOn.id)].quantity);
-        }else {
-          _addOnActiveList.add(false);
-          _addOnQtyList.add(1);
-        }
-      }
+      // for (var addOnId
+      //     in Get.find<CartController>().cartList[_cartIndex].addOnIds!) {
+      //   addOnIdList.add(addOnId.id);
+      // }
+      // for (var addOn in item!.addOns!) {
+      //   if (addOnIdList.contains(addOn.id)) {
+      //     _addOnActiveList.add(true);
+      //     _addOnQtyList.add(Get.find<CartController>()
+      //         .cartList[_cartIndex]
+      //         .addOnIds![addOnIdList.indexOf(addOn.id)]
+      //         .quantity);
+      //   } else {
+      //     _addOnActiveList.add(false);
+      //     _addOnQtyList.add(1);
+      //   }
+      // }
     }
-    if(notify) {
+    if (notify) {
       update();
     }
     return _cartIndex;
@@ -401,18 +440,25 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
-  void setQuantity(bool isIncrement, int? stock,  int? quantityLimit, {bool getxSnackBar = false}) {
+  void setQuantity(bool isIncrement, int? stock, int? quantityLimit,
+      {bool getxSnackBar = false}) {
     if (isIncrement) {
-      if(Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && _quantity! >= stock!) {
+      if (Get.find<SplashController>()
+              .configModel!
+              .moduleConfig!
+              .module!
+              .stock! &&
+          _quantity! >= stock!) {
         showCustomSnackBar('out_of_stock'.tr);
-      }else {
-        if(quantityLimit != null ){
-          if(_quantity! >= quantityLimit && quantityLimit != 0) {
-            showCustomSnackBar('${'maximum_quantity_limit'.tr} $quantityLimit', getXSnackBar: getxSnackBar);
+      } else {
+        if (quantityLimit != null) {
+          if (_quantity! >= quantityLimit && quantityLimit != 0) {
+            showCustomSnackBar('${'maximum_quantity_limit'.tr} $quantityLimit',
+                getXSnackBar: getxSnackBar);
           } else {
             _quantity = _quantity! + 1;
           }
-        }else {
+        } else {
           _quantity = _quantity! + 1;
         }
       }
@@ -429,30 +475,33 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
-  void showMoreSpecificSection(int index){
+  void showMoreSpecificSection(int index) {
     _collapsVariation[index] = !_collapsVariation[index];
     update();
   }
+
   void setNewCartVariationIndex(int index, int i, Item item) {
-    if(!item.foodVariations![index].multiSelect!) {
-      for(int j = 0; j < _selectedVariations[index].length; j++) {
-        if(item.foodVariations![index].required!){
+    if (!item.foodVariations![index].multiSelect!) {
+      for (int j = 0; j < _selectedVariations[index].length; j++) {
+        if (item.foodVariations![index].required!) {
           _selectedVariations[index][j] = j == i;
-        }else{
-          if(_selectedVariations[index][j]!){
+        } else {
+          if (_selectedVariations[index][j]!) {
             _selectedVariations[index][j] = false;
-          }else{
+          } else {
             _selectedVariations[index][j] = j == i;
           }
         }
       }
     } else {
-      if(!_selectedVariations[index][i]! && selectedVariationLength(_selectedVariations, index) >= item.foodVariations![index].max!) {
+      if (!_selectedVariations[index][i]! &&
+          selectedVariationLength(_selectedVariations, index) >=
+              item.foodVariations![index].max!) {
         showCustomSnackBar(
           '${'maximum_variation_for'.tr} ${item.foodVariations![index].name} ${'is'.tr} ${item.foodVariations![index].max}',
           getXSnackBar: true,
         );
-      }else {
+      } else {
         _selectedVariations[index][i] = !_selectedVariations[index][i]!;
       }
     }
@@ -461,8 +510,8 @@ class ItemController extends GetxController implements GetxService {
 
   int selectedVariationLength(List<List<bool?>> selectedVariations, int index) {
     int length = 0;
-    for(bool? isSelected in selectedVariations[index]) {
-      if(isSelected!) {
+    for (bool? isSelected in selectedVariations[index]) {
+      if (isSelected!) {
         length++;
       }
     }
@@ -554,16 +603,16 @@ class ItemController extends GetxController implements GetxService {
 
   void setImageIndex(int index, bool notify) {
     _imageIndex = index;
-    if(notify) {
+    if (notify) {
       update();
     }
   }
 
   Future<void> getProductDetails(Item item) async {
     _item = null;
-    if(item.name != null) {
+    if (item.name != null) {
       _item = item;
-    }else {
+    } else {
       _item = null;
       Response response = await itemRepo.getItemDetails(item.id);
       if (response.statusCode == 200) {
@@ -576,9 +625,9 @@ class ItemController extends GetxController implements GetxService {
     setExistInCart(_item, notify: !ResponsiveHelper.isDesktop(Get.context));
   }
 
-  void setSelect(int select, bool notify){
+  void setSelect(int select, bool notify) {
     _productSelect = select;
-    if(notify){
+    if (notify) {
       update();
     }
   }
@@ -604,79 +653,178 @@ class ItemController extends GetxController implements GetxService {
   }
 
   bool isAvailable(Item item) {
-    return DateConverter.isAvailable(item.availableTimeStarts, item.availableTimeEnds);
+    return DateConverter.isAvailable(
+        item.availableTimeStarts, item.availableTimeEnds);
   }
 
-  double? getDiscount(Item item) => item.storeDiscount == 0 ? item.discount : item.storeDiscount;
+  double? getDiscount(Item item) =>
+      item.storeDiscount == 0 ? item.discount : item.storeDiscount;
 
-  String? getDiscountType(Item item) => item.storeDiscount == 0 ? item.discountType : 'percent';
+  String? getDiscountType(Item item) =>
+      item.storeDiscount == 0 ? item.discountType : 'percent';
 
-  void navigateToItemPage(Item? item, BuildContext context, {bool inStore = false, bool isCampaign = false}) {
-    if(Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText! || item!.moduleType == 'food') {
-      ResponsiveHelper.isMobile(context) ? Get.bottomSheet(
-        ItemBottomSheet(item: item, inStorePage: inStore, isCampaign: isCampaign),
-        backgroundColor: Colors.transparent, isScrollControlled: true,
-      ) : Get.dialog(
-        Dialog(child: ItemBottomSheet(item: item, inStorePage: inStore, isCampaign: isCampaign)),
-      );
-    }else {
-      Get.toNamed(RouteHelper.getItemDetailsRoute(item.id, inStore), arguments: ItemDetailsScreen(item: item, inStorePage: inStore));
+  void navigateToItemPage(Item? item, BuildContext context,
+      {bool inStore = false, bool isCampaign = false}) {
+    if (Get.find<SplashController>()
+            .configModel!
+            .moduleConfig!
+            .module!
+            .showRestaurantText! ||
+        item!.moduleType == 'food') {
+      ResponsiveHelper.isMobile(context)
+          ? Get.bottomSheet(
+              ItemBottomSheet(
+                  item: item, inStorePage: inStore, isCampaign: isCampaign),
+              backgroundColor: Colors.transparent,
+              isScrollControlled: true,
+            )
+          : Get.dialog(
+              Dialog(
+                  child: ItemBottomSheet(
+                      item: item,
+                      inStorePage: inStore,
+                      isCampaign: isCampaign)),
+            );
+    } else {
+      Get.toNamed(RouteHelper.getItemDetailsRoute(item.id, inStore),
+          arguments: ItemDetailsScreen(item: item, inStorePage: inStore));
     }
   }
 
-  void itemDirectlyAddToCart(Item? item, BuildContext context, {bool inStore = false, bool isCampaign = false}) {
+  // void itemDirectlyAddToCart(Item? item, BuildContext context,
+  //     {bool inStore = false, bool isCampaign = false}) {
+  //   print(
+  //       '------check : (${(item!.foodVariations != null && item.foodVariations!.isEmpty)} && ${item.moduleType == AppConstants.food}) || (${(item.variations != null && item.variations!.isEmpty)} && ${item.moduleType != AppConstants.food})');
+  //   print('------check item : ${item.toJson()}');
+  //   if (((item.foodVariations != null && item.foodVariations!.isEmpty) &&
+  //           item.moduleType == AppConstants.food) ||
+  //       (item.variations != null &&
+  //           item.variations!.isEmpty &&
+  //           item.moduleType != AppConstants.food)) {
+  //     double price = item.price!;
+  //     double discount = item.discount!;
+  //     double discountPrice = PriceConverter.convertWithDiscount(
+  //         price, discount, item.discountType)!;
 
-    print('------check : (${(item!.foodVariations != null && item.foodVariations!.isEmpty)} && ${item.moduleType == AppConstants.food}) || (${(item.variations != null && item.variations!.isEmpty)} && ${item.moduleType != AppConstants.food})');
-    print('------check item : ${item.toJson()}');
-      if (((item.foodVariations != null && item.foodVariations!.isEmpty) && item.moduleType == AppConstants.food) || (item.variations != null && item.variations!.isEmpty && item.moduleType != AppConstants.food)) {
-        double price = item.price!;
-        double discount = item.discount!;
-        double discountPrice = PriceConverter.convertWithDiscount(price, discount, item.discountType)!;
+  //     CartDataModel cartModel = CartDataModel(
+       
+  //       price,
+  //       discount,
+  //       [],
+  //       [],
+  //       (price - discountPrice),
+  //       1,
+  //       [],
+  //       [],
+  //       isCampaign,
+  //       item.stock,
+  //       item,
+  //       item.quantityLimit != null ? item.quantityLimit! : null,
+  //     );
 
-        CartModel cartModel = CartModel(
-          null, price, discount, [], [], (price - discountPrice), 1, [], [], isCampaign,
-          item.stock, item, item.quantityLimit != null ? item.quantityLimit! : null,
-        );
+  //     OnlineCart onlineCart = OnlineCart(
+  //       null,
+  //       isCampaign ? null : item.id,
+  //       isCampaign ? item.id : null,
+  //       price.toString(),
+  //       '',
+  //       null,
+  //       Get.find<SplashController>()
+  //               .getModuleConfig(item.moduleType)
+  //               .newVariation!
+  //           ? []
+  //           : null,
+  //       1,
+  //       [],
+  //       [],
+  //       [],
+  //       'Item',
+  //     );
+  //     if (Get.find<SplashController>()
+  //             .configModel!
+  //             .moduleConfig!
+  //             .module!
+  //             .stock! &&
+  //         item.stock! <= 0) {
+  //       showCustomSnackBar('out_of_stock'.tr);
+  //     }
+  //     //   else if (Get.find<CartController>().existAnotherStoreItem(
+  //     //       cartModel.item!.storeId,
+  //     //       Get.find<SplashController>().module != null
+  //     //           ? Get.find<SplashController>().module!.id
+  //     //           : Get.find<SplashController>().cacheModule!.id)) {
+  //     //     Get.dialog(
+  //     //         ConfirmationDialog(
+  //     //           icon: Images.warning,
+  //     //           title: 'are_you_sure_to_reset'.tr,
+  //     //           description: Get.find<SplashController>()
+  //     //                   .configModel!
+  //     //                   .moduleConfig!
+  //     //                   .module!
+  //     //                   .showRestaurantText!
+  //     //               ? 'if_you_continue'.tr
+  //     //               : 'if_you_continue_without_another_store'.tr,
+  //     //           onYesPressed: () {
+  //     //             Get.find<CartController>()
+  //     //                 .clearCartOnline()
+  //     //                 .then((success) async {
+  //     //               // if (success) {
+  //     //               //   await Get.find<CartController>()
+  //     //               //       .addToCartOnline(onlineCart);
+  //     //               //   Get.back();
+  //     //               //   showCartSnackBar();
+  //     //               // }
+  //     //             });
+  //     //           },
+  //     //         ),
+  //     //         barrierDismissible: false);
+  //     //   // } else {
+  //     //   //   Get.find<CartController>().addToCartOnline(onlineCart);
+  //     //   //   showCartSnackBar();
+  //     //   // }
+  //     // }
+  //     else if (Get.find<SplashController>()
+  //             .configModel!
+  //             .moduleConfig!
+  //             .module!
+  //             .showRestaurantText! ||
+  //         item.moduleType == AppConstants.food) {
+  //       ResponsiveHelper.isMobile(context)
+  //           ? Get.bottomSheet(
+  //               ItemBottomSheet(
+  //                   item: item, inStorePage: inStore, isCampaign: isCampaign),
+  //               backgroundColor: Colors.transparent,
+  //               isScrollControlled: true,
+  //             )
+  //           : Get.dialog(
+  //               Dialog(
+  //                   child: ItemBottomSheet(
+  //                       item: item,
+  //                       inStorePage: inStore,
+  //                       isCampaign: isCampaign)),
+  //             );
+  //     } else {
+  //       Get.toNamed(RouteHelper.getItemDetailsRoute(item.id, inStore),
+  //           arguments: ItemDetailsScreen(item: item, inStorePage: inStore));
+  //     }
+  //   }
+  // }
 
-        OnlineCart onlineCart = OnlineCart(
-            null, isCampaign ? null : item.id, isCampaign ? item.id : null, price.toString(),
-            '', null, Get.find<SplashController>().getModuleConfig(item.moduleType).newVariation! ? [] : null,
-            1, [], [], [], 'Item',
-        );
-        if(Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && item.stock! <= 0){
-          showCustomSnackBar('out_of_stock'.tr);
-        }
-        else if (Get.find<CartController>().existAnotherStoreItem(cartModel.item!.storeId, Get.find<SplashController>().module != null
-            ? Get.find<SplashController>().module!.id : Get.find<SplashController>().cacheModule!.id)) {
-          Get.dialog(ConfirmationDialog(
-            icon: Images.warning,
-            title: 'are_you_sure_to_reset'.tr,
-            description: Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText!
-                ? 'if_you_continue'.tr : 'if_you_continue_without_another_store'.tr,
-            onYesPressed: () {
-              Get.find<CartController>().clearCartOnline().then((success) async {
-                if (success) {
-                  await Get.find<CartController>().addToCartOnline(onlineCart);
-                  Get.back();
-                  showCartSnackBar();
-                }
-              });
-            },
-          ), barrierDismissible: false);
-        } else {
-          Get.find<CartController>().addToCartOnline(onlineCart);
-          showCartSnackBar();
-        }
-      } else if(Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText! || item.moduleType == AppConstants.food){
-        ResponsiveHelper.isMobile(context) ? Get.bottomSheet(
-          ItemBottomSheet(item: item, inStorePage: inStore, isCampaign: isCampaign),
-          backgroundColor: Colors.transparent, isScrollControlled: true,
-        ) : Get.dialog(
-          Dialog(child: ItemBottomSheet(item: item, inStorePage: inStore, isCampaign: isCampaign)),
-        );
-      } else {
-        Get.toNamed(RouteHelper.getItemDetailsRoute(item.id, inStore), arguments: ItemDetailsScreen(item: item, inStorePage: inStore));
-      }
+  void addToCart(
+      {required int productId,
+      required int quantity,
+      String? variantType}) async {
+    await Get.find<CartController>().addToCart(
+        productId: productId, quantity: quantity, variantType: variantType);
   }
 
+  void getCartData(
+      {required int productId,
+      required int quantity,
+      String? variantType}) async {
+    Get.find<CartController>().getCartData();
+  }
+
+
+ 
 }

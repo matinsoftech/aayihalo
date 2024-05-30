@@ -12,7 +12,7 @@ import 'package:sixam_mart/view/screens/home/widget/grocery/just_for_you_view.da
 import 'package:sixam_mart/view/screens/home/widget/grocery/most_popular_item_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/new_on_mart_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/middle_section_banner_view.dart';
-import 'package:sixam_mart/view/screens/home/widget/grocery/special_offer_view.dart';
+import 'package:sixam_mart/view/screens/home/widget/grocery/collection_sections.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/promotional_banner_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/visit_again_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/banner_view.dart';
@@ -50,7 +50,7 @@ class ShopHomeScreen extends StatelessWidget {
       const FlashSaleView(),
       const MiddleSectionBannerView(),
       const PopularStoreView(),
-      const SpecialOfferView(isFood: false, isShop: true),
+      // const HomeScreenSections(isFood: false, isShop: true),
       const ProductWithCategoriesView(fromShop: true),
       const JustForYouView(),
       const FeaturedCategoriesView(),

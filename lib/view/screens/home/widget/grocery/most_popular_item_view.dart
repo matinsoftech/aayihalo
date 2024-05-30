@@ -9,7 +9,7 @@ import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
 import 'package:sixam_mart/view/base/card_design/item_card.dart';
-import 'package:sixam_mart/view/screens/home/widget/grocery/special_offer_view.dart';
+import 'package:sixam_mart/view/screens/home/widget/grocery/collection_sections.dart';
 
 class MostPopularItemView extends StatelessWidget {
   final bool isFood;

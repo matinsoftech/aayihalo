@@ -6,7 +6,6 @@ class OnlineCartModel {
   int? moduleId;
   int? itemId;
   bool? isGuest;
-  List<int>? addOnIds;
   List<int>? addOnQtys;
   String? itemType;
   double? price;
@@ -23,7 +22,6 @@ class OnlineCartModel {
         this.moduleId,
         this.itemId,
         this.isGuest,
-        this.addOnIds,
         this.addOnQtys,
         this.itemType,
         this.price,
@@ -39,7 +37,6 @@ class OnlineCartModel {
     moduleId = json['module_id'];
     itemId = json['item_id'];
     isGuest = json['is_guest'];
-    addOnIds = json['add_on_ids'].cast<int>();
     addOnQtys = json['add_on_qtys'].cast<int>();
     itemType = json['item_type'];
     price = json['price']?.toDouble();
@@ -67,7 +64,6 @@ class OnlineCartModel {
     data['module_id'] = moduleId;
     data['item_id'] = itemId;
     data['is_guest'] = isGuest;
-    data['add_on_ids'] = addOnIds;
     data['add_on_qtys'] = addOnQtys;
     data['item_type'] = itemType;
     data['price'] = price;

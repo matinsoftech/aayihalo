@@ -35,31 +35,31 @@ class SimilarProducts extends StatelessWidget {
                         title: 'Similar Products'.tr,
                       ),
                     ),
-                    SizedBox(
-                      height: 300,
-                      width: Get.width,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(
-                            left: Dimensions.paddingSizeDefault),
-                        itemCount: discountedItemList.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: Dimensions.paddingSizeDefault,
-                                right: Dimensions.paddingSizeDefault,
-                                top: Dimensions.paddingSizeDefault),
-                            child: ItemCard(
-                              item: discountedItemList[index],
-                              isPopularItem: false,
-                              isFood: isFood,
-                              isShop: isShop,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: 300,
+                    //   width: Get.width,
+                    //   child: ListView.builder(
+                    //     scrollDirection: Axis.horizontal,
+                    //     physics: const BouncingScrollPhysics(),
+                    //     padding: const EdgeInsets.only(
+                    //         left: Dimensions.paddingSizeDefault),
+                    //     itemCount: discountedItemList.length,
+                    //     itemBuilder: (context, index) {
+                    //       return Padding(
+                    //         padding: const EdgeInsets.only(
+                    //             bottom: Dimensions.paddingSizeDefault,
+                    //             right: Dimensions.paddingSizeDefault,
+                    //             top: Dimensions.paddingSizeDefault),
+                    //         child: ItemCard(
+                    //           item: discountedItemList[index],
+                    //           isPopularItem: false,
+                    //           isFood: isFood,
+                    //           isShop: isShop,
+                    //         ),
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                   ]),
                 )
               : const SizedBox()

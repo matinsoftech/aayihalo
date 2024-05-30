@@ -2,7 +2,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
 import 'package:sixam_mart/controller/localization_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
-import 'package:sixam_mart/data/model/response/cart_model.dart';
+import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/helper/cart_helper.dart';
 import 'package:sixam_mart/helper/price_converter.dart';
@@ -17,35 +17,35 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CartItemWidget extends StatelessWidget {
-  final CartModel cart;
+  final CartDataModel cart;
   final int cartIndex;
   final List<AddOns> addOns;
   final bool isAvailable;
-  const CartItemWidget({Key? key, required this.cart, required this.cartIndex, required this.isAvailable, required this.addOns}) : super(key: key);
+  const CartItemWidget({key, required this.cart, required this.cartIndex, required this.isAvailable, required this.addOns}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    double? startingPrice = CartHelper.calculatePriceWithVariation(item: cart.item);
-    double? endingPrice = CartHelper.calculatePriceWithVariation(item: cart.item, isStartingPrice: false);
-    String? variationText = CartHelper.setupVariationText(cart: cart);
-    String addOnText = CartHelper.setupAddonsText(cart: cart) ?? '';
+    double? startingPrice = double.parse(cart.price.toString());
+    double? endingPrice = double.parse(cart.price.toString());
+    String? variationText = '';
+    String addOnText = '';
 
-    double? discount = cart.item!.storeDiscount == 0 ? cart.item!.discount : cart.item!.storeDiscount;
-    String? discountType = cart.item!.storeDiscount == 0 ? cart.item!.discountType : 'percent';
+    double? discount = double.parse(cart.item!.discount.toString());
+    String? discountType = 'percent';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault),
       child: InkWell(
         onTap: () {
-          ResponsiveHelper.isMobile(context) ? showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (con) => ItemBottomSheet(item: cart.item, cartIndex: cartIndex, cart: cart),
-          ) : showDialog(context: context, builder: (con) => Dialog(
-            child: ItemBottomSheet(item: cart.item, cartIndex: cartIndex, cart: cart),
-          ));
+          // ResponsiveHelper.isMobile(context) ? showModalBottomSheet(
+          //   context: context,
+          //   isScrollControlled: true,
+          //   backgroundColor: Colors.transparent,
+          //   builder: (con) => ItemBottomSheet(item: cart.item, cartIndex: cartIndex, cart: cart),
+          // ) : showDialog(context: context, builder: (con) => Dialog(
+          //   child: ItemBottomSheet(item: cart.item, cartIndex: cartIndex, cart: cart),
+          // ));
         },
         child: Slidable(
           key: UniqueKey(),
@@ -55,7 +55,7 @@ class CartItemWidget extends StatelessWidget {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
+                  // Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
                 },
                 backgroundColor: Theme.of(context).colorScheme.error,
                 borderRadius: BorderRadius.horizontal(right: Radius.circular(Get.find<LocalizationController>().isLtr ? Dimensions.radiusDefault : 0), left: Radius.circular(Get.find<LocalizationController>().isLtr ? 0 : Dimensions.radiusDefault)),
@@ -112,7 +112,7 @@ class CartItemWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
 
-                        ((Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && cart.item!.unitType != null && !Get.find<SplashController>().getModuleConfig(cart.item!.moduleType).newVariation!)
+                        ((Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && cart.item!.unitType != null && !Get.find<SplashController>().getModuleConfig("gocery").newVariation!)
                         || (Get.find<SplashController>().configModel!.moduleConfig!.module!.vegNonVeg! && Get.find<SplashController>().configModel!.toggleVegNonVeg!)) ? Container(
                           padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall, horizontal: Dimensions.paddingSizeSmall),
                           decoration: BoxDecoration(
@@ -180,9 +180,9 @@ class CartItemWidget extends StatelessWidget {
                         QuantityButton(
                           onTap: cartController.isLoading ? null : () {
                             if (cart.quantity! > 1) {
-                              Get.find<CartController>().setQuantity(false, cartIndex, cart.stock, cart.quantityLimit);
+                              // Get.find<CartController>().setQuantity(false, cartIndex, cart.stock, cart.quantityLimit);
                             }else {
-                              Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
+                              // Get.find<CartController>().removeFromCart(cartIndex, item: cart.item);
                             }
                           },
                           isIncrement: false,
@@ -197,7 +197,7 @@ class CartItemWidget extends StatelessWidget {
                         QuantityButton(
                           onTap: cartController.isLoading ? null : () {
                             Get.find<CartController>().forcefullySetModule(Get.find<CartController>().cartList[0].item!.moduleId!);
-                            Get.find<CartController>().setQuantity(true, cartIndex, cart.stock, cart.quantityLimit);
+                            // Get.find<CartController>().setQuantity(true, cartIndex, cart.stock, cart.quantityLimit);
                           },
                           isIncrement: true,
                           color: cartController.isLoading ? Theme.of(context).disabledColor : null,

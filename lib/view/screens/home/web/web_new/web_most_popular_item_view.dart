@@ -98,13 +98,14 @@ class _WebMostPopularItemViewState extends State<WebMostPopularItemView> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraLarge, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeExtraSmall),
-                    child: ItemCard(
-                      isPopularItem: isShop ? false : true,
-                      isPopularItemCart: true,
-                      item: itemList[index],
-                      isFood: widget.isFood,
-                      isShop: widget.isShop,
-                    ),
+                    child:  Text("hello")
+                    // ItemCard(
+                    //   isPopularItem: isShop ? false : true,
+                    //   isPopularItemCart: true,
+                    //   item: itemList[index],
+                    //   isFood: widget.isFood,
+                    //   isShop: widget.isShop,
+                    // ),
                   );
                 },
               ),

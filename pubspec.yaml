@@ -18,7 +18,7 @@ dependencies:
   flutter_local_notifications: ^13.0.0
   path_provider: ^2.0.8
   url_strategy: ^0.2.0
-  pin_code_fields: ^7.3.0
+  pin_code_fields:
   geolocator: ^9.0.2
   google_maps_flutter: ^2.1.5
   google_maps_flutter_web: ^0.4.0+5

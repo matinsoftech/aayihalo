@@ -36,7 +36,7 @@ class ItemTitleView extends StatelessWidget {
     final bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
     double? startingPrice;
     double? endingPrice;
-    if (item!.variations!.isNotEmpty) {
+    if (item!.variations !=null &&  item!.variations!.isNotEmpty) {
       List<double?> priceList = [];
       for (var variation in item!.variations!) {
         priceList.add(variation.price);
@@ -70,11 +70,11 @@ class ItemTitleView extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: [
-                        Flexible(
+                        Expanded(
                           child: Text(
-                            item?.name ?? '',
+                            item!.name ?? '',
                             style: robotoMedium.copyWith(
-                                fontSize: Dimensions.fontSizeOverLarge),
+                                fontSize: Dimensions.fontSizeExtraLarge),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -260,34 +260,7 @@ class ItemTitleView extends StatelessWidget {
                                     // ),
                                     // SizedBox(width: 5),
 
-                                    InkWell(
-                                      onTap: () {
-                                        if (isLoggedIn) {
-                                          if (wishController.wishItemIdList
-                                              .contains(item!.id)) {
-                                            wishController.removeFromWishList(
-                                                item!.id, false);
-                                          } else {
-                                            wishController.addToWishList(
-                                                item, null, false);
-                                          }
-                                        } else {
-                                          showCustomSnackBar(
-                                              'you_are_not_logged_in'.tr);
-                                        }
-                                      },
-                                      child: Icon(
-                                        wishController.wishItemIdList
-                                                .contains(item!.id)
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        size: 25,
-                                        color: wishController.wishItemIdList
-                                                .contains(item!.id)
-                                            ? Theme.of(context).primaryColor
-                                            : Theme.of(context).disabledColor,
-                                      ),
-                                    ),
+                                    
                                   ],
                                 );
                               }),
@@ -312,7 +285,7 @@ class ItemTitleView extends StatelessWidget {
                       //     ),
                       //   ),
                       // ),
-                    item!.variations!.isNotEmpty ?  
+                  item!.variations !=null && item!.variations!.isNotEmpty ?  
                            
                           const  SizedBox() :   const SizedBox(height: Dimensions.paddingSizeExtraSmall),
 
@@ -320,7 +293,7 @@ class ItemTitleView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                          
-                           item!.variations!.isNotEmpty ?  
+                         item!.variations!=null&&  item!.variations!.isNotEmpty ?  
                            
                           const  SizedBox() :
                             Expanded(
@@ -337,7 +310,7 @@ class ItemTitleView extends StatelessWidget {
                                     textDirection: TextDirection.ltr,
                                   ),
                                   const SizedBox(height: 5),
-                                  discount! > 0
+                                 discount!=null && discount > 0
                                       ? Text(
                                           '${PriceConverter.convertPrice(startingPrice)}'
                                           '${endingPrice != null ? ' - ${PriceConverter.convertPrice(endingPrice)}' : ''}',
@@ -349,7 +322,7 @@ class ItemTitleView extends StatelessWidget {
                                                   TextDecoration.lineThrough),
                                         )
                                       : const SizedBox(),
-                                  SizedBox(height: discount > 0 ? 5 : 0),
+                                  SizedBox(height:  discount!=null && discount > 0 ? 5 : 0),
                                   !isCampaign
                                       ? Row(children: [
                                           // Text(
@@ -414,7 +387,7 @@ class ItemTitleView extends StatelessWidget {
                                       ),
                                     )
                                   : const SizedBox(),
-                     item!.variations!.isNotEmpty ?  
+                    item!.variations !=null && item!.variations!.isNotEmpty ?  
                            
                           const  SizedBox() :          const SizedBox(
                                   height: Dimensions.paddingSizeDefault),

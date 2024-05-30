@@ -111,7 +111,7 @@ class _ParcelRequestScreenState extends State<ParcelRequestScreen> {
 
 
               if(parcelController.distance != -1 && parcelController.extraCharge != null) {
-                charge = CheckoutHelper.calculateParcelDeliveryCharge(parcelController: parcelController, parcelCategory: widget.parcelCategory, zoneId: widget.pickedUpAddress.zoneId!);
+                // charge = CheckoutHelper.calculateParcelDeliveryCharge(parcelController: parcelController, parcelCategory: widget.parcelCategory, zoneId: widget.pickedUpAddress.zoneId!);
                 dmTips = orderController.tips;
                 total = charge + dmTips + additionalCharge;
               }

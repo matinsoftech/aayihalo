@@ -145,7 +145,7 @@ class SplashController extends GetxController implements GetxService {
   }
 
   Module getModuleConfig(String? moduleType) {
-    Module module = Module.fromJson(_data!['module_config'][moduleType]);
+    Module module = Module.fromJson(_data!['module_config']['food']);
     if(moduleType == 'food') {
       module.newVariation = true;
     }else {

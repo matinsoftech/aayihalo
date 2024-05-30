@@ -11,7 +11,7 @@ import 'package:sixam_mart/view/screens/home/widget/grocery/item_that_you_love_v
 import 'package:sixam_mart/view/screens/home/widget/grocery/just_for_you_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/most_popular_item_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/new_on_mart_view.dart';
-import 'package:sixam_mart/view/screens/home/widget/grocery/special_offer_view.dart';
+import 'package:sixam_mart/view/screens/home/widget/grocery/collection_sections.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/visit_again_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/banner_view.dart';
 
@@ -43,7 +43,7 @@ class FoodHomeScreen extends StatelessWidget {
 
       const CategoryViewWidget(),
       isLoggedIn ? const VisitAgainView(fromFood: true) : const SizedBox(),
-      const SpecialOfferView(isFood: true, isShop: false),
+      // const HomeScreenSections(isFood: true, isShop: false),
       const BestReviewItemView(),
       const BestStoreNearbyView(),
       const ItemThatYouLoveView(forShop: false),

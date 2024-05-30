@@ -21,7 +21,7 @@ import 'package:sixam_mart/view/screens/checkout/widget/partial_pay_view.dart';
 class BottomSection extends StatelessWidget {
   final OrderController orderController;
   final double total;
-  final Module module;
+  final Module  ? module;
   final double subTotal;
   final double discount;
   final CouponController couponController;
@@ -146,7 +146,7 @@ class BottomSection extends StatelessWidget {
         child: Column(
           children: [
             storeId == null ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(module.addOn! ? 'subtotal'.tr : 'item_price'.tr, style: robotoMedium),
+              Text( 'item_price'.tr, style: robotoMedium),
               Text(PriceConverter.convertPrice(subTotal), style: robotoMedium, textDirection: TextDirection.ltr),
             ]) : const SizedBox(),
             SizedBox(height: storeId == null ? Dimensions.paddingSizeSmall : 0),

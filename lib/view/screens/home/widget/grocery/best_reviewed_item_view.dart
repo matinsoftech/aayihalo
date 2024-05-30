@@ -35,37 +35,37 @@ class _BestReviewItemViewState extends State<BestReviewItemView> {
                 Get.toNamed(RouteHelper.getPopularItemRoute(false, false)),
           ),
         ),
-        SizedBox(
-          height: 285,
-          width: Get.width,
-          child: reviewItemList != null
-              ? ListView.builder(
-                  controller: scrollController,
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.paddingSizeDefault),
-                  itemCount: reviewItemList.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: Dimensions.paddingSizeDefault,
-                          right: Dimensions.paddingSizeDefault,
-                          top: Dimensions.paddingSizeDefault),
-                      child: InkWell(
-                        onTap: () => Get.find<ItemController>()
-                            .navigateToItemPage(reviewItemList[index], context),
-                        child: ItemCard(
-                          isFood: false,
-                          isShop: false,
-                          item: itemController.reviewedItemList![index],
-                        ),
-                      ),
-                    );
-                  },
-                )
-              : const BestReviewItemShimmer(),
-        ),
+        // SizedBox(
+        //   height: 285,
+        //   width: Get.width,
+        //   child: reviewItemList != null
+        //       ? ListView.builder(
+        //           controller: scrollController,
+        //           scrollDirection: Axis.horizontal,
+        //           physics: const BouncingScrollPhysics(),
+        //           padding: const EdgeInsets.only(
+        //               left: Dimensions.paddingSizeDefault),
+        //           itemCount: reviewItemList.length,
+        //           itemBuilder: (context, index) {
+        //             return Padding(
+        //               padding: const EdgeInsets.only(
+        //                   bottom: Dimensions.paddingSizeDefault,
+        //                   right: Dimensions.paddingSizeDefault,
+        //                   top: Dimensions.paddingSizeDefault),
+        //               child: InkWell(
+        //                 onTap: () => Get.find<ItemController>()
+        //                     .navigateToItemPage(reviewItemList[index], context),
+        //                 child: ItemCard(
+        //                   isFood: false,
+        //                   isShop: false,
+        //                   item: itemController.reviewedItemList![index],
+        //                 ),
+        //               ),
+        //             );
+        //           },
+        //         )
+        //       : const BestReviewItemShimmer(),
+        // ),
       ]);
     });
   }

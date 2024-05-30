@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
+import 'package:sixam_mart/data/model/response/home_screen_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
@@ -9,59 +10,61 @@ import 'package:sixam_mart/util/images.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
 import 'package:sixam_mart/view/base/card_design/item_card.dart';
 
-class ProductsInThisCategory extends StatelessWidget {
+class HomeScreenSections extends StatelessWidget {
   final bool isFood;
-  final bool isShop;
-  const ProductsInThisCategory(
-      {Key? key, required this.isFood, required this.isShop})
-      : super(key: key);
+  final bool isShop; 
+  final List<Product> products;
+  final String title; 
+  const HomeScreenSections({ required this.isFood, required this.isShop, required this.products,required this.title, })
+     ;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ItemController>(builder: (itemController) {
       List<Item>? discountedItemList = itemController.discountedItemList;
 
-      return discountedItemList != null
+      return 
+      discountedItemList != null
           ? discountedItemList.isNotEmpty
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: Dimensions.paddingSizeDefault),
-                  child: Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                           left: Dimensions.paddingSizeExtraSmall,
-                          right: Dimensions.paddingSizeDefault),
-                      child: TitleWidget(
-                        title: 'Products in this category'.tr,
-                      ),
-                    ),
-                    // SizedBox(
-                    //   height: 300,
-                    //   width: Get.width,
-                    //   child: ListView.builder(
-                    //     scrollDirection: Axis.horizontal,
-                    //     physics: const BouncingScrollPhysics(),
-                    //     padding: const EdgeInsets.only(
-                    //         left: Dimensions.paddingSizeDefault),
-                    //     itemCount: discountedItemList.length,
-                    //     itemBuilder: (context, index) {
-                    //       return Padding(
-                    //         padding: const EdgeInsets.only(
-                    //             bottom: Dimensions.paddingSizeDefault,
-                    //             right: Dimensions.paddingSizeDefault,
-                    //             top: Dimensions.paddingSizeDefault),
-                    //         child: ItemCard(
-                    //           item: discountedItemList[index],
-                    //           isPopularItem: false,
-                    //           isFood: isFood,
-                    //           isShop: isShop,
-                    //         ),
-                    //       );
-                    //     },
-                    //   ),
-                    // ),
-                  ]),
-                )
+              ? Column(children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: Dimensions.paddingSizeDefault,
+                      left: Dimensions.paddingSizeDefault,
+                      right: Dimensions.paddingSizeDefault),
+                  child: TitleWidget(
+                    title: title.tr,
+                    // image: Images.discountOfferIcon,
+                    onTap: () => Get.toNamed(
+                        RouteHelper.getPopularItemRoute(false, true)),
+                  ),
+                ),
+               
+                SizedBox(
+                  height: 285,
+                  width: Get.width,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.only(
+                        left: Dimensions.paddingSizeDefault),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: Dimensions.paddingSizeDefault,
+                            right: Dimensions.paddingSizeDefault,
+                            top: Dimensions.paddingSizeDefault),
+                        child: ItemCardCollection(
+                            item: products[index],
+                            isPopularItem: false,
+                            isFood: isFood,
+                            isShop: isShop),
+                      );
+                    },
+                  ),
+                ),
+              ])
               : const SizedBox()
           : const ItemShimmerView(isPopularItem: false);
     });
@@ -70,8 +73,8 @@ class ProductsInThisCategory extends StatelessWidget {
 
 class ItemShimmerView extends StatelessWidget {
   final bool isPopularItem;
-  const ItemShimmerView({Key? key, required this.isPopularItem})
-      : super(key: key);
+  const ItemShimmerView({ required this.isPopularItem})
+      ;
 
   @override
   Widget build(BuildContext context) {

@@ -62,10 +62,10 @@ class CampaignController extends GetxController implements GetxService {
         List<Item> campaign = [];
         response.body.forEach((camp) => campaign.add(Item.fromJson(camp)));
         for (var c in campaign) {
-          if(!Get.find<SplashController>().getModuleConfig(c.moduleType).newVariation!
-              || c.variations!.isEmpty || c.foodVariations!.isNotEmpty) {
-            _itemCampaignList!.add(c);
-          }
+          // if(!Get.find<SplashController>().getModuleConfig(c.moduleType).newVariation!
+          //     || c.variations!.isEmpty || c.foodVariations!.isNotEmpty) {
+          //   _itemCampaignList!.add(c);
+          // }
         }
       } else {
         ApiChecker.checkApi(response);

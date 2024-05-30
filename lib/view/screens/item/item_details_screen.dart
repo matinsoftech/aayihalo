@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/model/body/place_order_body.dart';
-import 'package:sixam_mart/data/model/response/cart_model.dart';
+import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/helper/cart_helper.dart';
 import 'package:sixam_mart/helper/price_converter.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';
-import 'package:sixam_mart/view/base/cart_count_view.dart';
 import 'package:sixam_mart/view/base/custom_app_bar.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/menu_drawer.dart';
@@ -21,7 +22,6 @@ import 'package:sixam_mart/view/screens/home/widget/grocery/brands_in_this_categ
 import 'package:sixam_mart/view/screens/home/widget/grocery/products_in_this_category.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/similar_products.dart';
 import 'package:sixam_mart/view/screens/item/widget/details_app_bar.dart';
-import 'package:sixam_mart/view/screens/item/widget/details_web_view.dart';
 import 'package:sixam_mart/view/screens/item/widget/item_image_view.dart';
 import 'package:sixam_mart/view/screens/item/widget/item_title_view.dart';
 
@@ -29,7 +29,7 @@ class ItemDetailsScreen extends StatefulWidget {
   final Item? item;
   final bool inStorePage;
   const ItemDetailsScreen(
-      {Key? key, required this.item, required this.inStorePage})
+      {key, required this.item, required this.inStorePage})
       : super(key: key);
 
   @override
@@ -54,130 +54,132 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       return GetBuilder<ItemController>(
         builder: (itemController) {
           int? stock = 0;
-          CartModel? cartModel;
+          CartDataModel? cartModel;
           OnlineCart? cart;
           double priceWithAddons = 0;
           int? cartId = cartController.getCartId(itemController.cartIndex);
-          if (itemController.item != null &&
-              itemController.variationIndex != null) {
-            List<String> variationList = [];
-            for (int index = 0;
-                index < itemController.item!.choiceOptions!.length;
-                index++) {
-              variationList.add(itemController.item!.choiceOptions![index]
-                  .options![itemController.variationIndex![index]]
-                  .replaceAll(' ', ''));
-            }
-            String variationType = '';
-            bool isFirst = true;
-            for (var variation in variationList) {
-              if (isFirst) {
-                variationType = '$variationType$variation';
-                isFirst = false;
-              } else {
-                variationType = '$variationType-$variation';
-              }
-            }
+          // if (itemController.item != null &&
+          //     itemController.variationIndex != null) {
+          //   List<String> variationList = [];
+          //   for (int index = 0;
+          //       index < itemController.item!.choiceOptions!.length;
+          //       index++) {
+          //     variationList.add(itemController.item!.choiceOptions![index]
+          //         .options![itemController.variationIndex![index]]
+          //         .replaceAll(' ', ''));
+          //   }
+          //   String variationType = '';
+          //   bool isFirst = true;
+          //   for (var variation in variationList) {
+          //     if (isFirst) {
+          //       variationType = '$variationType$variation';
+          //       isFirst = false;
+          //     } else {
+          //       variationType = '$variationType-$variation';
+          //     }
+          //   }
 
-            double? price = itemController.item!.price;
-            Variation? variation;
-            stock = itemController.item!.stock ?? 0;
-            for (Variation v in itemController.item!.variations!) {
-              if (v.type == variationType) {
-                price = v.price;
-                variation = v;
-                stock = v.stock;
-                break;
-              }
-            }
+          //   double? price = itemController.item!.price;
+          //   Variation? variation;
+          //   stock = itemController.item!.stock ?? 0;
+          //   for (Variation v in itemController.item!.variations!) {
+          //     if (v.type == variationType) {
+          //       price = v.price;
+          //       variation = v;
+          //       stock = v.stock;
+          //       break;
+          //     }
+          //   }
 
-            double? discount =
-                (itemController.item!.availableDateStarts != null ||
-                        itemController.item!.storeDiscount == 0)
-                    ? itemController.item!.discount
-                    : itemController.item!.storeDiscount;
-            String? discountType =
-                (itemController.item!.availableDateStarts != null ||
-                        itemController.item!.storeDiscount == 0)
-                    ? itemController.item!.discountType
-                    : 'percent';
-            double priceWithDiscount = PriceConverter.convertWithDiscount(
-                price, discount, discountType)!;
-            double priceWithQuantity =
-                priceWithDiscount * itemController.quantity!;
-            double addonsCost = 0;
-            List<AddOn> addOnIdList = [];
-            List<AddOns> addOnsList = [];
-            for (int index = 0;
-                index < itemController.item!.addOns!.length;
-                index++) {
-              if (itemController.addOnActiveList[index]) {
-                addonsCost = addonsCost +
-                    (itemController.item!.addOns![index].price! *
-                        itemController.addOnQtyList[index]!);
-                addOnIdList.add(AddOn(
-                    id: itemController.item!.addOns![index].id,
-                    quantity: itemController.addOnQtyList[index]));
-                addOnsList.add(itemController.item!.addOns![index]);
-              }
-            }
+          //   double? discount =
+          //       (itemController.item!.availableDateStarts != null ||
+          //               itemController.item!.storeDiscount == 0)
+          //           ? itemController.item!.discount
+          //           : itemController.item!.storeDiscount;
+          //   String? discountType =
+          //       (itemController.item!.availableDateStarts != null ||
+          //               itemController.item!.storeDiscount == 0)
+          //           ? itemController.item!.discountType
+          //           : 'percent';
+          //   double priceWithDiscount = PriceConverter.convertWithDiscount(
+          //       price, discount, discountType)!;
+          //   double priceWithQuantity =
+          //       priceWithDiscount * itemController.quantity!;
+          //   double addonsCost = 0;
+          //   List<AddOn> addOnIdList = [];
+          //   List<AddOns> addOnsList = [];
+          //   for (int index = 0;
+          //       index < itemController.item!.addOns!.length;
+          //       index++) {
+          //     if (itemController.addOnActiveList[index]) {
+          //       addonsCost = addonsCost +
+          //           (itemController.item!.addOns![index].price! *
+          //               itemController.addOnQtyList[index]!);
+          //       addOnIdList.add(AddOn(
+          //           id: itemController.item!.addOns![index].id,
+          //           quantity: itemController.addOnQtyList[index]));
+          //       addOnsList.add(itemController.item!.addOns![index]);
+          //     }
+          //   }
 
-            cartModel = CartModel(
-              null,
-              price,
-              priceWithDiscount,
-              variation != null ? [variation] : [],
-              [],
-              (price! -
-                  PriceConverter.convertWithDiscount(
-                      price, discount, discountType)!),
-              itemController.quantity,
-              addOnIdList,
-              addOnsList,
-              itemController.item!.availableDateStarts != null,
-              stock,
-              itemController.item,
-              itemController.item!.quantityLimit,
-            );
+          //   cartModel = CartModel(
+          //     null,
+          //     price,
+          //     priceWithDiscount,
+          //     variation != null ? [variation] : [],
+          //     [],
+          //     (price! -
+          //         PriceConverter.convertWithDiscount(
+          //             price, discount, discountType)!),
+          //     itemController.quantity,
+          //     addOnIdList,
+          //     addOnsList,
+          //     itemController.item!.availableDateStarts != null,
+          //     stock,
+          //     itemController.item,
+          //     itemController.item!.quantityLimit,
+          //   );
 
-            List<int?> listOfAddOnId =
-                CartHelper.getSelectedAddonIds(addOnIdList: addOnIdList);
-            List<int?> listOfAddOnQty =
-                CartHelper.getSelectedAddonQtnList(addOnIdList: addOnIdList);
+          //   List<int?> listOfAddOnId =
+          //       CartHelper.getSelectedAddonIds(addOnIdList: addOnIdList);
+          //   List<int?> listOfAddOnQty =
+          //       CartHelper.getSelectedAddonQtnList(addOnIdList: addOnIdList);
 
-            cart = OnlineCart(
-                cartId,
-                widget.item!.id,
-                null,
-                priceWithDiscount.toString(),
-                '',
-                variation != null ? [variation] : [],
-                null,
-                itemController.cartIndex != -1
-                    ? cartController.cartList[itemController.cartIndex].quantity
-                    : itemController.quantity,
-                listOfAddOnId,
-                addOnsList,
-                listOfAddOnQty,
-                'Item');
-            priceWithAddons = priceWithQuantity +
-                (Get.find<SplashController>()
-                        .configModel!
-                        .moduleConfig!
-                        .module!
-                        .addOn!
-                    ? addonsCost
-                    : 0);
-          }
+          //   cart = OnlineCart(
+          //       cartId,
+          //       widget.item!.id,
+          //       null,
+          //       priceWithDiscount.toString(),
+          //       '',
+          //       variation != null ? [variation] : [],
+          //       null,
+          //       itemController.cartIndex != -1
+          //           ? cartController.cartList[itemController.cartIndex].quantity
+          //           : itemController.quantity,
+          //       listOfAddOnId,
+          //       addOnsList,
+          //       listOfAddOnQty,
+          //       'Item');
+          //   priceWithAddons = priceWithQuantity +
+          //       (Get.find<SplashController>()
+          //               .configModel!
+          //               .moduleConfig!
+          //               .module!
+          //               .addOn!
+          //           ? addonsCost
+          //           : 0);
+          // }
 
           return Scaffold(
             key: _globalKey,
             backgroundColor: Theme.of(context).cardColor,
             endDrawer: const MenuDrawer(),
-            endDrawerEnableOpenDragGesture: false, 
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-             bottomSheet: cartController.cartList.isEmpty?const  SizedBox():  const CartDetailFloatingButton(),
-             
+            endDrawerEnableOpenDragGesture: false,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            bottomSheet: cartController.cartList.isEmpty
+                ? const SizedBox()
+                : const CartDetailFloatingButton(),
             appBar: ResponsiveHelper.isDesktop(context)
                 ? const CustomAppBar(title: '')
                 : DetailsAppBar(
@@ -185,15 +187,19 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     item: itemController.item!,
                   ),
             body: SafeArea(
-                child: (itemController.item != null)
-                    ? ResponsiveHelper.isDesktop(context)
-                        ? DetailsWebView(
-                            cartModel: cartModel,
-                            stock: stock,
-                            priceWithAddOns: priceWithAddons,
-                            cart: cart,
-                          )
-                        : Column(children: [
+                child:
+                
+                //  (itemController.item != null)
+                //     ? ResponsiveHelper.isDesktop(context)
+                //         ? DetailsWebView(
+                //             cartModel: cartModel,
+                //             stock: stock,
+                //             priceWithAddOns: priceWithAddons,
+                //             cart: cart,
+                //           )
+                //         : 
+                        
+                        Column(children: [
                             Expanded(
                                 child: Scrollbar(
                               child: SingleChildScrollView(
@@ -213,7 +219,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
                                               Builder(builder: (context) {
                                                 return ItemTitleView(
-                                                  item: itemController.item,
+                                                  item: widget.item,
                                                   inStorePage:
                                                       widget.inStorePage,
                                                   isCampaign: itemController
@@ -226,297 +232,210 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                                           .moduleConfig!
                                                           .module!
                                                           .stock! &&
-                                                      stock! <= 0),
+                                                      stock <= 0),
                                                 );
-                                              }), 
+                                              }),
 
-                                            const  SizedBox(height: 16),
+                                              const SizedBox(height: 16), 
+
+
 
                                               /// Brand
-                                              Container(
-                                                height: 56,
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
-                                                  border: Border.symmetric(
-                                                    horizontal: BorderSide(
-                                                      color:
-                                                          Colors.grey.shade300,
-                                                    ),
+                                              // Container(
+                                              //   height: 56,
+                                              //   width: double.infinity,
+                                              //   decoration: BoxDecoration(
+                                              //     border: Border.symmetric(
+                                              //       horizontal: BorderSide(
+                                              //         color:
+                                              //             Colors.grey.shade300,
+                                              //       ),
+                                              //     ),
+                                              //   ),
+                                              //   child: Row(
+                                              //     children: [
+                                              //       Container(
+                                              //         height: 40,
+                                              //         width: 40,
+                                              //         decoration: BoxDecoration(
+                                              //           color:
+                                              //               Colors.green[100],
+                                              //           borderRadius:
+                                              //               BorderRadius
+                                              //                   .circular(8),
+                                              //         ),
+
+                                              //         // child:
+
+                                              //         //  CachedNetworkImage(
+                                              //         //   imageUrl: Get.find<SplashController>()
+                                              //         //       .configModel!
+                                              //         //       .baseUrls +
+                                              //         //       itemController.item!.store!.image!,
+                                              //         //   height: 40,
+                                              //         //   width: 40,
+                                              //         //   fit: BoxFit.cover,
+                                              //         // ),
+                                              //       ),
+                                              //       const SizedBox(
+                                              //         width: 8,
+                                              //       ),
+                                              //       Column(
+                                              //         crossAxisAlignment:
+                                              //             CrossAxisAlignment
+                                              //                 .start,
+                                              //         mainAxisAlignment:
+                                              //             MainAxisAlignment
+                                              //                 .center,
+                                              //         children: [
+                                              //           Text(
+                                              //             itemController
+                                              //                 .item!.storeName!,
+                                              //             style: robotoMedium
+                                              //                 .copyWith(
+                                              //                     fontSize:
+                                              //                         Dimensions
+                                              //                             .fontSizeLarge),
+                                              //           ),
+                                              //           const SizedBox(
+                                              //               height: 4),
+                                              //           Text(
+                                              //             "View All Products",
+                                              //             style: robotoRegular.copyWith(
+                                              //                 color: const Color(
+                                              //                     0xFF01684b),
+                                              //                 fontSize: Dimensions
+                                              //                     .fontSizeSmall),
+                                              //           ),
+                                              //         ],
+                                              //       ),
+                                              //       const Spacer(),
+                                              //       IconButton(
+                                              //           onPressed: () {},
+                                              //           icon: const Icon(
+                                              //             Icons
+                                              //                 .arrow_forward_rounded,
+                                              //           ))
+                                              //     ],
+                                              //   ),
+                                              // ),
+
+                                            
+                                              // Variation 
+
+
+                                             widget.item?.variations ==null || widget.item!.variations!.isEmpty
+                                                  ? 
+
+                                                  Text("Nrs. ${widget.item!.price!}",style: robotoMedium.copyWith(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),) : 
+
+                                              Column( 
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Variations',
+                                                    style: robotoBold.copyWith(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.green[100],
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-
-                                                      // child:
-
-                                                      //  CachedNetworkImage(
-                                                      //   imageUrl: Get.find<SplashController>()
-                                                      //       .configModel!
-                                                      //       .baseUrls +
-                                                      //       itemController.item!.store!.image!,
-                                                      //   height: 40,
-                                                      //   width: 40,
-                                                      //   fit: BoxFit.cover,
-                                                      // ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          itemController
-                                                              .item!.storeName!,
-                                                          style: robotoMedium
-                                                              .copyWith(
-                                                                  fontSize:
-                                                                      Dimensions
-                                                                          .fontSizeLarge),
-                                                        ),
-                                                        const SizedBox(
-                                                            height: 4),
-                                                        Text(
-                                                          "View All Products",
-                                                          style: robotoRegular.copyWith(
-                                                              color: const Color(
-                                                                  0xFF01684b),
-                                                              fontSize: Dimensions
-                                                                  .fontSizeSmall),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const Spacer(),
-                                                    IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
-                                                          Icons
-                                                              .arrow_forward_rounded,
-                                                        ))
-                                                  ],
-                                                ),
-                                              ),
-
-                                              const SizedBox(height: 16),
-                                              // Variation
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount: itemController.item!
-                                                    .choiceOptions!.length,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemBuilder: (context, index) {
-                                                  return Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                            itemController
-                                                                .item!
-                                                                .choiceOptions![
-                                                                    index]
-                                                                .title!,
-                                                            style: robotoMedium
-                                                                .copyWith(
-                                                                    fontSize:
-                                                                        Dimensions
-                                                                            .fontSizeLarge,)),
-                                                        const SizedBox(
-                                                            height: Dimensions
-                                                                .paddingSizeExtraSmall),
-                                                        GridView.builder(
-                                                          gridDelegate:
-                                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 2,
-                                                            crossAxisSpacing:
-                                                                20,
-                                                            mainAxisSpacing: 10,
-                                                            childAspectRatio:
-                                                                (  2.1),
-                                                          ),
-                                                          shrinkWrap: true,
-                                                          physics:
-                                                              const NeverScrollableScrollPhysics(),
-                                                          itemCount:
-                                                              itemController
-                                                                  .item!
-                                                                  .choiceOptions![
-                                                                      index]
-                                                                  .options!
-                                                                  .length,
-                                                          itemBuilder:
-                                                              (context, i) {
-                                                            return InkWell(
-                                                              onTap: () {
-                                                                itemController
-                                                                    .setCartVariationIndex(
-                                                                        index,
-                                                                        i,
-                                                                        itemController
-                                                                            .item);
-                                                              },
-                                                              child: Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        Dimensions
-                                                                            .paddingSizeExtraSmall),
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: itemController.variationIndex![
-                                                                              index] !=
-                                                                          i
-                                                                      ? Theme.of(
-                                                                              context)
-                                                                          .disabledColor
-                                                                      : Theme.of(
-                                                                              context)
-                                                                          .primaryColor,
+                                                  const SizedBox(height: 8),
+                                                  SingleChildScrollView(
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    child: Row(
+                                                        children: List.generate(
+                                                      widget.item!.variations!
+                                                          .length,
+                                                      (index) => Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                right: 8.0),
+                                                        child: Container(
+                                                          height: 90,
+                                                          width: 150,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade100,
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
-                                                                              5),
-                                                                  border: itemController.variationIndex![
-                                                                              index] !=
-                                                                          i
-                                                                      ? Border.all(
-                                                                          color: Theme.of(context)
-                                                                              .disabledColor,
-                                                                          width:
-                                                                              2)
-                                                                      : null,
+                                                                    16,
+                                                                  )),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                  widget
+                                                                      .item!
+                                                                      .variations![
+                                                                          index]
+                                                                      .type!
+                                                                      .trim(),
+                                                                  style: robotoRegular.copyWith(
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
                                                                 ),
-                                                                child: Column( 
-                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                  children: [
-                                                                    Text(
-                                                                      itemController
-                                                                          .item!
-                                                                          .choiceOptions![
-                                                                              index]
-                                                                          .options![
-                                                                              i]
-                                                                          .trim(),
-                                                                      maxLines: 1,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style: robotoRegular
-                                                                          .copyWith(
-                                                                        color: itemController.variationIndex![index] !=
-                                                                                i
-                                                                            ? Colors
-                                                                                .black
-                                                                            : Colors
-                                                                                .white,
-                                                                      ),
-                                                                    ),
-
-                                                                    const SizedBox(
-                                                                        height: 5),  
-
-                                                                    Text(
-                                                                      PriceConverter.convertPrice(
-                                                                          itemController
-                                                                              .item!
-                                                                              .variations![
-                                                                                  index].price!
-                                                                              ),
-                                                                      style: robotoRegular.copyWith(
-                                                                          color: itemController.variationIndex![index] !=
-                                                                                  i
-                                                                              ? Colors
-                                                                                  .black
-                                                                              : Colors
-                                                                                  .white,
-                                                                          fontSize: Dimensions
-                                                                              .fontSizeSmall),
-                                                                    ),
-
-
-                                                                     const SizedBox(
-                                                                        height: 8),   
-
-                                                                    // Add to cart 
-                                                                    InkWell( 
-                                                                      onTap: () { 
-                                                                        Get.find<ItemController>().itemDirectlyAddToCart(itemController.item, context);
-                                                                      },
-                                                                      child: Center(
-                                                                        child: Text(
-                                                                         "Add",
-                                                                          style: robotoRegular.copyWith(
-                                                                              color: itemController.variationIndex![index] !=
-                                                                                      i
-                                                                                  ? Colors
-                                                                                      .black
-                                                                                  : Colors
-                                                                                      .white,
-                                                                              fontSize: Dimensions
-                                                                                  .fontSizeSmall , 
-                                                                                   
-                                                                                  
-                                                                                  fontWeight: FontWeight.bold
-                                                                                  ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-
-
-                                                                  ],
+                                                                const SizedBox(
+                                                                  height: 4,
                                                                 ),
-                                                              ),
-                                                            );
-                                                          },
+
+                                                                Text(
+                                                                  'NRs. ${widget.item!.variations![index].price!}',
+                                                                  style: robotoRegular.copyWith(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                                ),
+                                                                // Text(
+                                                                //   widget
+                                                                //       .item!
+                                                                //       .choiceOptions![
+                                                                //           index]
+                                                                //       .options![i],
+                                                                //   style: robotoRegular.copyWith(
+                                                                //       fontSize:
+                                                                //           16,
+                                                                //       fontWeight:
+                                                                //           FontWeight.bold),
+                                                                // ),
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ),
-                                                        SizedBox(
-                                                            height: index !=
-                                                                    itemController
-                                                                            .item!
-                                                                            .choiceOptions!
-                                                                            .length -
-                                                                        1
-                                                                ? Dimensions
-                                                                    .paddingSizeLarge
-                                                                : 0),
-                                                      ]);
-                                                },
+                                                      ),
+                                                    )),
+                                                  ),
+                                                ],
                                               ),
-                                              itemController.item!
-                                                      .choiceOptions!.isNotEmpty
-                                                  ? const SizedBox(
-                                                      height: Dimensions
-                                                          .paddingSizeLarge)
-                                                  : const SizedBox(),
+                                              // widget.item!
+                                              //         .choiceOptions!.isNotEmpty
+                                              //     ? const SizedBox(
+                                              //         height: Dimensions
+                                              //             .paddingSizeLarge)
+                                              //     : const SizedBox(),
 
-                                             
-                                              // Quantity 
+                                              // Quantity
 
-                                              
-                                           
+                                              // Row(children: [
 
-                                              // Row(children: [ 
-
-                                              
                                               //   Text('${'total_amount'.tr}:',
                                               //       style: robotoMedium.copyWith(
                                               //           fontSize: Dimensions
@@ -549,12 +468,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                                   height: Dimensions
                                                       .paddingSizeExtraLarge),
 
-                                              (itemController.item!
-                                                              .description !=
+                                              (widget.item!.description !=
                                                           null &&
-                                                      itemController
-                                                          .item!
-                                                          .description!
+                                                      widget.item!.description!
                                                           .isNotEmpty)
                                                   ? Column(
                                                       crossAxisAlignment:
@@ -586,12 +502,12 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                                             fontSize: 14,
                                                             color: Colors.green,
                                                           ),
-                                                        ), 
-
+                                                        ),
 
                                                         const SizedBox(
-                                                            height: Dimensions
-                                                                .paddingSizeExtraSmall,),
+                                                          height: Dimensions
+                                                              .paddingSizeExtraSmall,
+                                                        ),
 
                                                         ///
                                                         ///
@@ -609,8 +525,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                                     )
                                                   : const SizedBox(),
 
-
-                                              const     SizedBox(height: 120,)
+                                              const SizedBox(
+                                                height: 120,
+                                              )
                                             ],
                                           )))),
                             )),
@@ -743,10 +660,11 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                             //     ),
                             //   );
                             // }),
-                          
-                          
                           ])
-                    : const Center(child: CircularProgressIndicator())),
+                    // : const Center(child: CircularProgressIndicator()
+                    // )
+                    
+                    ),
           );
         },
       );
@@ -764,7 +682,7 @@ class QuantityButton extends StatelessWidget {
   final int? quantityLimit;
   final CartController cartController;
   const QuantityButton({
-    Key? key,
+    key,
     required this.isIncrement,
     required this.quantity,
     required this.stock,
@@ -783,8 +701,8 @@ class QuantityButton extends StatelessWidget {
           : () {
               if (isExistInCart) {
                 if (!isIncrement && quantity! > 1) {
-                  Get.find<CartController>()
-                      .setQuantity(false, cartIndex, stock, quantityLimit);
+                  // Get.find<CartController>()
+                  //     .setQuantity(false, cartIndex, stock, quantityLimit);
                 } else if (isIncrement && quantity! > 0) {
                   if (quantity! < stock! ||
                       !Get.find<SplashController>()
@@ -792,8 +710,8 @@ class QuantityButton extends StatelessWidget {
                           .moduleConfig!
                           .module!
                           .stock!) {
-                    Get.find<CartController>()
-                        .setQuantity(true, cartIndex, stock, quantityLimit);
+                    // Get.find<CartController>()
+                    //     .setQuantity(true, cartIndex, stock, quantityLimit);
                   } else {
                     showCustomSnackBar('out_of_stock'.tr);
                   }

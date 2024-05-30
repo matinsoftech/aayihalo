@@ -83,26 +83,26 @@ class _WebSpecialOfferViewState extends State<WebSpecialOfferView> {
                   ),
                 ),
 
-                SizedBox(
-                  height: 285, width: Get.width,
-                  child: ListView.builder(
-                    controller: scrollController,
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtraLarge),
-                    itemCount: discountedItemList.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraLarge, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeExtraSmall),
-                        child: ItemCard(
-                          item: discountedItemList[index],
-                          isShop: widget.isShop,
-                          isFood: widget.isFood,
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                // SizedBox(
+                //   height: 285, width: Get.width,
+                //   child: ListView.builder(
+                //     controller: scrollController,
+                //     scrollDirection: Axis.horizontal,
+                //     physics: const BouncingScrollPhysics(),
+                //     padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtraLarge),
+                //     itemCount: discountedItemList.length,
+                //     itemBuilder: (context, index) {
+                //       return Padding(
+                //         padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraLarge, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeExtraSmall),
+                //         child: ItemCard(
+                //           item: discountedItemList[index],
+                //           isShop: widget.isShop,
+                //           isFood: widget.isFood,
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
               ]),
             ),
           ),

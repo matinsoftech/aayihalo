@@ -17,7 +17,7 @@ class ItemImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String?> imageList = [];
     imageList.add(item!.image);
-    imageList.addAll(item!.images!);
+    // imageList.addAll(item!.images!);
 
     return GetBuilder<ItemController>(
       builder: (itemController) {

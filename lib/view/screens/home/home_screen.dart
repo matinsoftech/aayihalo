@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:sixam_mart/controller/auth_controller.dart';
 import 'package:sixam_mart/controller/banner_controller.dart';
 import 'package:sixam_mart/controller/campaign_controller.dart';
@@ -32,7 +33,13 @@ class HomeScreen extends StatefulWidget {
 
   static Future<void> loadData(bool reload) async {
     Get.find<LocationController>().syncZoneData();
-    Get.find<FlashSaleController>().setEmptyFlashSale();
+    Get.find<FlashSaleController>().setEmptyFlashSale(); 
+     
+         
+    Get.find<ItemController>().getHomeScreenData(lat: Get.find<LocationController>().getUserAddress()!.latitude!,  long: 
+          Get.find<LocationController>().getUserAddress()!.longitude!,
+    
+     );
     if (Get.find<SplashController>().module != null &&
         !Get.find<SplashController>()
             .configModel!
@@ -46,7 +53,9 @@ class HomeScreen extends StatefulWidget {
       }
       if (Get.find<SplashController>().module!.moduleType.toString() ==
           AppConstants.ecommerce) {
-        Get.find<ItemController>().getFeaturedCategoriesItemList(false, false);
+        Get.find<ItemController>().getFeaturedCategoriesItemList(false, false); 
+
+
         Get.find<FlashSaleController>().getFlashSale(reload, false);
       }
       Get.find<BannerController>().getPromotionalBanner(reload);
@@ -278,40 +287,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
+                                                  GetBuilder<ItemController>( 
+                                                      builder: (itemController) =>
                                                   RichText(
-                                                      text: TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text:
-                                                            "${"estimated_delivery_time".tr}\n",
-                                                        style: robotoRegular
-                                                            .copyWith(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyLarge!
-                                                                  .color,
-                                                          fontSize: Dimensions
-                                                              .fontSizeDefault,
+                                                        text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              "${"estimated_delivery_time".tr}\n",
+                                                          style: robotoRegular
+                                                              .copyWith(
+                                                            color:
+                                                                Theme.of(context)
+                                                                    .textTheme
+                                                                    .bodyLarge!
+                                                                    .color,
+                                                            fontSize: Dimensions
+                                                                .fontSizeDefault,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      TextSpan(
-                                                        text: '15 mins',
-                                                        style: robotoMedium
-                                                            .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyLarge!
-                                                                  .color,
-                                                          fontSize: Dimensions
-                                                              .fontSizeOverLarge,
+                                                        TextSpan(
+                                                          text: '${itemController.homeScreenDataModel ==null ? '--' :itemController.homeScreenDataModel!.deliveryTime } mins',
+                                                          style: robotoMedium
+                                                              .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color:
+                                                                Theme.of(context)
+                                                                    .textTheme
+                                                                    .bodyLarge!
+                                                                    .color,
+                                                            fontSize: Dimensions
+                                                                .fontSizeOverLarge,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  )),
+                                                      ],
+                                                    )),
+                                                  ),
                                                 ]),
                                             const SizedBox(width: 4),
                                             Padding(

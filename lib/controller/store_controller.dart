@@ -289,7 +289,7 @@ class StoreController extends GetxController implements GetxService {
     Get.find<CouponController>().removeCouponData(false);
     Get.find<OrderController>().clearPrevData(null);
     await Get.find<StoreController>().getStoreDetails(Store(id: storeId), false);
-    Get.find<OrderController>().initializeTimeSlot(_store!);
+    // Get.find<OrderController>().initializeTimeSlot(_store!);
   }
 
   Future<Store?> getStoreDetails(Store store, bool fromModule, {bool fromCart = false, String slug = ''}) async {

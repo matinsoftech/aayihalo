@@ -16,7 +16,9 @@ class AppConstants {
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';
   static const String storeItemUri = '/api/v1/items/latest';
-  static const String popularItemUri = '/api/v1/items/popular';
+  static const String popularItemUri = '/api/v1/items/popular'; 
+static const String homeScreenDataUrl = '/api/v1/home-page-data';
+
   static const String reviewedItemUri = '/api/v1/items/most-reviewed';
   static const String searchItemUri = '/api/v1/items/details/';
   static const String subCategoryUri = '/api/v1/categories/childes/';
@@ -164,8 +166,10 @@ class AppConstants {
   /// Cart
   static const String getCartListUri = '/api/v1/customer/cart/list';
   static const String addCartUri = '/api/v1/customer/cart/add';
+  static const String addToCart= '/api/v1/carts';
   static const String updateCartUri = '/api/v1/customer/cart/update';
   static const String removeAllCartUri = '/api/v1/customer/cart/remove';
+  static const String removeCart ='/api/v1/cart/remove';
   static const String removeItemCartUri = '/api/v1/customer/cart/remove-item';
 
   /// Shared Key

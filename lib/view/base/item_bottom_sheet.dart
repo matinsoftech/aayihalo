@@ -4,9 +4,10 @@ import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/controller/wishlist_controller.dart';
 import 'package:sixam_mart/data/model/body/place_order_body.dart';
-import 'package:sixam_mart/data/model/response/cart_model.dart';
+import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/data/model/response/module_model.dart';
+import 'package:sixam_mart/data/model/response/order_details_model.dart';
 import 'package:sixam_mart/helper/cart_helper.dart';
 import 'package:sixam_mart/helper/date_converter.dart';
 import 'package:sixam_mart/helper/price_converter.dart';
@@ -31,11 +32,11 @@ import 'cart_snackbar.dart';
 class ItemBottomSheet extends StatefulWidget {
   final Item? item;
   final bool isCampaign;
-  final CartModel? cart;
+  final CartDataModel? cart;
   final int? cartIndex;
   final bool inStorePage;
   const ItemBottomSheet(
-      {Key? key,
+      {key,
       required this.item,
       this.isCampaign = false,
       this.cart,
@@ -172,9 +173,9 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
             addonsCost = addonsCost +
                 (widget.item!.addOns![index].price! *
                     itemController.addOnQtyList[index]!);
-            addOnIdList.add(AddOn(
-                id: widget.item!.addOns![index].id,
-                quantity: itemController.addOnQtyList[index]));
+            // addOnIdList.add(AddOn(
+            //     id: widget.item!.addOns![index].id,
+            //     quantity: itemController.addOnQtyList[index]));
             addOnsList.add(widget.item!.addOns![index]);
           }
         }
@@ -805,172 +806,175 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
                                             showCustomSnackBar(invalid,
                                                 getXSnackBar: true);
                                           } else {
-                                            CartModel cartModel = CartModel(
-                                                null,
-                                                price,
-                                                priceWithDiscountAndAddons,
-                                                variation != null
-                                                    ? [variation]
-                                                    : [],
-                                                itemController
-                                                    .selectedVariations,
-                                                (price! -
-                                                    PriceConverter
-                                                        .convertWithDiscount(
-                                                            price,
-                                                            discount,
-                                                            discountType)!),
-                                                itemController.quantity,
-                                                addOnIdList,
-                                                addOnsList,
-                                                widget.isCampaign,
-                                                stock,
-                                                widget.item,
-                                                widget.item!.quantityLimit !=
-                                                        null
-                                                    ? widget
-                                                        .item!.quantityLimit!
-                                                    : null);
+                                            // CartDataModel cartModel = CartDataModel(
+                                               
+                                            //     price,
+                                            //     priceWithDiscountAndAddons,
+                                            //     variation != null
+                                            //         ? [variation]
+                                            //         : [],
+                                            //     itemController
+                                            //         .selectedVariations,
+                                            //     (price! -
+                                            //         PriceConverter
+                                            //             .convertWithDiscount(
+                                            //                 price,
+                                            //                 discount,
+                                            //                 discountType)!),
+                                            //     itemController.quantity,
+                                            //     addOnIdList,
+                                            //     addOnsList,
+                                            //     widget.isCampaign,
+                                            //     stock,
+                                            //     widget.item,
+                                            //     widget.item!.quantityLimit !=
+                                            //             null
+                                            //         ? widget
+                                            //             .item!.quantityLimit!
+                                            //         : null);
 
-                                            List<OrderVariation> variations =
-                                                CartHelper
-                                                    .getSelectedVariations(
-                                              isFoodVariation:
-                                                  Get.find<SplashController>()
-                                                      .getModuleConfig(widget
-                                                          .item!.moduleType)
-                                                      .newVariation!,
-                                              foodVariations:
-                                                  widget.item!.foodVariations!,
-                                              selectedVariations: itemController
-                                                  .selectedVariations,
-                                            );
-                                            List<int?> listOfAddOnId =
-                                                CartHelper.getSelectedAddonIds(
-                                                    addOnIdList: addOnIdList);
-                                            List<int?> listOfAddOnQty =
-                                                CartHelper
-                                                    .getSelectedAddonQtnList(
-                                                        addOnIdList:
-                                                            addOnIdList);
+                                            // List<OrderVariation> variations =
+                                            //     CartHelper
+                                            //         .getSelectedVariations(
+                                            //   isFoodVariation:
+                                            //       Get.find<SplashController>()
+                                            //           .getModuleConfig(widget
+                                            //               .item!.moduleType)
+                                            //           .newVariation!,
+                                            //   foodVariations:
+                                            //       widget.item!.foodVariations!,
+                                            //   selectedVariations: itemController
+                                            //       .selectedVariations,
+                                            // );
+                                            // List<int?> listOfAddOnId =
+                                            //     CartHelper.getSelectedAddonIds(
+                                            //         addOnIdList: addOnIdList);
+                                            // List<int?> listOfAddOnQty =
+                                            //     CartHelper
+                                            //         .getSelectedAddonQtnList(
+                                            //             addOnIdList:
+                                            //                 addOnIdList);
 
-                                            OnlineCart onlineCart = OnlineCart(
-                                                widget.cart != null
-                                                    ? widget.cart!.id
-                                                    : null,
-                                                widget.isCampaign
-                                                    ? null
-                                                    : widget.item!.id,
-                                                widget.isCampaign
-                                                    ? widget.item!.id
-                                                    : null,
-                                                priceWithDiscountAndAddons
-                                                    .toString(),
-                                                '',
-                                                variation != null
-                                                    ? [variation]
-                                                    : null,
-                                                Get.find<SplashController>()
-                                                        .getModuleConfig(widget
-                                                            .item!.moduleType)
-                                                        .newVariation!
-                                                    ? variations
-                                                    : null,
-                                                itemController.quantity,
-                                                listOfAddOnId,
-                                                addOnsList,
-                                                listOfAddOnQty,
-                                                'Item');
+                                            // OnlineCart onlineCart = OnlineCart(
+                                            //     widget.cart != null
+                                            //         ? widget.cart!.id
+                                            //         : null,
+                                            //     widget.isCampaign
+                                            //         ? null
+                                            //         : widget.item!.id,
+                                            //     widget.isCampaign
+                                            //         ? widget.item!.id
+                                            //         : null,
+                                            //     priceWithDiscountAndAddons
+                                            //         .toString(),
+                                            //     '',
+                                            //     variation != null
+                                            //         ? [variation]
+                                            //         : null,
+                                            //     Get.find<SplashController>()
+                                            //             .getModuleConfig(widget
+                                            //                 .item!.moduleType)
+                                            //             .newVariation!
+                                            //         ? variations
+                                            //         : null,
+                                            //     itemController.quantity,
+                                                
+                                            //     // listOfAddOnId,
+                                            //    );
 
-                                            print(
-                                                '====online cart : ${onlineCart.toJson()}');
+                                            // print(
+                                            //     '====online cart : ${onlineCart.toJson()}');
 
                                             if (widget.isCampaign) {
-                                              Get.toNamed(
-                                                  RouteHelper.getCheckoutRoute(
-                                                      'campaign'),
-                                                  arguments: CheckoutScreen(
-                                                    storeId: null,
-                                                    fromCart: false,
-                                                    cartList: [cartModel],
-                                                  ));
+                                              // Get.toNamed(
+                                              //     RouteHelper.getCheckoutRoute(
+                                              //         'campaign'),
+                                              //     arguments: CheckoutScreen(
+                                              //       storeId: null,
+                                              //       fromCart: false,
+                                              //       cartList: [cartModel],
+                                              //     ));
                                             } else {
-                                              if (Get.find<CartController>()
-                                                  .existAnotherStoreItem(
-                                                cartModel.item!.storeId,
-                                                Get.find<SplashController>()
-                                                            .module !=
-                                                        null
-                                                    ? Get.find<
-                                                            SplashController>()
-                                                        .module!
-                                                        .id
-                                                    : Get.find<
-                                                            SplashController>()
-                                                        .cacheModule!
-                                                        .id,
-                                              )) {
-                                                Get.dialog(
-                                                    ConfirmationDialog(
-                                                      icon: Images.warning,
-                                                      title:
-                                                          'are_you_sure_to_reset'
-                                                              .tr,
-                                                      description: Get.find<
-                                                                  SplashController>()
-                                                              .configModel!
-                                                              .moduleConfig!
-                                                              .module!
-                                                              .showRestaurantText!
-                                                          ? 'if_you_continue'.tr
-                                                          : 'if_you_continue_without_another_store'
-                                                              .tr,
-                                                      onYesPressed: () {
-                                                        Get.back();
-                                                        Get.find<
-                                                                CartController>()
-                                                            .clearCartOnline()
-                                                            .then(
-                                                                (success) async {
-                                                          if (success) {
-                                                            await Get.find<
-                                                                    CartController>()
-                                                                .addToCartOnline(
-                                                                    onlineCart);
-                                                            Get.back();
-                                                            showCartSnackBar();
-                                                          }
-                                                        });
-                                                      },
-                                                    ),
-                                                    barrierDismissible: false);
-                                              } else {
-                                                if (widget.cart != null ||
-                                                    itemController.cartIndex !=
-                                                        -1) {
-                                                  await Get.find<
-                                                          CartController>()
-                                                      .updateCartOnline(
-                                                          onlineCart)
-                                                      .then((success) {
-                                                    if (success) {
-                                                      Get.back();
-                                                    }
-                                                  });
-                                                } else {
-                                                  await Get.find<
-                                                          CartController>()
-                                                      .addToCartOnline(
-                                                          onlineCart)
-                                                      .then((success) {
-                                                    if (success) {
-                                                      Get.back();
-                                                    }
-                                                  });
-                                                }
 
-                                                showCartSnackBar();
-                                              }
+
+                                              // if (Get.find<CartController>()
+                                              //     .existAnotherStoreItem(
+                                              //   cartModel.item!.storeId,
+                                              //   Get.find<SplashController>()
+                                              //               .module !=
+                                              //           null
+                                              //       ? Get.find<
+                                              //               SplashController>()
+                                              //           .module!
+                                              //           .id
+                                              //       : Get.find<
+                                              //               SplashController>()
+                                              //           .cacheModule!
+                                              //           .id,
+                                              // )) {
+                                              //   Get.dialog(
+                                              //       ConfirmationDialog(
+                                              //         icon: Images.warning,
+                                              //         title:
+                                              //             'are_you_sure_to_reset'
+                                              //                 .tr,
+                                              //         description: Get.find<
+                                              //                     SplashController>()
+                                              //                 .configModel!
+                                              //                 .moduleConfig!
+                                              //                 .module!
+                                              //                 .showRestaurantText!
+                                              //             ? 'if_you_continue'.tr
+                                              //             : 'if_you_continue_without_another_store'
+                                              //                 .tr,
+                                              //         onYesPressed: () {
+                                              //           Get.back();
+                                              //           Get.find<
+                                              //                   CartController>()
+                                              //               .clearCartOnline()
+                                              //               .then(
+                                              //                   (success) async {
+                                              //             if (success) {
+                                              //               await Get.find<
+                                              //                       CartController>()
+                                              //                   .addToCartOnline(
+                                              //                       onlineCart);
+                                              //               Get.back();
+                                              //               showCartSnackBar();
+                                              //             }
+                                              //           });
+                                              //         },
+                                              //       ),
+                                              //       barrierDismissible: false);
+                                              // } else {
+                                              //   if (widget.cart != null ||
+                                              //       itemController.cartIndex !=
+                                              //           -1) {
+                                              //     await Get.find<
+                                              //             CartController>()
+                                              //         .updateCartOnline(
+                                              //             onlineCart)
+                                              //         .then((success) {
+                                              //       if (success) {
+                                              //         Get.back();
+                                              //       }
+                                              //     });
+                                              //   } else {
+                                              //     await Get.find<
+                                              //             CartController>()
+                                              //         .addToCartOnline(
+                                              //             onlineCart)
+                                              //         .then((success) {
+                                              //       if (success) {
+                                              //         Get.back();
+                                              //       }
+                                              //     });
+                                              //   }
+
+                                              //   showCartSnackBar();
+                                              // }
+                                            
+                                            
                                             }
                                           }
                                         },
@@ -1014,7 +1018,7 @@ class _ItemBottomSheetState extends State<ItemBottomSheet> {
 class AddonView extends StatelessWidget {
   final Item item;
   final ItemController itemController;
-  const AddonView({Key? key, required this.item, required this.itemController})
+  const AddonView({key, required this.item, required this.itemController})
       : super(key: key);
 
   @override
@@ -1171,7 +1175,7 @@ class VariationView extends StatelessWidget {
   final Item? item;
   final ItemController itemController;
   const VariationView(
-      {Key? key, required this.item, required this.itemController})
+      {key, required this.item, required this.itemController})
       : super(key: key);
 
   @override
@@ -1247,7 +1251,7 @@ class NewVariationView extends StatelessWidget {
   final String? discountType;
   final bool showOriginalPrice;
   const NewVariationView(
-      {Key? key,
+      {key,
       required this.item,
       required this.itemController,
       required this.discount,

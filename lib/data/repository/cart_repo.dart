@@ -5,7 +5,7 @@ import 'package:sixam_mart/controller/auth_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/api/api_client.dart';
 import 'package:sixam_mart/data/model/body/place_order_body.dart';
-import 'package:sixam_mart/data/model/response/cart_model.dart';
+import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,14 +14,14 @@ class CartRepo{
   final SharedPreferences sharedPreferences;
   CartRepo({required this.apiClient, required this.sharedPreferences});
 
-  List<CartModel> getCartList() {
+  List<CartDataModel> getCartList() {
     List<String> carts = [];
     if(sharedPreferences.containsKey(AppConstants.cartList)) {
       carts = sharedPreferences.getStringList(AppConstants.cartList) ?? [];
     }
-    List<CartModel> cartList = [];
+    List<CartDataModel> cartList = [];
     for (String cart in carts) {
-      CartModel cartModel = CartModel.fromJson(jsonDecode(cart));
+      CartDataModel cartModel = CartDataModel.fromJson(jsonDecode(cart));
       if((cartModel.item?.moduleId ?? 0) == getModuleId()) {
         cartList.add(cartModel);
       }
@@ -29,19 +29,19 @@ class CartRepo{
     return cartList;
   }
 
-  Future<void> addToCartList(List<CartModel> cartProductList) async {
+  Future<void> addToCartList(List<CartDataModel> cartProductList) async {
     List<String> carts = [];
     if(sharedPreferences.containsKey(AppConstants.cartList)) {
       carts = sharedPreferences.getStringList(AppConstants.cartList) ?? [];
     }
     List<String> cartStringList = [];
     for(String cartString in carts) {
-      CartModel cartModel = CartModel.fromJson(jsonDecode(cartString));
+      CartDataModel cartModel = CartDataModel.fromJson(jsonDecode(cartString));
       if(cartModel.item!.moduleId != getModuleId()) {
         cartStringList.add(cartString);
       }
     }
-    for(CartModel cartModel in cartProductList) {
+    for(CartDataModel cartModel in cartProductList) {
       cartStringList.add(jsonEncode(cartModel.toJson()));
     }
     await sharedPreferences.setStringList(AppConstants.cartList, cartStringList);
@@ -55,14 +55,20 @@ class CartRepo{
     return apiClient.postData('${AppConstants.addCartUri}${!Get.find<AuthController>().isLoggedIn() ? '?guest_id=${Get.find<AuthController>().getGuestId()}' : ''}', cart.toJson());
   }
 
-  Future<Response> updateCartOnline(OnlineCart cart) async {
-    return apiClient.postData('${AppConstants.updateCartUri}${!Get.find<AuthController>().isLoggedIn() ? '?guest_id=${Get.find<AuthController>().getGuestId()}' : ''}', cart.toJson());
+    Future<Response> addToCart({ required Map<String,dynamic> body}) async {
+    return apiClient.postData(AppConstants.addToCart, body);
+  }
+    Future<Response> getCartData() async {
+    return apiClient.getData(AppConstants.addToCart, );
   }
 
-  Future<Response> updateCartQuantityOnline(int cartId, double price, int quantity) async {
+  Future<Response> updateCartOnline(OnlineCart cart) async {
+    return apiClient.postData(AppConstants.updateCartUri, cart.toJson());
+  }
+
+  Future<Response> updateCartQuantityOnline(int cartId,  int quantity) async {
     Map<String, dynamic> data = {
-      "cart_id": cartId,
-      "price": price,
+      "product_id": cartId,
       "quantity": quantity,
     };
     return apiClient.postData('${AppConstants.updateCartUri}${!Get.find<AuthController>().isLoggedIn() ? '?guest_id=${Get.find<AuthController>().getGuestId()}' : ''}', data);
@@ -77,13 +83,16 @@ class CartRepo{
     };
 
     return apiClient.getData(
-      '${AppConstants.getCartListUri}${!Get.find<AuthController>().isLoggedIn() ? '?guest_id=${Get.find<AuthController>().getGuestId()}' : ''}',
+      '${AppConstants.addToCart}${!Get.find<AuthController>().isLoggedIn() ? '?guest_id=${Get.find<AuthController>().getGuestId()}' : ''}',
       headers: Get.find<SplashController>().module?.id == null ? header : null,
     );
   }
 
-  Future<Response> removeCartItemOnline(int cartId, String? guestId) async {
-    return apiClient.deleteData('${AppConstants.removeItemCartUri}?cart_id=$cartId${guestId != null ? '&guest_id=$guestId' : ''}');
+  Future<Response> removeCartItemOnline(int cartId, String? guestId) async { 
+    final body  = { 
+      "id":cartId,
+    };
+    return apiClient.postData('${AppConstants.removeCart}?cart_id=$cartId${guestId != null ? '&guest_id=$guestId' : ''}', body);
   }
 
   Future<Response> clearCartOnline() async {

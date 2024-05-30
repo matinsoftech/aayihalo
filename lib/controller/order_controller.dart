@@ -201,7 +201,11 @@ class OrderController extends GetxController implements GetxService {
     if (response.statusCode == 200) {
       _offlineMethodList = [];
 
+      if(response.body is List) { 
+
       response.body.forEach((method) => _offlineMethodList!.add(OfflineMethodModel.fromJson(method)));
+      }
+
 
     }else{
       ApiChecker.checkApi(response);
