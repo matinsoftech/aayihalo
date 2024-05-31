@@ -58,6 +58,10 @@ class CartRepo{
     Future<Response> addToCart({ required Map<String,dynamic> body}) async {
     return apiClient.postData(AppConstants.addToCart, body);
   }
+
+    Future<Response> placeOrder({ required Map<String,dynamic> body}) async {
+    return apiClient.postData(AppConstants.placeOrder, body);
+  }
     Future<Response> getCartData() async {
     return apiClient.getData(AppConstants.addToCart, );
   }

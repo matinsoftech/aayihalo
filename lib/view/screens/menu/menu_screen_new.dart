@@ -92,8 +92,8 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                                         RouteHelper.getSignInRoute(
                                             Get.currentRoute));
                                   } else {
-                                    Get.dialog(const SignInScreen(
-                                        exitFromApp: true, backFromThis: true));
+                                    Get.dialog( SignInScreen(
+                                       ));
                                   }
                                 },
                                 child: Text(

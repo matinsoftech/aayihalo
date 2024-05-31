@@ -41,7 +41,7 @@ class MenuButton extends StatelessWidget {
               if(!ResponsiveHelper.isDesktop(context)) {
                 Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
               } else{
-                Get.dialog(const SignInScreen(exitFromApp: true, backFromThis: true));
+                Get.dialog( SignInScreen());
               }
             }), useSafeArea: false);
           }else {
@@ -49,7 +49,7 @@ class MenuButton extends StatelessWidget {
               Get.find<WishListController>().removeWishes();
               Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
             } else{
-              Get.dialog(const SignInScreen(exitFromApp: true, backFromThis: true));
+              Get.dialog( SignInScreen());
             }
           }
         }else if(menu.route.startsWith('http')) {

@@ -53,7 +53,8 @@ class SplashScreenState extends State<SplashScreen> {
 
     Get.find<SplashController>().initSharedData();
     if((Get.find<AuthController>().getGuestId().isNotEmpty || Get.find<AuthController>().isLoggedIn()) && Get.find<SplashController>().cacheModule != null) {
-      Get.find<CartController>().getCartData();
+      Get.find<CartController>().getCartData(); 
+      Get.find<LocationController>().getAddressList();
     }
     _route();
 

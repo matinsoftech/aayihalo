@@ -78,6 +78,8 @@ class LocationController extends GetxController implements GetxService {
   bool _updateAddAddressData = true;
   bool _showLocationSuggestion = true;
   bool _showSearchField = false;
+  String ? _userAddressId ;
+  String? get userAddressId =>_userAddressId;
 
   List<PredictionModel> get predictionList => _predictionList;
   bool get isLoading => _isLoading;
@@ -482,6 +484,7 @@ class LocationController extends GetxController implements GetxService {
     try {
       addressModel =
           AddressModel.fromJson(jsonDecode(locationRepo.getUserAddress()!));
+          _userAddressId = addressModel.id.toString();
     } catch (_) {}
     return addressModel;
   }

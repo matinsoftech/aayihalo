@@ -42,6 +42,14 @@ class CartController extends GetxController implements GetxService {
   int _currentIndex = 0;
   bool _isLoading = false;
 
+  String _appliedCoupon = '';
+  String get appliedCoupon => _appliedCoupon; 
+
+  void setAppliedCoupon(String coupon){
+    _appliedCoupon = coupon;
+    update();
+  }
+
   List<CartDataModel> get cartList => _cartList;
   List<OnlineCartModel> get onlineCartList => _onlineCartList;
   double get subTotal => _subTotal;
@@ -552,10 +560,32 @@ if(index != null){
     return 0; // Return 0 if the item is not found
   }
 
-  Future<void> getDataCart() async {
+  Future<void> placeOrder( { String ? couponCode, required  int deliveryAddressId }) async {
     try {
-      final res = await cartRepo.getCartData();
-      print(res);
+
+final body = { 
+  "delivery_address_id" : deliveryAddressId,
+  "coupon_code" : couponCode
+
+}; 
+
+final res = await cartRepo.placeOrder(body: body);
+
+if(res.statusCode == 200){
+
+getCartData();
+  Get.offAll(() => HomeScreen());
+  showCustomSnackBar('Order placed successfully', isError: false);
+ }
+ else { 
+
+    ApiChecker.checkApi(res);
+ }
+
+
+
+
+     
     } catch (e) {
       print(e);
     }

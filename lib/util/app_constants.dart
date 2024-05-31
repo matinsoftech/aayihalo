@@ -167,6 +167,7 @@ static const String homeScreenDataUrl = '/api/v1/home-page-data';
   static const String getCartListUri = '/api/v1/customer/cart/list';
   static const String addCartUri = '/api/v1/customer/cart/add';
   static const String addToCart= '/api/v1/carts';
+  static const String placeOrder= '/api/v1/place-order';
   static const String updateCartUri = '/api/v1/customer/cart/update';
   static const String removeAllCartUri = '/api/v1/customer/cart/remove';
   static const String removeCart ='/api/v1/cart/remove';

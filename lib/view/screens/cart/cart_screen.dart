@@ -3,6 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
+import 'package:sixam_mart/controller/coupon_controller.dart';
+import 'package:sixam_mart/controller/location_controller.dart';
+import 'package:sixam_mart/controller/location_controller.dart';
+import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/controller/store_controller.dart';
 import 'package:sixam_mart/data/model/response/cart_data_model.dart';
@@ -56,6 +60,7 @@ class _CartScreenState extends State<CartScreen> {
   final TextEditingController guestEmailController = TextEditingController();
   final FocusNode guestNumberNode = FocusNode();
   final FocusNode guestEmailNode = FocusNode();
+  final _coupounCodeController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -171,17 +176,19 @@ class _CartScreenState extends State<CartScreen> {
                                                                           BorderRadius.circular(
                                                                               8)),
                                                                 ),
-                                                                title: Text("${item
-                                                                    .name
-                                                                    .toString()}${cartController.cartList[index].variation != null ? ' (${cartController
-                                        .cartList[index].variation})' : ''}"),
+                                                                title: Text(
+                                                                    "${item.name.toString()}${cartController.cartList[index].variation != null ? ' (${cartController.cartList[index].variation})' : ''}"),
                                                                 subtitle: Row(
                                                                   children: [
-                                                                   const  Spacer(),
+                                                                    const Spacer(),
                                                                     IconButton(
-                                                                      icon: const Icon(
-                                                                          Icons
-                                                                              .delete, color: Colors.red,),
+                                                                      icon:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .delete,
+                                                                        color: Colors
+                                                                            .red,
+                                                                      ),
                                                                       onPressed:
                                                                           () {
                                                                         cartController
@@ -189,7 +196,8 @@ class _CartScreenState extends State<CartScreen> {
                                                                       },
                                                                     ),
                                                                     CartScreenItemCountView(
-                                                                      cartIndex: index,
+                                                                        cartIndex:
+                                                                            index,
                                                                         item:
                                                                             item),
                                                                   ],
@@ -222,10 +230,11 @@ class _CartScreenState extends State<CartScreen> {
                                                                               'Coupoun Code',
                                                                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                                                             ),
-                                                                            SizedBox(height: 32),
+                                                                            SizedBox(height: 16),
                                                                             Padding(
                                                                               padding: const EdgeInsets.all(8.0),
-                                                                              child: TextFormField( 
+                                                                              child: TextFormField(
+                                                                                controller: _coupounCodeController,
                                                                                 decoration: InputDecoration(
                                                                                   hintText: 'Enter Coupoun Code',
                                                                                   hintStyle: TextStyle(
@@ -236,13 +245,35 @@ class _CartScreenState extends State<CartScreen> {
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                            
                                                                             ),
-                                                                            Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: CustomButton(
-                                                                                buttonText: 'Apply Coupoun',
-                                                                                onPressed: (){},
+                                                                            GetBuilder<CouponController>(
+                                                                              builder: (controller) => Column(
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: CustomButton(
+                                                                                      buttonText: controller.isLoading ? 'Please wait..' : 'Apply Coupoun',
+                                                                                      onPressed: controller.isLoading
+                                                                                          ? () {}
+                                                                                          : () {
+                                                                                            final discount =   controller.applyCoupon(_coupounCodeController.text, cartController.subTotal, 0.0, cartController.cartList[0].item!.storeId);
+                                                                                            if(discount == 0.0){
+                                                                                              showCustomSnackBar('Invalid Coupoun Code');
+                                                                                            }
+                                                                                            else{
+                                                                                              showCustomSnackBar('Coupoun Applied', isError: false); 
+                                                                                              cartController.setAppliedCoupon(_coupounCodeController.text);
+                                                                                            }
+                                                                                          }
+                                                                                    ),
+                                                                                  ),
+                                                                                  Text(
+                                                                                    'Discount applied : ${controller.discount}',
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 11,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
                                                                               ),
                                                                             ),
                                                                           ]),
@@ -250,7 +281,7 @@ class _CartScreenState extends State<CartScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                         const  SizedBox(
+                                                          const SizedBox(
                                                             height: 10,
                                                           ),
 
@@ -321,9 +352,9 @@ class _CartScreenState extends State<CartScreen> {
                                                             ),
                                                           ),
 
-                                                          // cancellation policy 
+                                                          // cancellation policy
 
-                                                           Padding(
+                                                          Padding(
                                                             padding:
                                                                 const EdgeInsets
                                                                     .all(8.0),
@@ -341,23 +372,18 @@ class _CartScreenState extends State<CartScreen> {
                                                                           crossAxisAlignment:
                                                                               CrossAxisAlignment.start,
                                                                           children: [
-                                                                           const  SizedBox(height: 10),
-                                                                          const   Text(
+                                                                            const SizedBox(height: 10),
+                                                                            const Text(
                                                                               'Cancellation Policy',
                                                                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                                                             ),
                                                                             const SizedBox(height: 32),
                                                                             Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child:
-                                                                              
-                                                                              
-                                                                              Text('You cannot cancel your order once it is packed and dispatched by our partners”. However you can always request for a refund if applicable.' , style: TextStyle(
-color: Colors.grey
-
-                                                                              ),)
-                                                                            ),
-                                                                           
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Text(
+                                                                                  'You cannot cancel your order once it is packed and dispatched by our partners”. However you can always request for a refund if applicable.',
+                                                                                  style: TextStyle(color: Colors.grey),
+                                                                                )),
                                                                           ]),
                                                                     )),
                                                               ),
@@ -548,6 +574,7 @@ color: Colors.grey
                         ? const SizedBox.shrink()
                         : CheckoutButton(
                             cartController: cartController,
+                            couponCode: _coupounCodeController.text,
                             availableList: cartController.availableList),
                   ],
                 )
@@ -773,8 +800,9 @@ color: Colors.grey
 
           ResponsiveHelper.isDesktop(context)
               ? CheckoutButton(
+                couponCode: _coupounCodeController.text,
                   cartController: cartController,
-                  availableList: cartController.availableList)
+                  availableList: cartController.availableList,)
               : const SizedBox.shrink(),
         ]);
       }),
@@ -860,9 +888,13 @@ color: Colors.grey
 
 class CheckoutButton extends StatelessWidget {
   final CartController cartController;
+  final String? couponCode;
   final List<bool> availableList;
   const CheckoutButton(
-      {key, required this.cartController, required this.availableList})
+      {key,
+      required this.cartController,
+      required this.availableList,
+      this.couponCode})
       : super(key: key);
 
   @override
@@ -1069,40 +1101,58 @@ class CheckoutButton extends StatelessWidget {
                 ? const SizedBox(height: Dimensions.paddingSizeSmall)
                 : const SizedBox(),
             SafeArea(
-              child: CustomButton(
-                  buttonText: "Proceed to Pay".tr,
-                  fontSize: ResponsiveHelper.isDesktop(context)
-                      ? Dimensions.fontSizeSmall
-                      : Dimensions.fontSizeLarge,
-                  isBold: ResponsiveHelper.isDesktop(context) ? false : true,
-                  radius: ResponsiveHelper.isDesktop(context)
-                      ? Dimensions.radiusSmall
-                      : Dimensions.radiusDefault,
-                  onPressed: () {
-                    showCustomSnackBar("Couldn't place the order");
-                    // if(!cartController.cartList.first.item!.scheduleOrder! && availableList.contains(false)) {
-                    //   showCustomSnackBar('one_or_more_product_unavailable'.tr);
-                    // }
+              child: GetBuilder<LocationController>(
+                builder: (locationController) => CustomButton(
+                    buttonText: "Proceed to Pay".tr,
+                    fontSize: ResponsiveHelper.isDesktop(context)
+                        ? Dimensions.fontSizeSmall
+                        : Dimensions.fontSizeLarge,
+                    isBold: ResponsiveHelper.isDesktop(context) ? false : true,
+                    radius: ResponsiveHelper.isDesktop(context)
+                        ? Dimensions.radiusSmall
+                        : Dimensions.radiusDefault,
+                    onPressed: () {
+                      final deliveryAddress = locationController.addressList!;
 
-                    /*else if(Get.find<AuthController>().isGuestLoggedIn() && !Get.find<SplashController>().configModel!.guestCheckoutStatus!) {
-                    showCustomSnackBar('currently_your_zone_have_no_permission_to_place_any_order'.tr);
-                  }*/
-                    //  else {
-                    //   if(Get.find<SplashController>().module == null) {
-                    //     int i = 0;
-                    //     for(i = 0; i < Get.find<SplashController>().moduleList!.length; i++){
-                    //       if(cartController.cartList[0].item!.moduleId == Get.find<SplashController>().moduleList![i].id){
-                    //         break;
-                    //       }
-                    //     }
-                    //     Get.find<SplashController>().setModule(Get.find<SplashController>().moduleList![i]);
-                    //     HomeScreen.loadData(true);
-                    //   }
-                    //   Get.find<CouponController>().removeCouponData(false);
+int id =-1;
+                      if (deliveryAddress.isEmpty) {
 
-                    //   Get.toNamed(RouteHelper.getCheckoutRoute('cart'));
-                    // }
-                  }),
+                        showCustomSnackBar(
+                            "Please add delivery address",
+                            isError: false);
+                    
+                      }
+                      else { 
+                        id = deliveryAddress[0].id!;
+                      }
+                     print(couponCode);
+
+                     cartController.placeOrder(deliveryAddressId: id,couponCode: couponCode);
+
+                      // if(!cartController.cartList.first.item!.scheduleOrder! && availableList.contains(false)) {
+                      //   showCustomSnackBar('one_or_more_product_unavailable'.tr);
+                      // }
+
+                      /*else if(Get.find<AuthController>().isGuestLoggedIn() && !Get.find<SplashController>().configModel!.guestCheckoutStatus!) {
+                      showCustomSnackBar('currently_your_zone_have_no_permission_to_place_any_order'.tr);
+                    }*/
+                      //  else {
+                      //   if(Get.find<SplashController>().module == null) {
+                      //     int i = 0;
+                      //     for(i = 0; i < Get.find<SplashController>().moduleList!.length; i++){
+                      //       if(cartController.cartList[0].item!.moduleId == Get.find<SplashController>().moduleList![i].id){
+                      //         break;
+                      //       }
+                      //     }
+                      //     Get.find<SplashController>().setModule(Get.find<SplashController>().moduleList![i]);
+                      //     HomeScreen.loadData(true);
+                      //   }
+                      //   Get.find<CouponController>().removeCouponData(false);
+
+                      //   Get.toNamed(RouteHelper.getCheckoutRoute('cart'));
+                      // }
+                    }),
+              ),
             ),
           ],
         );

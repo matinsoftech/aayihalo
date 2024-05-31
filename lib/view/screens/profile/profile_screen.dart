@@ -149,10 +149,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                               .currentRoute));
                                                     } else {
                                                       Get.dialog(
-                                                          const SignInScreen(
-                                                              exitFromApp: true,
-                                                              backFromThis:
-                                                                  true));
+                                                           SignInScreen(
+                                                            ));
                                                     }
                                                   },
                                                   child: Text(
@@ -205,9 +203,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   RouteHelper.getSignInRoute(
                                                       Get.currentRoute));
                                             } else {
-                                              Get.dialog(const SignInScreen(
-                                                  exitFromApp: true,
-                                                  backFromThis: true));
+                                              Get.dialog( SignInScreen(
+                                                  ));
                                             }
                                           },
                                           child: Container(
