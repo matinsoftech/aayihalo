@@ -6,6 +6,7 @@ import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';
+import 'package:sixam_mart/view/screens/item/item_details_screen.dart';
 
 class CartCountView extends StatelessWidget {
   final Item item;
@@ -127,7 +128,9 @@ print(cartIndex);
               ),
             )
           : InkWell(
-              onTap: () async{
+              onTap: () async{ 
+
+              item.variations != null && item.variations!.isNotEmpty ? Navigator.push(context, MaterialPageRoute(builder: (_)=>ItemDetailsScreen(item: item, inStorePage: false))):
                  Get.find<ItemController>().addToCart(productId: item.id!, quantity: 1);
               },
               child: child ??
@@ -198,7 +201,7 @@ class CartScreenItemCountView extends StatelessWidget {
                                        
                                  cartController.addToCart(quantity:cartController
                                         .cartList[cartIndex].quantity!-1 , productId: cartController
-                                        .cartList[cartIndex].item!.id!, variantType: null) ;
+                                        .cartList[cartIndex].item!.id!, variantType: null, index: cartIndex) ;
                                 } else {
                                     
                              cartController.removeCartItemOnline(cartIndex);

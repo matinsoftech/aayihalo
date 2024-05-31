@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
@@ -169,9 +171,10 @@ class _CartScreenState extends State<CartScreen> {
                                                                           BorderRadius.circular(
                                                                               8)),
                                                                 ),
-                                                                title: Text(item
+                                                                title: Text("${item
                                                                     .name
-                                                                    .toString()),
+                                                                    .toString()}${cartController.cartList[index].variation != null ? ' (${cartController
+                                        .cartList[index].variation})' : ''}"),
                                                                 subtitle: Row(
                                                                   children: [
                                                                    const  Spacer(),

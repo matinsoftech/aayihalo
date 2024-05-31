@@ -306,13 +306,14 @@ class CartController extends GetxController implements GetxService {
 
   int isExistInCart(
       int? itemID, String variationType, bool isUpdate, int? cartIndex) {
-    for (int index = 0; index < _cartList.length; index++) {
-      if (_cartList[index].item!.id == itemID) {
-        if ((isUpdate && index == cartIndex)) {
-          return -1;
-        } else {
-          return index;
+ 
+    for (int i = 0; i < _cartList.length; i++) {
+      if (_cartList[i].item!.id == itemID &&
+          _cartList[i].variation == variationType) {
+        if (isUpdate) {
+          // setQuantity(true, i, _cartList[i].item!.stock, _cartList[i].item!.quantityLimit);
         }
+        return i;
       }
     }
     return -1;
@@ -454,6 +455,7 @@ class CartController extends GetxController implements GetxService {
     update();
 
 final cartId = _cartList[cartIndex].id!;
+  _cartList.removeAt(cartIndex);
    
     Response response = await cartRepo.removeCartItemOnline(
         cartId,
@@ -462,7 +464,7 @@ final cartId = _cartList[cartIndex].id!;
             : Get.find<AuthController>().getGuestId());
     if (response.statusCode == 201) {
       isSuccess = true;
-     _cartList.removeAt(cartIndex);
+   
      getCartData();
     
     } else {
@@ -519,7 +521,7 @@ final cartId = _cartList[cartIndex].id!;
     final Map<String, dynamic> body = {
       "product_id": productId,
       "quantity": quantity,
-      "variation": variantType,
+      "variant_type": variantType,
     };
 
     try { 

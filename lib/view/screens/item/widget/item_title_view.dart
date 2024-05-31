@@ -265,7 +265,8 @@ class ItemTitleView extends StatelessWidget {
                                 );
                               }),
 
-                               CartCountView(item: item!, fromItemDetail: true,),
+                            
+                                             item?.variations ==null || item!.variations!.isEmpty ?    CartCountView(item: item!, fromItemDetail: true,) : const  SizedBox(),
                       ]),
                       // const SizedBox(height: 5),
 

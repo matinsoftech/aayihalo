@@ -9,9 +9,9 @@ class CartDataModel {
     final AddOnIds? addOnIds;
     final AddOnIds? addOnQtys;
     final ItemTypeEnum? itemType;
-    final int? price;
+    final num? price;
      int? quantity;
-    final AddOnIds? variation;
+    final String ? variation;
     final DateTime? createdAt;
     final DateTime? updatedAt;
     final CartItem? item;
@@ -44,7 +44,7 @@ class CartDataModel {
         ItemTypeEnum? itemType,
         int? price,
         int? quantity,
-        AddOnIds? variation,
+        String? variation,
         DateTime? createdAt,
         DateTime? updatedAt,
         CartItem? item,
@@ -81,7 +81,7 @@ class CartDataModel {
         itemType: itemTypeEnumValues.map[json["item_type"]]!,
         price: json["price"],
         quantity: json["quantity"],
-        variation: addOnIdsValues.map[json["variation"]]!,
+        variation: json["variant_type"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         item: json["item"] == null ? null : CartItem.fromJson(json["item"]),
@@ -98,7 +98,7 @@ class CartDataModel {
         "item_type": itemTypeEnumValues.reverse[itemType],
         "price": price,
         "quantity": quantity,
-        "variation": addOnIdsValues.reverse[variation],
+        "variation": variation,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "item": item?.toJson(),
@@ -125,7 +125,7 @@ class CartItem {
 
 
     final String? sku;
-    final String? variations;
+    final String? variation;
     final AddOnIds? addOns;
    dynamic attributes;
     final String? choiceOptions;
@@ -168,7 +168,7 @@ class CartItem {
         this.costPrice,
        
         this.sku,
-        this.variations,
+        this.variation,
         this.addOns,
         this.attributes,
         this.choiceOptions,
@@ -256,7 +256,7 @@ class CartItem {
             costPrice: costPrice ?? this.costPrice,
            
             sku: sku ?? this.sku,
-            variations: variations ?? this.variations,
+            variation: variations ?? this.variation,
             addOns: addOns ?? this.addOns,
             attributes: attributes ?? this.attributes,
             choiceOptions: choiceOptions ?? this.choiceOptions,
@@ -305,7 +305,7 @@ class CartItem {
    
       
         sku: json["sku"],
-        variations: json["variations"],
+        variation: json["variation_type"],
         addOns: addOnIdsValues.map[json["add_ons"]]!,
         attributes: json["attributes"]!,
         choiceOptions: json["choice_options"],
@@ -350,7 +350,7 @@ class CartItem {
       
     
         "sku": sku,
-        "variations": variations,
+        "variations": variation,
         "add_ons": addOnIdsValues.reverse[addOns],
         "attributes": attributes,
         "choice_options": choiceOptions,

@@ -357,6 +357,7 @@ class ItemCardCollection extends StatelessWidget {
                               // delivery in
 
                               CartCountView( 
+                                fromItemDetail: false,
                               
                                   item: Item(
                                 id: item.id,
