@@ -9,6 +9,7 @@ import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/controller/store_controller.dart';
+import 'package:sixam_mart/data/model/response/address_model.dart';
 import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/data/model/response/store_model.dart';
@@ -39,6 +40,7 @@ import 'package:sixam_mart/view/screens/cart/widget/web_cart_items_widget.dart';
 import 'package:sixam_mart/view/screens/cart/widget/web_suggested_item_view.dart';
 import 'package:sixam_mart/view/screens/checkout/checkout_screen.dart';
 import 'package:sixam_mart/view/screens/checkout/widget/delivery_section.dart';
+import 'package:sixam_mart/view/screens/dashboard/widget/address_bottom_sheet.dart';
 import 'package:sixam_mart/view/screens/home/home_screen.dart';
 
 import 'widget/not_available_bottom_sheet.dart';
@@ -252,20 +254,18 @@ class _CartScreenState extends State<CartScreen> {
                                                                                   Padding(
                                                                                     padding: const EdgeInsets.all(8.0),
                                                                                     child: CustomButton(
-                                                                                      buttonText: controller.isLoading ? 'Please wait..' : 'Apply Coupoun',
-                                                                                      onPressed: controller.isLoading
-                                                                                          ? () {}
-                                                                                          : () {
-                                                                                            final discount =   controller.applyCoupon(_coupounCodeController.text, cartController.subTotal, 0.0, cartController.cartList[0].item!.storeId);
-                                                                                            if(discount == 0.0){
-                                                                                              showCustomSnackBar('Invalid Coupoun Code');
-                                                                                            }
-                                                                                            else{
-                                                                                              showCustomSnackBar('Coupoun Applied', isError: false); 
-                                                                                              cartController.setAppliedCoupon(_coupounCodeController.text);
-                                                                                            }
-                                                                                          }
-                                                                                    ),
+                                                                                        buttonText: controller.isLoading ? 'Please wait..' : 'Apply Coupoun',
+                                                                                        onPressed: controller.isLoading
+                                                                                            ? () {}
+                                                                                            : () {
+                                                                                                final discount = controller.applyCoupon(_coupounCodeController.text, cartController.subTotal, 0.0, cartController.cartList[0].item!.storeId);
+                                                                                                if (discount == 0.0) {
+                                                                                                  showCustomSnackBar('Invalid Coupoun Code');
+                                                                                                } else {
+                                                                                                  showCustomSnackBar('Coupoun Applied', isError: false);
+                                                                                                  cartController.setAppliedCoupon(_coupounCodeController.text);
+                                                                                                }
+                                                                                              }),
                                                                                   ),
                                                                                   Text(
                                                                                     'Discount applied : ${controller.discount}',
@@ -440,63 +440,94 @@ class _CartScreenState extends State<CartScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Text('delivery_type'.tr,
+                                                        Text("Delivering to",
                                                             style:
                                                                 robotoMedium),
                                                         const SizedBox(
                                                             height: Dimensions
                                                                 .paddingSizeSmall),
 
+                                                        Row(
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 300,
+                                                              child: Text(
+                                                                Get.find<
+                                                                        LocationController>()
+                                                                    .getUserAddress()!
+                                                                    .address!,
+                                                              ),
+                                                            ), 
+InkWell( 
+  onTap: (){ 
+
+showDialog(context: context, builder: (_)=>Container(
+  height: 400,
+  child: AddressBottomSheet(
+        fromDialog: true, 
+        isCheckOut: true, 
+        onTap: (AddressModel  address){ 
+          
+        },
+      ),
+));
+
+  },
+  child: const  Icon(Icons.edit, color: Colors.green, size: 20,)), 
+                                                           
+                                                          ],
+                                                        ),
+
                                                         //  DeliveryOptionButton(
                                                         //   value: 'delivery', title: 'home_delivery'.tr, charge: charge,
                                                         //   isFree: storeController.store!.freeDelivery, fromWeb: true, total: total,
                                                         // ) :
 
-                                                        SingleChildScrollView(
-                                                          scrollDirection:
-                                                              Axis.horizontal,
-                                                          child: Row(children: [
-                                                            Get.find<SplashController>()
-                                                                        .configModel!
-                                                                        .homeDeliveryStatus ==
-                                                                    1
-                                                                ? DeliveryOptionButton(
-                                                                    value:
-                                                                        'delivery',
-                                                                    title:
-                                                                        'home_delivery'
-                                                                            .tr,
-                                                                    charge: 0.0,
-                                                                    isFree:
-                                                                        false,
-                                                                    fromWeb:
-                                                                        true,
-                                                                    total: 120,
-                                                                  )
-                                                                : const SizedBox(),
-                                                            const SizedBox(
-                                                                width: Dimensions
-                                                                    .paddingSizeDefault),
-                                                            Get.find<SplashController>()
-                                                                        .configModel!
-                                                                        .takeawayStatus ==
-                                                                    1
-                                                                ? DeliveryOptionButton(
-                                                                    value:
-                                                                        'take_away',
-                                                                    title:
-                                                                        'take_away'
-                                                                            .tr,
-                                                                    charge: 0.0,
-                                                                    isFree:
-                                                                        true,
-                                                                    fromWeb:
-                                                                        true,
-                                                                    total: 120,
-                                                                  )
-                                                                : const SizedBox(),
-                                                          ]),
-                                                        ),
+                                                        // SingleChildScrollView(
+                                                        //   scrollDirection:
+                                                        //       Axis.horizontal,
+                                                        //   child: Row(children: [
+                                                        //     Get.find<SplashController>()
+                                                        //                 .configModel!
+                                                        //                 .homeDeliveryStatus ==
+                                                        //             1
+                                                        //         ? DeliveryOptionButton(
+                                                        //             value:
+                                                        //                 'delivery',
+                                                        //             title:
+                                                        //                 'home_delivery'
+                                                        //                     .tr,
+                                                        //             charge: 0.0,
+                                                        //             isFree:
+                                                        //                 false,
+                                                        //             fromWeb:
+                                                        //                 true,
+                                                        //             total: 120,
+                                                        //           )
+                                                        //         : const SizedBox(),
+                                                        //     const SizedBox(
+                                                        //         width: Dimensions
+                                                        //             .paddingSizeDefault),
+                                                        //     Get.find<SplashController>()
+                                                        //                 .configModel!
+                                                        //                 .takeawayStatus ==
+                                                        //             1
+                                                        //         ? DeliveryOptionButton(
+                                                        //             value:
+                                                        //                 'take_away',
+                                                        //             title:
+                                                        //                 'take_away'
+                                                        //                     .tr,
+                                                        //             charge: 0.0,
+                                                        //             isFree:
+                                                        //                 true,
+                                                        //             fromWeb:
+                                                        //                 true,
+                                                        //             total: 120,
+                                                        //           )
+                                                        //         : const SizedBox(),
+                                                        //   ]),
+                                                        // ),
 
                                                         const SizedBox(
                                                             height: Dimensions
@@ -800,9 +831,10 @@ class _CartScreenState extends State<CartScreen> {
 
           ResponsiveHelper.isDesktop(context)
               ? CheckoutButton(
-                couponCode: _coupounCodeController.text,
+                  couponCode: _coupounCodeController.text,
                   cartController: cartController,
-                  availableList: cartController.availableList,)
+                  availableList: cartController.availableList,
+                )
               : const SizedBox.shrink(),
         ]);
       }),
@@ -1114,20 +1146,17 @@ class CheckoutButton extends StatelessWidget {
                     onPressed: () {
                       final deliveryAddress = locationController.addressList!;
 
-int id =-1;
+                      int id = -1;
                       if (deliveryAddress.isEmpty) {
-
-                        showCustomSnackBar(
-                            "Please add delivery address",
+                        showCustomSnackBar("Please add delivery address",
                             isError: false);
-                    
-                      }
-                      else { 
+                      } else {
                         id = deliveryAddress[0].id!;
                       }
-                     print(couponCode);
+                      print(couponCode);
 
-                     cartController.placeOrder(deliveryAddressId: id,couponCode: couponCode);
+                      cartController.placeOrder(
+                          deliveryAddressId: id, couponCode: couponCode);
 
                       // if(!cartController.cartList.first.item!.scheduleOrder! && availableList.contains(false)) {
                       //   showCustomSnackBar('one_or_more_product_unavailable'.tr);

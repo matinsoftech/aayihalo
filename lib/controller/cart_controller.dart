@@ -3,6 +3,7 @@ import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/api/api_checker.dart';
 import 'package:sixam_mart/data/model/body/place_order_body.dart';
+import 'package:sixam_mart/data/model/response/address_model.dart';
 import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 // import 'package:sixam_mart/data/model/response/cart_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
@@ -22,6 +23,9 @@ class CartController extends GetxController implements GetxService {
 
   List<CartDataModel> _cartList = [];
   List<OnlineCartModel> _onlineCartList = [];
+
+  AddressModel ?  addressModel;  
+  
 
   double _subTotal = 0;
   double _itemPrice = 0;
