@@ -43,7 +43,9 @@ class PopularStoreView extends StatelessWidget {
 
           SizedBox(
             height: 160,
-            child: storeList != null ? ListView.builder(
+            child: storeList != null ?
+            
+             ListView.builder(
               controller: ScrollController(),
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
@@ -54,6 +56,7 @@ class PopularStoreView extends StatelessWidget {
                   padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall, bottom: 5),
                   child: InkWell(
                     onTap: () {
+
                       if(isFeatured && Get.find<SplashController>().moduleList != null) {
                         for(ModuleModel module in Get.find<SplashController>().moduleList!) {
                           if(module.id == storeList[index].moduleId) {
@@ -62,10 +65,7 @@ class PopularStoreView extends StatelessWidget {
                           }
                         }
                       }
-                      Get.toNamed(
-                        RouteHelper.getStoreRoute(id: storeList[index].id, page: isFeatured ? 'module' : 'store'),
-                        arguments: StoreScreen(store: storeList[index], fromModule: isFeatured),
-                      );
+                      
                     },
                     child: Container(
                       width: 200,

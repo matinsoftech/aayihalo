@@ -87,9 +87,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       const MenuScreenNew()
     ];
 
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {});
-    });
+  
   }
 
   Future<void> suggestAddressBottomSheet() async {
@@ -248,24 +246,29 @@ class DashboardScreenState extends State<DashboardScreen> {
                                   //   ),
                                   // ),
 
-                                  ResponsiveHelper.isDesktop(context)
-                                      ? const SizedBox()
-                                      : (widget.fromSplash &&
-                                              Get.find<LocationController>()
-                                                  .showLocationSuggestion &&
-                                              active)
-                                          ? const SizedBox()
-                                          : (orderController.showBottomSheet &&
-                                                  orderController
-                                                          .runningOrderModel !=
-                                                      null &&
-                                                  orderController
-                                                      .runningOrderModel!
-                                                      .orders!
-                                                      .isNotEmpty &&
-                                                  _isLogin)
-                                              ? const SizedBox()
-                                              : Center(
+                                  // ResponsiveHelper.isDesktop(context)
+                                  //     ? const SizedBox()
+                                  //     : 
+                                      
+                                      // (widget.fromSplash &&
+                                      //         Get.find<LocationController>()
+                                      //             .showLocationSuggestion &&
+                                      //         active)
+                                      //     ? const SizedBox()
+                                      //     : (orderController.showBottomSheet &&
+                                      //             orderController
+                                      //                     .runningOrderModel !=
+                                      //                 null &&
+                                      //             orderController
+                                      //                 .runningOrderModel!
+                                      //                 .orders!
+                                      //                 .isNotEmpty &&
+                                      //             _isLogin)
+                                      //         ? const SizedBox()
+                                      //         :
+                                              
+                                              
+                                               Center(
                                                   child: SizedBox(
                                                     width: size.width,
                                                     height: 80,

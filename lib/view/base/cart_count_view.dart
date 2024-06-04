@@ -23,7 +23,7 @@ class CartCountView extends StatelessWidget {
     return GetBuilder<CartController>(builder: (cartController) {
 
       
-      int cartQty = cartController.getItemQuantity(item: item);
+      int cartQty = cartController.getItemQuantity(item: item); 
      
       return cartQty != 0
           ? Center(
@@ -48,6 +48,8 @@ print(cartIndex);
                                 if (cartController
                                         .cartList[cartIndex].quantity! >
                                     1) {
+
+      cartController.currentItemId = item.id??-1;
 
                                             
                                  cartController.addToCart(quantity:cartController
@@ -82,8 +84,15 @@ print(cartIndex);
                           ),
                         ),
                       ),
-                      !cartController.isLoading
-                          ? Padding(
+                     cartController.isLoading &&  cartController.currentItemId == item.id
+                          
+                          ? SizedBox(
+                              height: 10,
+                              width: 10,
+                              child: CircularProgressIndicator(
+                                  color: Theme.of(context).cardColor)) :
+                          
+                          Padding(
                             padding:  EdgeInsets.all(fromItemDetail ? 0:  2.0),
                             child: Text(
                                 cartQty.toString(),
@@ -93,16 +102,14 @@ print(cartIndex);
                                         : Dimensions.fontSizeSmall,
                                     color: Theme.of(context).cardColor),
                               ),
-                          )
-                          : SizedBox(
-                              height: 10,
-                              width: 10,
-                              child: CircularProgressIndicator(
-                                  color: Theme.of(context).cardColor)),
+                          ),
+                          
                       InkWell(
                         onTap: cartController.isLoading
                             ? null
                             : () {
+      cartController.currentItemId = item.id??-1;
+
                               int cartIndex = cartController.cartList.indexWhere((element) => element.item!.id == item.id);
                                cartController.addToCart(quantity:cartController
                                         .cartList[cartIndex].quantity!+1 , productId: cartController
@@ -127,7 +134,13 @@ print(cartIndex);
                     ]),
               ),
             )
-          : InkWell(
+          :  
+        cartController.addingToCart ? 
+  Text("Adding..", style: TextStyle( 
+    color: Theme.of(context).primaryColor,
+  ),): 
+
+          InkWell(
               onTap: () async{ 
 
               item.variations != null && item.variations!.isNotEmpty ? Navigator.push(context, MaterialPageRoute(builder: (_)=>ItemDetailsScreen(item: item, inStorePage: false))):

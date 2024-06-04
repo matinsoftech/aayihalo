@@ -16,10 +16,20 @@ import 'package:get/get.dart';
 import 'package:sixam_mart/view/screens/home/widget/banner_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/popular_store_view.dart';
 
-class ModuleView extends StatelessWidget {
+class ModuleView extends StatefulWidget {
   final SplashController splashController;
   const ModuleView({Key? key, required this.splashController}) : super(key: key);
 
+  @override
+  State<ModuleView> createState() => _ModuleViewState();
+}
+
+class _ModuleViewState extends State<ModuleView> {
+  initState() {
+    super.initState();
+    widget.splashController.switchModule(0, true);
+   
+  }
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -28,17 +38,17 @@ class ModuleView extends StatelessWidget {
         return const BannerView(isFeatured: true);
       }),
 
-      splashController.moduleList != null ? splashController.moduleList!.isNotEmpty ? GridView.builder(
+      widget.splashController.moduleList != null ? widget.splashController.moduleList!.isNotEmpty ? GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3, mainAxisSpacing: Dimensions.paddingSizeSmall,
           crossAxisSpacing: Dimensions.paddingSizeSmall, childAspectRatio: (1/1),
         ),
         padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-        itemCount: splashController.moduleList!.length,
+        itemCount: widget.splashController.moduleList!.length,
         shrinkWrap: true, physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return InkWell(
-            onTap: () => splashController.switchModule(index, true),
+        
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
@@ -51,14 +61,14 @@ class ModuleView extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                   child: CustomImage(
-                    image: '${splashController.configModel!.baseUrls!.moduleImageUrl}/${splashController.moduleList![index].icon}',
+                    image: '${widget.splashController.configModel!.baseUrls!.moduleImageUrl}/${widget.splashController.moduleList![index].icon}',
                     height: 50, width: 50,
                   ),
                 ),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
 
                 Center(child: Text(
-                  splashController.moduleList![index].moduleName!,
+                  widget.splashController.moduleList![index].moduleName!,
                   textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis,
                   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
                 )),
@@ -69,7 +79,7 @@ class ModuleView extends StatelessWidget {
         },
       ) : Center(child: Padding(
         padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall), child: Text('no_module_found'.tr),
-      )) : ModuleShimmer(isEnabled: splashController.moduleList == null),
+      )) : ModuleShimmer(isEnabled: widget.splashController.moduleList == null),
 
       GetBuilder<LocationController>(builder: (locationController) {
         List<AddressModel?> addressList = [];

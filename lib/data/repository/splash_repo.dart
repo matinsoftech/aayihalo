@@ -97,7 +97,7 @@ class SplashRepo {
     }catch(_) {}
     apiClient.updateHeader(
       sharedPreferences.getString(AppConstants.token), addressModel?.zoneIds, addressModel?.areaIds,
-      sharedPreferences.getString(AppConstants.languageCode), module?.id,
+      sharedPreferences.getString(AppConstants.languageCode), 6,
         addressModel?.latitude, addressModel?.longitude
     );
     if(module != null) {

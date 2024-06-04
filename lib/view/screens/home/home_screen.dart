@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/view/screens/home/widget/module_view.dart';
 import 'package:sixam_mart/view/screens/parcel/parcel_category_screen.dart';
+import 'package:sixam_mart/view/screens/store/store_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -40,6 +41,8 @@ class HomeScreen extends StatefulWidget {
           Get.find<LocationController>().getUserAddress()!.longitude!,
     
      );
+
+
     if (Get.find<SplashController>().module != null &&
         !Get.find<SplashController>()
             .configModel!
@@ -124,6 +127,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Get.find<LocationController>().getUserAddress()!.longitude,
           false,
           updateInAddress: true);
+
+
+          // Get.toNamed(
+          //               RouteHelper.getStoreRoute(id: Get.find<ItemController>().homeScreenDataModel?.nearestStore!.id!, page: 'module'),
+                       
+          //             );
     }
   }
 

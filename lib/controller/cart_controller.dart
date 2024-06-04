@@ -24,8 +24,7 @@ class CartController extends GetxController implements GetxService {
   List<CartDataModel> _cartList = [];
   List<OnlineCartModel> _onlineCartList = [];
 
-  AddressModel ?  addressModel;  
-  
+  AddressModel? addressModel;
 
   double _subTotal = 0;
   double _itemPrice = 0;
@@ -46,10 +45,20 @@ class CartController extends GetxController implements GetxService {
   int _currentIndex = 0;
   bool _isLoading = false;
 
-  String _appliedCoupon = '';
-  String get appliedCoupon => _appliedCoupon; 
+  int _currentItemId = 0 ; 
+  int get currentItemId => _currentItemId; 
 
-  void setAppliedCoupon(String coupon){
+  set currentItemId(int index) {
+    _currentItemId = index ; 
+  }
+
+  bool _addingToCart = false;
+  bool get addingToCart => _addingToCart;
+
+  String _appliedCoupon = '';
+  String get appliedCoupon => _appliedCoupon;
+
+  void setAppliedCoupon(String coupon) {
     _appliedCoupon = coupon;
     update();
   }
@@ -318,7 +327,6 @@ class CartController extends GetxController implements GetxService {
 
   int isExistInCart(
       int? itemID, String variationType, bool isUpdate, int? cartIndex) {
- 
     for (int i = 0; i < _cartList.length; i++) {
       if (_cartList[i].item!.id == itemID &&
           _cartList[i].variation == variationType) {
@@ -414,7 +422,7 @@ class CartController extends GetxController implements GetxService {
     _isLoading = true;
     update();
     Response response =
-        await cartRepo.updateCartQuantityOnline(cartId,  quantity);
+        await cartRepo.updateCartQuantityOnline(cartId, quantity);
     if (response.statusCode == 200) {
       getCartDataOnline();
       // calculationCart();
@@ -463,12 +471,11 @@ class CartController extends GetxController implements GetxService {
     _isLoading = true;
     bool isSuccess = false;
 
-    
     update();
 
-final cartId = _cartList[cartIndex].id!;
-  _cartList.removeAt(cartIndex);
-   
+    final cartId = _cartList[cartIndex].id!;
+    _cartList.removeAt(cartIndex);
+
     Response response = await cartRepo.removeCartItemOnline(
         cartId,
         Get.find<AuthController>().isLoggedIn()
@@ -476,9 +483,8 @@ final cartId = _cartList[cartIndex].id!;
             : Get.find<AuthController>().getGuestId());
     if (response.statusCode == 201) {
       isSuccess = true;
-   
-     getCartData();
-    
+
+      getCartData();
     } else {
       ApiChecker.checkApi(response);
     }
@@ -528,7 +534,7 @@ final cartId = _cartList[cartIndex].id!;
   Future<void> addToCart(
       {required int quantity,
       required int productId,
-      int ? index, 
+      int? index,
       required String? variantType}) async {
     final Map<String, dynamic> body = {
       "product_id": productId,
@@ -536,15 +542,16 @@ final cartId = _cartList[cartIndex].id!;
       "variant_type": variantType,
     };
 
-    try { 
-/// the product id is the id of the product that is being added to the cart
+    try {
+      /// the product id is the id of the product that is being added to the cart
 
-
-if(index != null){  
-  _cartList[index].quantity = quantity;
-  update();
-}
-
+      _addingToCart = true; 
+      _isLoading = true;
+      update();
+      if (index != null) {
+        _cartList[index].quantity = quantity;
+        update();
+      }
 
       final res = await cartRepo.addToCart(body: body);
       getCartData();
@@ -553,6 +560,9 @@ if(index != null){
     } catch (e) {
       print(e);
     }
+
+    _addingToCart = false;
+    update();
   }
 
   int getItemQuantity({required var item}) {
@@ -564,32 +574,24 @@ if(index != null){
     return 0; // Return 0 if the item is not found
   }
 
-  Future<void> placeOrder( { String ? couponCode, required  int deliveryAddressId }) async {
+  Future<void> placeOrder(
+      {String? couponCode, required int deliveryAddressId}) async {
     try {
+      final body = {
+        "delivery_address_id": deliveryAddressId,
+        "coupon_code": couponCode
+      };
 
-final body = { 
-  "delivery_address_id" : deliveryAddressId,
-  "coupon_code" : couponCode
+      final res = await cartRepo.placeOrder(body: body);
 
-}; 
+      if (res.statusCode == 200) {
+        getCartData();
 
-final res = await cartRepo.placeOrder(body: body);
-
-if(res.statusCode == 200){
-
-getCartData();
-  Get.offAll(() => HomeScreen());
-  showCustomSnackBar('Order placed successfully', isError: false);
- }
- else { 
-
-    ApiChecker.checkApi(res);
- }
-
-
-
-
-     
+        showCustomSnackBar('Order placed successfully', isError: false);
+        Get.back();
+      } else {
+        ApiChecker.checkApi(res);
+      }
     } catch (e) {
       print(e);
     }
