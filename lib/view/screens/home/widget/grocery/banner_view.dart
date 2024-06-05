@@ -66,9 +66,12 @@ class BannerView extends StatelessWidget {
                                       : Get.find<SplashController>()
                                           .configModel!
                                           .baseUrls!
-                                          .bannerImageUrl;
+                                          .bannerImageUrl; 
                               return InkWell(
-                                onTap: () async {
+                                onTap: () async { 
+                                
+
+                                  // bannerDataList[index] is Item ? Get.find<ItemController>().navigateToItemPage(bannerDataList[index], context) : bannerDataList[index] is Store ? Get.toNamed(RouteHelper.getStoreRoute(id: bannerDataList[index].id, page: isFeatured ? 'module' : 'banner'), arguments: StoreScreen(store: bannerDataList[index], fromModule: isFeatured)) : bannerDataList[index] is BasicCampaignModel ? Get.toNamed(RouteHelper.getBasicCampaignRoute(bannerDataList[index])) : await canLaunchUrlString(bannerDataList[index]) ? await launchUrlString(bannerDataList[index], mode: LaunchMode.externalApplication) : showCustomSnackBar('unable_to_found_url'.tr);
                                   // if (bannerDataList[index] is Item) {
                                   //   Item? item = bannerDataList[index];
                                   //   Get.find<ItemController>()
@@ -134,9 +137,15 @@ class BannerView extends StatelessWidget {
                                         Dimensions.radiusLarge),
                                     child: GetBuilder<SplashController>(
                                         builder: (splashController) {
-                                      return CustomImage(
-                                        image: '$baseUrl/${bannerList[index]}',
-                                        fit: BoxFit.cover,
+                                      return InkWell( 
+                                        onTap: () {  
+                                          
+                                          print('bannerDataList[index] $bannerDataList[index]');
+                                        },
+                                        child: CustomImage(
+                                          image: '$baseUrl/${bannerList[index]}',
+                                          fit: BoxFit.cover,
+                                        ),
                                       );
                                     }),
                                   ),

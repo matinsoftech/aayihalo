@@ -12,19 +12,16 @@ class CartCountView extends StatelessWidget {
   final Item item;
   final bool fromItemDetail;
 
-  
   final Widget? child;
   const CartCountView(
-      {key, required this.item, this.child,   this.fromItemDetail = false})
+      {key, required this.item, this.child, this.fromItemDetail = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CartController>(builder: (cartController) {
+      int cartQty = cartController.getItemQuantity(item: item);
 
-      
-      int cartQty = cartController.getItemQuantity(item: item); 
-     
       return cartQty != 0
           ? Center(
               child: Container(
@@ -41,20 +38,23 @@ class CartCountView extends StatelessWidget {
                         onTap: cartController.isLoading
                             ? null
                             : () {
+                                int cartIndex = cartController.cartList
+                                    .indexWhere((element) =>
+                                        element.item!.id == item.id);
+                                print(cartIndex);
 
-int cartIndex = cartController.cartList.indexWhere((element) => element.item!.id == item.id);
-print(cartIndex);
-                              
                                 if (cartController
                                         .cartList[cartIndex].quantity! >
                                     1) {
+                                  cartController.currentItemId = item.id ?? -1;
 
-      cartController.currentItemId = item.id??-1;
-
-                                            
-                                 cartController.addToCart(quantity:cartController
-                                        .cartList[cartIndex].quantity!-1 , productId: cartController
-                                        .cartList[cartIndex].item!.id!, variantType: null) ;
+                                  cartController.addToCart(
+                                      quantity: cartController
+                                              .cartList[cartIndex].quantity! -
+                                          1,
+                                      productId: cartController
+                                          .cartList[cartIndex].item!.id!,
+                                      variantType: null);
                                   // cartController.setQuantity(
                                   //   false,
                                   //   cartIndex,
@@ -63,8 +63,8 @@ print(cartIndex);
                                   //       .quantityLimit,
                                   // );
                                 } else {
-
-                                  cartController.removeCartItemOnline(cartIndex);
+                                  cartController
+                                      .removeCartItemOnline(cartIndex);
                                 }
                               },
                         child: Container(
@@ -79,22 +79,21 @@ print(cartIndex);
                           ),
                           child: Icon(
                             Icons.remove,
-                            size:  fromItemDetail ? null :  16  ,
+                            size: fromItemDetail ? null : 16,
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
                       ),
-                     cartController.isLoading &&  cartController.currentItemId == item.id
-                          
+                      cartController.isLoading &&
+                              cartController.currentItemId == item.id
                           ? SizedBox(
                               height: 10,
                               width: 10,
                               child: CircularProgressIndicator(
-                                  color: Theme.of(context).cardColor)) :
-                          
-                          Padding(
-                            padding:  EdgeInsets.all(fromItemDetail ? 0:  2.0),
-                            child: Text(
+                                  color: Theme.of(context).cardColor))
+                          : Padding(
+                              padding: EdgeInsets.all(fromItemDetail ? 0 : 2.0),
+                              child: Text(
                                 cartQty.toString(),
                                 style: robotoMedium.copyWith(
                                     fontSize: fromItemDetail
@@ -102,18 +101,23 @@ print(cartIndex);
                                         : Dimensions.fontSizeSmall,
                                     color: Theme.of(context).cardColor),
                               ),
-                          ),
-                          
+                            ),
                       InkWell(
                         onTap: cartController.isLoading
                             ? null
                             : () {
-      cartController.currentItemId = item.id??-1;
+                                cartController.currentItemId = item.id ?? -1;
 
-                              int cartIndex = cartController.cartList.indexWhere((element) => element.item!.id == item.id);
-                               cartController.addToCart(quantity:cartController
-                                        .cartList[cartIndex].quantity!+1 , productId: cartController
-                                        .cartList[cartIndex].item!.id!, variantType: null) ;
+                                int cartIndex = cartController.cartList
+                                    .indexWhere((element) =>
+                                        element.item!.id == item.id);
+                                cartController.addToCart(
+                                    quantity: cartController
+                                            .cartList[cartIndex].quantity! +
+                                        1,
+                                    productId: cartController
+                                        .cartList[cartIndex].item!.id!,
+                                    variantType: null);
                               },
                         child: Container(
                           decoration: BoxDecoration(
@@ -125,8 +129,8 @@ print(cartIndex);
                           padding: const EdgeInsets.all(
                               Dimensions.paddingSizeExtraSmall),
                           child: Icon(
-                            Icons.add, 
-                            size:  fromItemDetail ? null :  16  ,
+                            Icons.add,
+                            size: fromItemDetail ? null : 16,
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
@@ -134,62 +138,66 @@ print(cartIndex);
                     ]),
               ),
             )
-          :  
-        cartController.addingToCart ? 
-  Text("Adding..", style: TextStyle( 
-    color: Theme.of(context).primaryColor,
-  ),): 
-
-          InkWell(
-              onTap: () async{ 
-
-              item.variations != null && item.variations!.isNotEmpty ? Navigator.push(context, MaterialPageRoute(builder: (_)=>ItemDetailsScreen(item: item, inStorePage: false))):
-                 Get.find<ItemController>().addToCart(productId: item.id!, quantity: 1);
-              },
-              child: child ??
-                  Container(
-                    height: fromItemDetail ? 40:  25,
-                    width: fromItemDetail ? 40: 25,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).cardColor,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 10)
-                        ]),
-                    child: Icon(Icons.add,
-                        size:fromItemDetail ? 24: 20, color: Theme.of(context).primaryColor),
+          : cartController.addingToCart &&
+                  cartController.currentItemId == item.id
+              ? Text(
+                  "Adding..",
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
                   ),
-            );
+                )
+              : InkWell(
+                  onTap: () async {
+                    cartController.currentItemId = item.id ?? -1;
+
+                    item.variations != null && item.variations!.isNotEmpty
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => ItemDetailsScreen(
+                                    item: item, inStorePage: false)))
+                        : Get.find<ItemController>()
+                            .addToCart(productId: item.id!, quantity: 1);
+                  },
+                  child: child ??
+                      Container(
+                        height: fromItemDetail ? 40 : 25,
+                        width: fromItemDetail ? 40 : 25,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Theme.of(context).cardColor,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 10)
+                            ]),
+                        child: Icon(Icons.add,
+                            size: fromItemDetail ? 24 : 20,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                );
     });
   }
 }
-
-
 
 class CartScreenItemCountView extends StatelessWidget {
   final CartItem item;
   final int cartIndex;
   final bool fromItemDetail;
   final Widget? child;
-  const CartScreenItemCountView(
-      {key, required this.item,  
-      required this.cartIndex,
-      
-     
-      this.child, this.fromItemDetail = false, 
-    
-      })
-      : super(key: key);
+  const CartScreenItemCountView({
+    key,
+    required this.item,
+    required this.cartIndex,
+    this.child,
+    this.fromItemDetail = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CartController>(builder: (cartController) {
-
-      
       int cartQty = cartController.getItemQuantity(item: item);
-     
+
       return cartQty != 0
           ? Center(
               child: Container(
@@ -205,19 +213,21 @@ class CartScreenItemCountView extends StatelessWidget {
                       InkWell(
                         onTap: cartController.isLoading
                             ? null
-                            : () { 
-
-                             
+                            : () {
                                 if (cartController
                                         .cartList[cartIndex].quantity! >
                                     1) {
-                                       
-                                 cartController.addToCart(quantity:cartController
-                                        .cartList[cartIndex].quantity!-1 , productId: cartController
-                                        .cartList[cartIndex].item!.id!, variantType: null, index: cartIndex) ;
+                                  cartController.addToCart(
+                                      quantity: cartController
+                                              .cartList[cartIndex].quantity! -
+                                          1,
+                                      productId: cartController
+                                          .cartList[cartIndex].item!.id!,
+                                      variantType: null,
+                                      index: cartIndex);
                                 } else {
-                                    
-                             cartController.removeCartItemOnline(cartIndex);
+                                  cartController
+                                      .removeCartItemOnline(cartIndex);
                                 }
                               },
                         child: Container(
@@ -232,33 +242,34 @@ class CartScreenItemCountView extends StatelessWidget {
                           ),
                           child: Icon(
                             Icons.remove,
-                            size:  fromItemDetail ? null :  16  ,
+                            size: fromItemDetail ? null : 16,
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
                       ),
-                     Padding(
-                            padding:  EdgeInsets.all(fromItemDetail ? 0:  2.0),
-                            child: Text(
-                                cartQty.toString(),
-                                style: robotoMedium.copyWith(
-                                    fontSize: fromItemDetail
-                                        ? Dimensions.fontSizeLarge
-                                        : Dimensions.fontSizeSmall,
-                                    color: Theme.of(context).cardColor),
-                              ),
-                          ),
-                         
+                      Padding(
+                        padding: EdgeInsets.all(fromItemDetail ? 0 : 2.0),
+                        child: Text(
+                          cartQty.toString(),
+                          style: robotoMedium.copyWith(
+                              fontSize: fromItemDetail
+                                  ? Dimensions.fontSizeLarge
+                                  : Dimensions.fontSizeSmall,
+                              color: Theme.of(context).cardColor),
+                        ),
+                      ),
                       InkWell(
                         onTap: cartController.isLoading
                             ? null
                             : () {
-                               cartController.addToCart(quantity:cartController
-                                        .cartList[cartIndex].quantity!+1 , productId: cartController
-                                        .cartList[cartIndex].item!.id!, variantType: null ,
-                                        
-                                        index: cartIndex
-                                        ) ;
+                                cartController.addToCart(
+                                    quantity: cartController
+                                            .cartList[cartIndex].quantity! +
+                                        1,
+                                    productId: cartController
+                                        .cartList[cartIndex].item!.id!,
+                                    variantType: null,
+                                    index: cartIndex);
                               },
                         child: Container(
                           decoration: BoxDecoration(
@@ -270,8 +281,8 @@ class CartScreenItemCountView extends StatelessWidget {
                           padding: const EdgeInsets.all(
                               Dimensions.paddingSizeExtraSmall),
                           child: Icon(
-                            Icons.add, 
-                            size:  fromItemDetail ? null :  16  ,
+                            Icons.add,
+                            size: fromItemDetail ? null : 16,
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
@@ -280,13 +291,14 @@ class CartScreenItemCountView extends StatelessWidget {
               ),
             )
           : InkWell(
-              onTap: () async{
-                 Get.find<ItemController>().addToCart(productId: item.id!, quantity: 1);
+              onTap: () async {
+                Get.find<ItemController>()
+                    .addToCart(productId: item.id!, quantity: 1);
               },
               child: child ??
                   Container(
-                    height: fromItemDetail ? 40:  25,
-                    width: fromItemDetail ? 40: 25,
+                    height: fromItemDetail ? 40 : 25,
+                    width: fromItemDetail ? 40 : 25,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Theme.of(context).cardColor,
@@ -296,7 +308,8 @@ class CartScreenItemCountView extends StatelessWidget {
                               blurRadius: 10)
                         ]),
                     child: Icon(Icons.add,
-                        size:fromItemDetail ? 24: 20, color: Theme.of(context).primaryColor),
+                        size: fromItemDetail ? 24 : 20,
+                        color: Theme.of(context).primaryColor),
                   ),
             );
     });

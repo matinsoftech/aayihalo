@@ -31,7 +31,7 @@ class AddressBottomSheet extends StatelessWidget {
       Get.find<LocationController>().getAddressList();
     }
     return Container(
-     height:  fromDialog ? 400:null,
+      height: fromDialog ? 400 : null,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.only(
@@ -57,7 +57,7 @@ class AddressBottomSheet extends StatelessWidget {
                       onPressed: () {
                         Get.find<SplashController>()
                             .saveWebSuggestedLocationStatus(true);
-                        Get.back();
+                       
                       },
                       icon: const Icon(Icons.clear),
                     )
@@ -89,7 +89,9 @@ class AddressBottomSheet extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        isCheckOut ? 'Select your location' :  '${'hey_welcome_back'.tr}\n${'which_location_do_you_want_to_select'.tr}',
+                          isCheckOut
+                              ? 'Select your location'
+                              : '${'hey_welcome_back'.tr}\n${'which_location_do_you_want_to_select'.tr}',
                           style: robotoBold.copyWith(
                               fontSize: Dimensions.fontSizeDefault)),
                       const SizedBox(height: Dimensions.paddingSizeLarge),
@@ -104,17 +106,19 @@ class AddressBottomSheet extends StatelessWidget {
                                         width: fromDialog ? 180 : 150),
                                     fromDialog
                                         ? const SizedBox(
-                                            height: Dimensions.paddingSizeDefault)
+                                            height:
+                                                Dimensions.paddingSizeDefault)
                                         : const SizedBox(),
                                     SizedBox(
                                       width: 280,
                                       child: Text(
-                                        'you_dont_have_any_saved_address_yet'.tr,
+                                        'you_dont_have_any_saved_address_yet'
+                                            .tr,
                                         textAlign: TextAlign.center,
                                         style: robotoRegular.copyWith(
                                             fontSize: Dimensions.fontSizeSmall,
-                                            color:
-                                                Theme.of(context).disabledColor),
+                                            color: Theme.of(context)
+                                                .disabledColor),
                                       ),
                                     ),
                                   ])
@@ -125,7 +129,8 @@ class AddressBottomSheet extends StatelessWidget {
                           ? const SizedBox(height: Dimensions.paddingSizeLarge)
                           : const SizedBox(),
                       (locationController.addressList != null && fromDialog)
-                          ? const SizedBox(height: Dimensions.paddingSizeDefault)
+                          ? const SizedBox(
+                              height: Dimensions.paddingSizeDefault)
                           : const SizedBox(),
                       Align(
                         alignment: locationController.addressList != null &&
@@ -144,22 +149,26 @@ class AddressBottomSheet extends StatelessWidget {
                                       .getCurrentLocation(true);
                               ZoneResponseModel response =
                                   await locationController.getZone(
-                                      address.latitude, address.longitude, false);
+                                      address.latitude,
+                                      address.longitude,
+                                      false);
                               if (response.isSuccess) {
                                 if (ResponsiveHelper.isDesktop(Get.context)) {
                                   Get.find<SplashController>()
                                       .saveWebSuggestedLocationStatus(true);
                                 }
-                                locationController.saveAddressAndNavigate(
-                                  address,
-                                  false,
-                                  '',
-                                  false,
-                                
-                                  ResponsiveHelper.isDesktop(Get.context),
-                                );
+
+                                if (!isCheckOut) {
+                                  locationController.saveAddressAndNavigate(
+                                    address,
+                                    false,
+                                    '',
+                                    false,
+                                    ResponsiveHelper.isDesktop(Get.context),
+                                  );
+                                }
                               } else {
-                                Get.back();
+                               
                                 if (ResponsiveHelper.isDesktop(Get.context)) {
                                   Get.find<SplashController>()
                                       .saveWebSuggestedLocationStatus(true);
@@ -237,11 +246,13 @@ class AddressBottomSheet extends StatelessWidget {
                                       horizontal: Dimensions.paddingSizeSmall,
                                       vertical: Dimensions.paddingSizeSmall),
                                   child: ListView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
                                     itemCount:
-                                        locationController.addressList!.length > 5
+                                        locationController.addressList!.length >
+                                                5
                                             ? 5
                                             : locationController
                                                 .addressList!.length,
@@ -262,8 +273,10 @@ class AddressBottomSheet extends StatelessWidget {
                                                 isSelected: selected,
                                                 fromDashBoard: true,
                                                 onTap: () {
-                                                  Get.dialog(const CustomLoader(),
-                                                      barrierDismissible: false);
+                                                  Get.dialog(
+                                                      const CustomLoader(),
+                                                      barrierDismissible:
+                                                          false);
                                                   AddressModel address =
                                                       locationController
                                                           .addressList![index];
@@ -276,7 +289,7 @@ class AddressBottomSheet extends StatelessWidget {
                                                     ResponsiveHelper.isDesktop(
                                                         context),
                                                   );
-          
+
                                                   Get.find<SplashController>()
                                                       .saveWebSuggestedLocationStatus(
                                                           true);

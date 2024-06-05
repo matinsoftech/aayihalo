@@ -31,10 +31,10 @@ class BottomCartWidget extends StatelessWidget {
                   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor),
                 ),
 
-                // Text(
-                //   PriceConverter.convertPrice(cartController.calculationCart()),
-                //   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor), textDirection: TextDirection.ltr,
-                // ),
+                Text(
+                  PriceConverter.convertPrice(cartController.subTotal),
+                  style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor), textDirection: TextDirection.ltr,
+                ),
               ]),
             ]),
 

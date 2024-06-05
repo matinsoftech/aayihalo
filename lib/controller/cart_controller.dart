@@ -24,7 +24,15 @@ class CartController extends GetxController implements GetxService {
   List<CartDataModel> _cartList = [];
   List<OnlineCartModel> _onlineCartList = [];
 
-  AddressModel? addressModel;
+  AddressModel? addressModel; 
+
+  int _deliveryAddressId =-1 ;  
+  int get deliveryAddressId => _deliveryAddressId ;
+
+  set deliveryAddressId(int id) {
+    _deliveryAddressId = id ; 
+  }
+
 
   double _subTotal = 0;
   double _itemPrice = 0;
@@ -32,7 +40,13 @@ class CartController extends GetxController implements GetxService {
   double _addOns = 0;
   double _variationPrice = 0;
   List<List<AddOns>> _addOnsList = [];
-  List<bool> _availableList = [];
+  List<bool> _availableList = []; 
+  String _variationType = '';
+  String get variationType => _variationType; 
+
+  set variationType(String type) {
+    _variationType = type ; 
+  }
   List<String> notAvailableList = [
     'Remove it from my cart',
     'I’ll wait until it’s restocked',

@@ -97,7 +97,11 @@ class LocationController extends GetxController implements GetxService {
   bool get buttonDisabled => _buttonDisabled;
   bool get showLocationSuggestion => _showLocationSuggestion;
   GoogleMapController? get mapController => _mapController;
-  bool? get showSearchField => _showSearchField;
+  bool? get showSearchField => _showSearchField; 
+
+
+  AddressModel? _userAddressModel ; 
+  AddressModel? get userAddressModel => _userAddressModel;
 
   double getRestaurantDistance(LatLng storeLatLng) {
     double distance = 0;
@@ -458,6 +462,7 @@ class LocationController extends GetxController implements GetxService {
   Future<ResponseModel> updateAddress(
       AddressModel addressModel, int? addressId) async {
     _isLoading = true;
+    _userAddressModel = addressModel;
     update();
     Response response =
         await locationRepo.updateAddress(addressModel, addressId);
@@ -475,6 +480,7 @@ class LocationController extends GetxController implements GetxService {
 
   Future<bool> saveUserAddress(AddressModel address) async {
     String userAddress = jsonEncode(address.toJson());
+        _userAddressModel = address; 
     return await locationRepo.saveUserAddress(userAddress, address.zoneIds,
         address.areaIds, address.latitude, address.longitude);
   }
@@ -482,9 +488,14 @@ class LocationController extends GetxController implements GetxService {
   AddressModel? getUserAddress() {
     AddressModel? addressModel;
     try {
+       
       addressModel =
           AddressModel.fromJson(jsonDecode(locationRepo.getUserAddress()!));
           _userAddressId = addressModel.id.toString();
+          _address=addressModel.address;
+
+           _userAddressModel = addressModel; 
+          
     } catch (_) {}
     return addressModel;
   }
@@ -648,12 +659,16 @@ class LocationController extends GetxController implements GetxService {
     }
     _loading = false;
     update();
-    return AddressModel(
+ final _address =  AddressModel(
       latitude: _pickPosition.latitude.toString(),
       longitude: _pickPosition.longitude.toString(),
       addressType: 'others',
       address: _pickAddress,
     );
+
+    _userAddressModel = _address;
+
+    return _address;
   }
 
   void disableButton() {
@@ -683,7 +698,9 @@ class LocationController extends GetxController implements GetxService {
       altitudeAccuracy: 1,
       headingAccuracy: 1,
     );
+    _userAddressModel = address;
     _address = address.address;
+    
     _addressTypeIndex = _addressTypeList.indexOf(address.addressType);
   }
 

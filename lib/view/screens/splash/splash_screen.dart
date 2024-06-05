@@ -51,7 +51,8 @@ class SplashScreenState extends State<SplashScreen> {
       firstTime = false;
     });
 
-    Get.find<SplashController>().initSharedData();
+    Get.find<SplashController>().initSharedData(); 
+    print("hll ${Get.find<AuthController>().isLoggedIn()}");
     if((Get.find<AuthController>().getGuestId().isNotEmpty || Get.find<AuthController>().isLoggedIn()) && Get.find<SplashController>().cacheModule != null) {
       Get.find<CartController>().getCartData(); 
       Get.find<LocationController>().getAddressList();

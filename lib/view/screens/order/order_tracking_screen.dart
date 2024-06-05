@@ -105,27 +105,27 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
         return track != null ? Center(child: SizedBox(width: Dimensions.webMaxWidth, child: Stack(children: [
 
-          GoogleMap(
-            initialCameraPosition: CameraPosition(target: LatLng(
-              double.parse(track.deliveryAddress!.latitude!), double.parse(track.deliveryAddress!.longitude!),
-            ), zoom: 16),
-            minMaxZoomPreference: const MinMaxZoomPreference(0, 16),
-            zoomControlsEnabled: true,
-            markers: _markers,
-            onMapCreated: (GoogleMapController controller) {
-              _controller = controller;
-              _isLoading = false;
-              setMarker(
-                track!.orderType == 'parcel' ? Store(latitude: track.receiverDetails!.latitude, longitude: track.receiverDetails!.longitude,
-                    address: track.receiverDetails!.address, name: track.receiverDetails!.contactPersonName) : track.store, track.deliveryMan,
-                track.orderType == 'take_away' ? Get.find<LocationController>().position.latitude == 0 ? track.deliveryAddress : AddressModel(
-                  latitude: Get.find<LocationController>().position.latitude.toString(),
-                  longitude: Get.find<LocationController>().position.longitude.toString(),
-                  address: Get.find<LocationController>().address,
-                ) : track.deliveryAddress, track.orderType == 'take_away', track.orderType == 'parcel', track.moduleType == 'food',
-              );
-            },
-          ),
+          // GoogleMap(
+          //   initialCameraPosition: CameraPosition(target: LatLng(
+          //     double.parse(track.deliveryAddress!.latitude!), double.parse(track.deliveryAddress!.longitude!),
+          //   ), zoom: 16),
+          //   minMaxZoomPreference: const MinMaxZoomPreference(0, 16),
+          //   zoomControlsEnabled: true,
+          //   markers: _markers,
+          //   onMapCreated: (GoogleMapController controller) {
+          //     _controller = controller;
+          //     _isLoading = false;
+          //     setMarker(
+          //       track!.orderType == 'parcel' ? Store(latitude: track.receiverDetails!.latitude, longitude: track.receiverDetails!.longitude,
+          //           address: track.receiverDetails!.address, name: track.receiverDetails!.contactPersonName) : track.store, track.deliveryMan,
+          //       track.orderType == 'take_away' ? Get.find<LocationController>().position.latitude == 0 ? track.deliveryAddress : AddressModel(
+          //         latitude: Get.find<LocationController>().position.latitude.toString(),
+          //         longitude: Get.find<LocationController>().position.longitude.toString(),
+          //         address: Get.find<LocationController>().address,
+          //       ) : track.deliveryAddress, track.orderType == 'take_away', track.orderType == 'parcel', track.moduleType == 'food',
+          //     );
+          //   },
+          // ),
 
           /*CustomGoogleMapMarkerBuilder(
             customMarkers: _customMarkers,
@@ -154,7 +154,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
             },
           ),*/
 
-          _isLoading ? const Center(child: CircularProgressIndicator()) : const SizedBox(),
+          // _isLoading ? const Center(child: CircularProgressIndicator()) : const SizedBox(),
 
           Positioned(
             top: Dimensions.paddingSizeSmall, left: Dimensions.paddingSizeSmall, right: Dimensions.paddingSizeSmall,

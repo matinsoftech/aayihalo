@@ -668,14 +668,29 @@ class VariationAddWidget extends StatelessWidget {
       child: CartCountView(item: widget.item! )):
     
     InkWell(
-      onTap: () {
+      onTap: 
+        cartController.isLoading && cartController.variationType == widget.item!.variations![index].type
+          ?  () {} : 
+      () {
+
+      cartController.variationType =    widget.item!.variations![index].type??'';
 
         cartController.addToCart(
             quantity: 1,
             productId: widget.item!.id!,
             variantType: widget.item!.variations![index].type);
       },
-      child: const Text(
+      child:
+      cartController.isLoading && cartController.variationType == widget.item!.variations![index].type
+          ?  const Text(
+        "LOADING...",
+        style: TextStyle(
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
+      )
+          : 
+       const Text(
         "ADD",
         style: TextStyle(
           color: Colors.green,

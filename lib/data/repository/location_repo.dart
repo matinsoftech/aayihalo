@@ -37,7 +37,8 @@ class LocationRepo {
       sharedPreferences.getString(AppConstants.languageCode),
       Get.find<SplashController>().module != null ? Get.find<SplashController>().module!.id : null,
       latitude, longitude
-    );
+    ); 
+    Get.back();
     return await sharedPreferences.setString(AppConstants.userAddress, address);
   }
 

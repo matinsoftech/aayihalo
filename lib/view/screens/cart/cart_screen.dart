@@ -452,29 +452,54 @@ class _CartScreenState extends State<CartScreen> {
                                                             SizedBox(
                                                               width: 300,
                                                               child: Text(
-                                                                Get.find<
-                                                                        LocationController>()
-                                                                    .getUserAddress()!
-                                                                    .address!,
+                                                               Get.find<LocationController>().userAddressModel!.address!,
                                                               ),
-                                                            ), 
-InkWell( 
-  onTap: (){ 
+                                                            ),
+                                                             // Get.find<LocationController>().saveUserAddress(address); 
+                                                                                    // Get.find<CartController>().deliveryAddressId = address.id??-1; 
+                                                            InkWell(
+                                                                onTap: () {
 
-showDialog(context: context, builder: (_)=>Container(
-  height: 400,
-  child: AddressBottomSheet(
-        fromDialog: true, 
-        isCheckOut: true, 
-        onTap: (AddressModel  address){ 
-          
-        },
-      ),
-));
+                                                                  Get.bottomSheet(
+                                                                      AddressBottomSheet( 
+                                                                        isCheckOut: true,
+                                                                          
+                                                                          ),
+                                                                      isScrollControlled: true
+                                                                  );
+                                                                  // showDialog(
+                                                                  //     context:
+                                                                  //         context,
+                                                                  //     builder:
+                                                                  //         (_) =>
+                                                                  //             Container(
+                                                                  //               height: 400,
+                                                                  //               child: GetBuilder<LocationController>( 
+                                                                  //                 builder: (controller) => 
+                                                                  //                  Column( 
+                                                                  //                   children: [
+                                                                  //                     ...List.generate(controller.addressList!.length, (index) { 
 
-  },
-  child: const  Icon(Icons.edit, color: Colors.green, size: 20,)), 
-                                                           
+                                                                  //                       final adress = controller.addressList![index];
+                                                                  //                       return ListTile( 
+                                                                  //                         title: Text(adress.address??''), 
+                                                                  //                         leading: Text(adress.addressType??''), 
+                                                                                        
+                                                                  //                     );
+                                                                  //                     })
+                                                                  //                   ],
+                                                                  //                 ),
+                                                                  //               )
+                                                                                
+                                                                  //             ));
+                                                                },
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.edit,
+                                                                  color: Colors
+                                                                      .green,
+                                                                  size: 20,
+                                                                )),
                                                           ],
                                                         ),
 
@@ -583,6 +608,221 @@ showDialog(context: context, builder: (_)=>Container(
                                                       ],
                                                     ),
                                                   ),
+                                               
+                                               
+                                                   Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context)
+                                                          .cardColor,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor
+                                                                .withOpacity(
+                                                                    0.05),
+                                                            blurRadius: 10)
+                                                      ],
+                                                    ),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: Dimensions
+                                                            .paddingSizeLarge,
+                                                        vertical: Dimensions
+                                                            .paddingSizeSmall),
+                                                    width: double.infinity,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text("Payment Method",
+                                                            style:
+                                                                robotoMedium),
+                                                        const SizedBox(
+                                                            height: Dimensions
+                                                                .paddingSizeSmall), 
+
+                                                                RadioListTile(value: 'COD', groupValue: 'COD', 
+                                                                title: Text("Cash on Delivery"),
+                                                                onChanged: (value) { 
+
+                                                                }),
+                                                                                                                             RadioListTile(value: 'Online', groupValue: 'COD',
+                                                                                                                             title: Text("Online Payment"),
+                                                                                                                             
+                                                                                                                              onChanged: (value) {  
+                                                                                                                                Get.snackbar("Not available", "This method is either disabled or not available.", 
+                                                                                                                                
+                                                                                                                                snackPosition: SnackPosition.BOTTOM,  
+                                                                                                                                backgroundColor: Colors.red,
+                                                                                                                                );
+
+                                                                }),
+
+                                                        // Row(
+                                                        //   children: [
+                                                        //     SizedBox(
+                                                        //       width: 300,
+                                                        //       child: Text(
+                                                        //        Get.find<LocationController>().userAddressModel!.address!,
+                                                        //       ),
+                                                        //     ),
+                                                        //      // Get.find<LocationController>().saveUserAddress(address); 
+                                                        //                             // Get.find<CartController>().deliveryAddressId = address.id??-1; 
+                                                        //     InkWell(
+                                                        //         onTap: () {
+
+                                                        //           Get.bottomSheet(
+                                                        //               AddressBottomSheet( 
+                                                        //                 isCheckOut: true,
+                                                                          
+                                                        //                   ),
+                                                        //               isScrollControlled: true
+                                                        //           );
+                                                        //           // showDialog(
+                                                        //           //     context:
+                                                        //           //         context,
+                                                        //           //     builder:
+                                                        //           //         (_) =>
+                                                        //           //             Container(
+                                                        //           //               height: 400,
+                                                        //           //               child: GetBuilder<LocationController>( 
+                                                        //           //                 builder: (controller) => 
+                                                        //           //                  Column( 
+                                                        //           //                   children: [
+                                                        //           //                     ...List.generate(controller.addressList!.length, (index) { 
+
+                                                        //           //                       final adress = controller.addressList![index];
+                                                        //           //                       return ListTile( 
+                                                        //           //                         title: Text(adress.address??''), 
+                                                        //           //                         leading: Text(adress.addressType??''), 
+                                                                                        
+                                                        //           //                     );
+                                                        //           //                     })
+                                                        //           //                   ],
+                                                        //           //                 ),
+                                                        //           //               )
+                                                                                
+                                                        //           //             ));
+                                                        //         },
+                                                        //         child:
+                                                        //             const Icon(
+                                                        //           Icons.edit,
+                                                        //           color: Colors
+                                                        //               .green,
+                                                        //           size: 20,
+                                                        //         )),
+                                                        //   ],
+                                                        // ),
+
+                                                        //  DeliveryOptionButton(
+                                                        //   value: 'delivery', title: 'home_delivery'.tr, charge: charge,
+                                                        //   isFree: storeController.store!.freeDelivery, fromWeb: true, total: total,
+                                                        // ) :
+
+                                                        // SingleChildScrollView(
+                                                        //   scrollDirection:
+                                                        //       Axis.horizontal,
+                                                        //   child: Row(children: [
+                                                        //     Get.find<SplashController>()
+                                                        //                 .configModel!
+                                                        //                 .homeDeliveryStatus ==
+                                                        //             1
+                                                        //         ? DeliveryOptionButton(
+                                                        //             value:
+                                                        //                 'delivery',
+                                                        //             title:
+                                                        //                 'home_delivery'
+                                                        //                     .tr,
+                                                        //             charge: 0.0,
+                                                        //             isFree:
+                                                        //                 false,
+                                                        //             fromWeb:
+                                                        //                 true,
+                                                        //             total: 120,
+                                                        //           )
+                                                        //         : const SizedBox(),
+                                                        //     const SizedBox(
+                                                        //         width: Dimensions
+                                                        //             .paddingSizeDefault),
+                                                        //     Get.find<SplashController>()
+                                                        //                 .configModel!
+                                                        //                 .takeawayStatus ==
+                                                        //             1
+                                                        //         ? DeliveryOptionButton(
+                                                        //             value:
+                                                        //                 'take_away',
+                                                        //             title:
+                                                        //                 'take_away'
+                                                        //                     .tr,
+                                                        //             charge: 0.0,
+                                                        //             isFree:
+                                                        //                 true,
+                                                        //             fromWeb:
+                                                        //                 true,
+                                                        //             total: 120,
+                                                        //           )
+                                                        //         : const SizedBox(),
+                                                        //   ]),
+                                                        // ),
+
+                                                        const SizedBox(
+                                                            height: Dimensions
+                                                                .paddingSizeDefault),
+
+                                                        ///Delivery_fee
+                                                        // Center(
+                                                        //     child: Row(
+                                                        //         mainAxisAlignment:
+                                                        //             MainAxisAlignment
+                                                        //                 .center,
+                                                        //         children: [
+                                                        //       Text(
+                                                        //           '${'delivery_charge'.tr}: '),
+                                                        //       Text(
+                                                        //           // storeController.store!.freeDelivery! ?
+                                                        //           'free'.tr
+                                                        //           // : orderController.distance != -1 ? PriceConverter.convertPrice(charge) : 'calculating'.tr,
+
+                                                        //           ),
+                                                        //     ])),
+                                                        // SizedBox(height: !takeAway && !isGuestLoggedIn ? Dimensions.paddingSizeLarge : 0),
+
+                                                        // // /delivery section
+                                                        // DeliverySection(
+                                                        //   orderController: Get.find<
+                                                        //       OrderController>(),
+                                                        //   storeController: Get.find<
+                                                        //       StoreController>(),
+                                                        //   address: Get.find<
+                                                        //           LocationController>()
+                                                        //       .addressList!,
+                                                        //   addressList: CheckoutHelper
+                                                        //       .getDropdownAddressList(
+                                                        //           context:
+                                                        //               context,
+                                                        //           addressList: Get
+                                                        //                   .find<
+                                                        //                       LocationController>()
+                                                        //               .addressList!,
+                                                        //           store: null),
+                                                        //   guestNameTextEditingController:
+                                                        //       guestContactPersonNameController,
+                                                        //   guestNumberTextEditingController:
+                                                        //       guestContactPersonNumberController,
+                                                        //   guestNumberNode:
+                                                        //       guestNumberNode,
+                                                        //   guestEmailController:
+                                                        //       guestEmailController,
+                                                        //   guestEmailNode:
+                                                        //       guestEmailNode,
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                               
+                                               
                                                 ]),
                                           ),
                                     ResponsiveHelper.isDesktop(context)
