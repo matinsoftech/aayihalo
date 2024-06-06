@@ -47,14 +47,13 @@ class ItemCardCollection extends StatelessWidget {
                 id: item.id,
                 name: item.name,
                 image: item.image,
-               description: item.description,
+                description: item.description,
                 avgRating: double.parse(item.avgRating.toString()),
                 ratingCount: item.ratingCount,
                 discount: double.parse((item.discount ?? '0.0').toString()),
                 discountType: item.discountType.toString(),
                 unitType: item.unitType.toString(),
                 storeName: '',
-                
                 stock: item.stock,
                 price: item.price,
               ),
@@ -356,24 +355,23 @@ class ItemCardCollection extends StatelessWidget {
                               ),
                               // delivery in
 
-                              CartCountView( 
-                                fromItemDetail: false,
-                              
+                              CartCountView(
+                                  fromItemDetail: false,
                                   item: Item(
-                                id: item.id,
-                                name: item.name,
-                                image: item.image,
-                                avgRating:
-                                    double.parse(item.avgRating.toString()),
-                                ratingCount: item.ratingCount,
-                                discount: double.parse(
-                                    (item.discount ?? '0.0').toString()),
-                                discountType: item.discountType.toString(),
-                                unitType: item.unitType.toString(),
-                                storeName: '',
-                                stock: item.stock,
-                                price: item.price,
-                              ))
+                                    id: item.id,
+                                    name: item.name,
+                                    image: item.image,
+                                    avgRating:
+                                        double.parse(item.avgRating.toString()),
+                                    ratingCount: item.ratingCount,
+                                    discount: double.parse(
+                                        (item.discount ?? '0.0').toString()),
+                                    discountType: item.discountType.toString(),
+                                    unitType: item.unitType.toString(),
+                                    storeName: '',
+                                    stock: item.stock,
+                                    price: item.price,
+                                  ))
                             ],
                           ),
 
@@ -445,20 +443,22 @@ class ItemCard extends StatelessWidget {
         InkWell(
           hoverColor: Colors.transparent,
           onTap: () {
-          Item itemD =    Item(
-                id: item.id,
-                name: item.name,
-                image: item.image,
-                avgRating: double.parse(item.avgRating.toString()),
-                ratingCount: item.ratingCount,
-                discount: double.parse((item.discount ?? '0.0').toString()),
-                discountType: item.discountType.toString(),
-                unitType: item.unitType.toString(),
-                storeName: '',
-                stock: item.stock,
-                price: item.price,
-              );
-           Navigator.of(context).push(MaterialPageRoute(builder: (_)=>ItemDetailsScreen(item: item, inStorePage: false)));
+            Item itemD = Item(
+              id: item.id,
+              name: item.name,
+              image: item.image,
+              avgRating: double.parse(item.avgRating.toString()),
+              ratingCount: item.ratingCount,
+              discount: double.parse((item.discount ?? '0.0').toString()),
+              discountType: item.discountType.toString(),
+              unitType: item.unitType.toString(),
+              storeName: '',
+              stock: item.stock,
+              price: item.price,
+            );
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) =>
+                    ItemDetailsScreen(item: item, inStorePage: false)));
           },
           child: Container(
             width: 150,
@@ -715,7 +715,7 @@ class ItemCard extends StatelessWidget {
                                     unitType: item.unitType.toString(),
                                     storeName: '',
                                     stock: item.stock,
-                                    price: item.price,
+                                    price: double.parse(item.price.toString()),
                                   ))),
                                   style: robotoMedium.copyWith(
                                     fontSize: Dimensions.fontSizeExtraSmall,
@@ -746,7 +746,7 @@ class ItemCard extends StatelessWidget {
                                     unitType: item.unitType.toString(),
                                     storeName: '',
                                     stock: item.stock,
-                                    price: item.price,
+                                    price: double.parse(item.price.toString()),
                                   )),
                                   discount: double.parse(
                                       (item.discount ?? '0.0').toString()),
@@ -761,8 +761,8 @@ class ItemCard extends StatelessWidget {
                                   item: Item(
                                 id: item.id,
                                 name: item.name,
-                                image: item.image, 
-                                variations: item.variations, 
+                                image: item.image,
+                                variations: item.variations,
                                 images: item.images,
                                 avgRating:
                                     double.parse(item.avgRating.toString()),

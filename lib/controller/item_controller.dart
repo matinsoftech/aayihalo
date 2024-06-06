@@ -637,10 +637,10 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
-  double? getStartingPrice(Item item) {
-    double? startingPrice = 0;
+  dynamic getStartingPrice(Item item) {
+    dynamic startingPrice = 0;
     if (item.choiceOptions != null && item.choiceOptions!.isNotEmpty) {
-      List<double?> priceList = [];
+      List<dynamic> priceList = [];
       for (var variation in item.variations!) {
         priceList.add(variation.price);
       }
@@ -707,7 +707,7 @@ class ItemController extends GetxController implements GetxService {
   //         price, discount, item.discountType)!;
 
   //     CartDataModel cartModel = CartDataModel(
-       
+
   //       price,
   //       discount,
   //       [],
@@ -824,7 +824,4 @@ class ItemController extends GetxController implements GetxService {
       String? variantType}) async {
     Get.find<CartController>().getCartData();
   }
-
-
- 
 }
