@@ -4,18 +4,15 @@ import 'package:flutter/widgets.dart';
 import 'package:sixam_mart/controller/category_controller.dart';
 import 'package:sixam_mart/controller/localization_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
-import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
-import 'package:sixam_mart/view/screens/home/widget/category_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:get/get.dart';
-import 'package:sixam_mart/view/screens/home/widget/grocery/category_view_all.dart';
 
 class CategoryViewWidget extends StatelessWidget {
   const CategoryViewWidget({Key? key}) : super(key: key);

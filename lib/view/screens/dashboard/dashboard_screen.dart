@@ -6,27 +6,20 @@ import 'package:sixam_mart/controller/auth_controller.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
 import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/controller/order_controller.dart';
-import 'package:sixam_mart/controller/parcel_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/model/response/order_model.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
-import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
-import 'package:sixam_mart/view/base/cart_widget.dart';
 import 'package:sixam_mart/view/base/custom_dialog.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/screens/address/address_screen.dart';
-import 'package:sixam_mart/view/screens/chat/conversation_screen.dart';
 import 'package:sixam_mart/view/screens/checkout/widget/congratulation_dialogue.dart';
 import 'package:sixam_mart/view/screens/dashboard/widget/address_bottom_sheet.dart';
 import 'package:sixam_mart/view/screens/dashboard/widget/bottom_nav_item.dart';
 import 'package:sixam_mart/view/screens/dashboard/widget/cart_detail_floating_button.dart';
-import 'package:sixam_mart/view/screens/dashboard/widget/navbar_custom_painter.dart';
-import 'package:sixam_mart/view/screens/dashboard/widget/parcel_bottom_sheet.dart';
 import 'package:sixam_mart/view/screens/favourite/favourite_screen.dart';
 import 'package:sixam_mart/view/screens/home/home_screen.dart';
-import 'package:sixam_mart/view/screens/home/widget/category_view.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/category_view.dart';
 import 'package:sixam_mart/view/screens/menu/menu_screen_new.dart';
 import 'package:sixam_mart/view/screens/order/order_screen.dart';
@@ -38,9 +31,7 @@ import 'widget/running_order_view_widget.dart';
 class DashboardScreen extends StatefulWidget {
   final int pageIndex;
   final bool fromSplash;
-  const DashboardScreen(
-      {Key? key, required this.pageIndex, this.fromSplash = false})
-      : super(key: key);
+  const DashboardScreen({Key? key, required this.pageIndex, this.fromSplash = false}) : super(key: key);
 
   @override
   DashboardScreenState createState() => DashboardScreenState();
@@ -65,11 +56,8 @@ class DashboardScreenState extends State<DashboardScreen> {
     _isLogin = Get.find<AuthController>().isLoggedIn();
 
     if (_isLogin) {
-      if (Get.find<SplashController>().configModel!.loyaltyPointStatus == 1 &&
-          Get.find<AuthController>().getEarningPint().isNotEmpty &&
-          !ResponsiveHelper.isDesktop(Get.context)) {
-        Future.delayed(const Duration(seconds: 1),
-            () => showAnimatedDialog(context, const CongratulationDialogue()));
+      if (Get.find<SplashController>().configModel!.loyaltyPointStatus == 1 && Get.find<AuthController>().getEarningPint().isNotEmpty && !ResponsiveHelper.isDesktop(Get.context)) {
+        Future.delayed(const Duration(seconds: 1), () => showAnimatedDialog(context, const CongratulationDialogue()));
       }
       suggestAddressBottomSheet();
       Get.find<OrderController>().getRunningOrders(1);
@@ -79,22 +67,12 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     _pageController = PageController(initialPage: widget.pageIndex);
 
-    _screens = [
-      const HomeScreen(),
-      const FavouriteScreen(),
-      const SizedBox(),
-      const OrderScreen(),
-      const MenuScreenNew()
-    ];
-
-  
+    _screens = [const HomeScreen(), const FavouriteScreen(), const SizedBox(), const OrderScreen(), const MenuScreenNew()];
   }
 
   Future<void> suggestAddressBottomSheet() async {
     active = await Get.find<LocationController>().checkLocationActive();
-    if (widget.fromSplash &&
-        Get.find<LocationController>().showLocationSuggestion &&
-        active) {
+    if (widget.fromSplash && Get.find<LocationController>().showLocationSuggestion && active) {
       Future.delayed(const Duration(seconds: 1), () {
         showModalBottomSheet(
           context: context,
@@ -121,13 +99,10 @@ class DashboardScreenState extends State<DashboardScreen> {
             return false;
           } else {
             if (splashController.isRefreshing) {
-              showCustomSnackBar('please_wait_until_refresh_complete'.tr,
-                  isError: true);
+              showCustomSnackBar('please_wait_until_refresh_complete'.tr, isError: true);
               return false;
             }
-            if (!ResponsiveHelper.isDesktop(context) &&
-                Get.find<SplashController>().module != null &&
-                Get.find<SplashController>().configModel!.module == null) {
+            if (!ResponsiveHelper.isDesktop(context) && Get.find<SplashController>().module != null && Get.find<SplashController>().configModel!.module == null) {
               Get.find<SplashController>().setModule(null);
               return false;
             } else {
@@ -135,8 +110,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                 return true;
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('back_press_again_to_exit'.tr,
-                      style: const TextStyle(color: Colors.white)),
+                  content: Text('back_press_again_to_exit'.tr, style: const TextStyle(color: Colors.white)),
                   behavior: SnackBarBehavior.floating,
                   backgroundColor: Colors.green,
                   duration: const Duration(seconds: 2),
@@ -152,21 +126,15 @@ class DashboardScreenState extends State<DashboardScreen> {
           }
         },
         child: GetBuilder<OrderController>(builder: (orderController) {
-          List<OrderModel> runningOrder =
-              orderController.runningOrderModel != null
-                  ? orderController.runningOrderModel!.orders!
-                  : [];
+          List<OrderModel> runningOrder = orderController.runningOrderModel != null ? orderController.runningOrderModel!.orders! : [];
 
           List<OrderModel> reversOrder = List.from(runningOrder.reversed);
 
           return GetBuilder<CartController>(
             builder: (controller) => Scaffold(
               key: _scaffoldKey,
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: controller.cartList.isEmpty
-                  ? const SizedBox()
-                  : const CartDetailFloatingButton(),
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: controller.cartList.isEmpty ? const SizedBox() : const CartDetailFloatingButton(),
               body: ExpandableBottomSheet(
                 background: Stack(children: [
                   PageView.builder(
@@ -181,17 +149,12 @@ class DashboardScreenState extends State<DashboardScreen> {
                       ? const SizedBox()
                       : Align(
                           alignment: Alignment.bottomCenter,
-                          child: GetBuilder<SplashController>(
-                              builder: (splashController) {
-                            bool isParcel = splashController.module != null &&
-                                splashController.configModel!.moduleConfig!
-                                    .module!.isParcel!;
+                          child: GetBuilder<SplashController>(builder: (splashController) {
+                            bool isParcel = splashController.module != null && splashController.configModel!.moduleConfig!.module!.isParcel!;
 
                             _screens = [
                               const HomeScreen(),
-                              isParcel
-                                  ? const AddressScreen(fromDashboard: true)
-                                  : const FavouriteScreen(),
+                              isParcel ? const AddressScreen(fromDashboard: true) : const FavouriteScreen(),
                               const SafeArea(child: CategoryViewWidget()),
                               const OrderScreen(),
                               const MenuScreenNew(),
@@ -202,14 +165,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                               height: GetPlatform.isIOS ? 80 : 65,
                               decoration: BoxDecoration(
                                 color: Theme.of(context).cardColor,
-                                borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(
-                                        Dimensions.radiusLarge)),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 5)
-                                ],
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(Dimensions.radiusLarge)),
+                                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 5)],
                               ),
                               child: Stack(
                                 children: [
@@ -248,116 +205,76 @@ class DashboardScreenState extends State<DashboardScreen> {
 
                                   // ResponsiveHelper.isDesktop(context)
                                   //     ? const SizedBox()
-                                  //     : 
-                                      
-                                      // (widget.fromSplash &&
-                                      //         Get.find<LocationController>()
-                                      //             .showLocationSuggestion &&
-                                      //         active)
-                                      //     ? const SizedBox()
-                                      //     : (orderController.showBottomSheet &&
-                                      //             orderController
-                                      //                     .runningOrderModel !=
-                                      //                 null &&
-                                      //             orderController
-                                      //                 .runningOrderModel!
-                                      //                 .orders!
-                                      //                 .isNotEmpty &&
-                                      //             _isLogin)
-                                      //         ? const SizedBox()
-                                      //         :
-                                              
-                                              
-                                               Center(
-                                                  child: SizedBox(
-                                                    width: size.width,
-                                                    height: 80,
-                                                    child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          BottomNavItem(
-                                                            title: 'home'.tr,
-                                                            selectedIcon: Images
-                                                                .homeSelect,
-                                                            unSelectedIcon: Images
-                                                                .homeUnselect,
-                                                            isSelected:
-                                                                _pageIndex == 0,
-                                                            onTap: () =>
-                                                                _setPage(0),
-                                                          ),
-                                                          BottomNavItem(
-                                                            title: isParcel
-                                                                ? 'address'.tr
-                                                                : 'favourite'
-                                                                    .tr,
-                                                            selectedIcon: isParcel
-                                                                ? Images
-                                                                    .addressSelect
-                                                                : Images
-                                                                    .favouriteSelect,
-                                                            unSelectedIcon: isParcel
-                                                                ? Images
-                                                                    .addressUnselect
-                                                                : Images
-                                                                    .favouriteUnselect,
-                                                            isSelected:
-                                                                _pageIndex == 1,
-                                                            onTap: () =>
-                                                                _setPage(1),
-                                                          ),
-                                                          BottomNavItem(
-                                                            title:
-                                                                'Categories'.tr,
-                                                            selectedIcon: Images
-                                                                .moduleIcon,
-                                                            unSelectedIcon:
-                                                                Images
-                                                                    .moduleIcon,
-                                                            isSelected:
-                                                                _pageIndex == 2,
-                                                            onTap: () =>
-                                                                _setPage(2),
-                                                          ),
-                                                          // Container(width: size.width * 0.2),
-                                                          BottomNavItem(
-                                                            title: 'orders'.tr,
-                                                            selectedIcon: Images
-                                                                .orderSelect,
-                                                            unSelectedIcon: Images
-                                                                .orderUnselect,
-                                                            isSelected:
-                                                                _pageIndex == 3,
-                                                            onTap: () =>
-                                                                _setPage(3),
-                                                          ),
-                                                          BottomNavItem(
-                                                            title: 'menu'.tr,
-                                                            selectedIcon:
-                                                                Images.menu,
-                                                            unSelectedIcon:
-                                                                Images.menu,
-                                                            isSelected:
-                                                                _pageIndex == 4,
-                                                            onTap: () =>
-                                                                _setPage(4),
-                                                          ),
-                                                        ]),
-                                                  ),
-                                                ),
+                                  //     :
+
+                                  // (widget.fromSplash &&
+                                  //         Get.find<LocationController>()
+                                  //             .showLocationSuggestion &&
+                                  //         active)
+                                  //     ? const SizedBox()
+                                  //     : (orderController.showBottomSheet &&
+                                  //             orderController
+                                  //                     .runningOrderModel !=
+                                  //                 null &&
+                                  //             orderController
+                                  //                 .runningOrderModel!
+                                  //                 .orders!
+                                  //                 .isNotEmpty &&
+                                  //             _isLogin)
+                                  //         ? const SizedBox()
+                                  //         :
+
+                                  Center(
+                                    child: SizedBox(
+                                      width: size.width,
+                                      height: 80,
+                                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                        BottomNavItem(
+                                          title: 'home'.tr,
+                                          selectedIcon: Images.homeSelect,
+                                          unSelectedIcon: Images.homeUnselect,
+                                          isSelected: _pageIndex == 0,
+                                          onTap: () => _setPage(0),
+                                        ),
+                                        BottomNavItem(
+                                          title: isParcel ? 'address'.tr : 'favourite'.tr,
+                                          selectedIcon: isParcel ? Images.addressSelect : Images.favouriteSelect,
+                                          unSelectedIcon: isParcel ? Images.addressUnselect : Images.favouriteUnselect,
+                                          isSelected: _pageIndex == 1,
+                                          onTap: () => _setPage(1),
+                                        ),
+                                        BottomNavItem(
+                                          title: 'Categories'.tr,
+                                          selectedIcon: Images.moduleIcon,
+                                          unSelectedIcon: Images.moduleIcon,
+                                          isSelected: _pageIndex == 2,
+                                          onTap: () => _setPage(2),
+                                        ),
+                                        // Container(width: size.width * 0.2),
+                                        BottomNavItem(
+                                          title: 'orders'.tr,
+                                          selectedIcon: Images.orderSelect,
+                                          unSelectedIcon: Images.orderUnselect,
+                                          isSelected: _pageIndex == 3,
+                                          onTap: () => _setPage(3),
+                                        ),
+                                        BottomNavItem(
+                                          title: 'menu'.tr,
+                                          selectedIcon: Images.menu,
+                                          unSelectedIcon: Images.menu,
+                                          isSelected: _pageIndex == 4,
+                                          onTap: () => _setPage(4),
+                                        ),
+                                      ]),
+                                    ),
+                                  ),
                                 ],
                               ),
                             );
                           }),
                         ),
                 ]),
-                persistentContentHeight: (widget.fromSplash &&
-                        Get.find<LocationController>().showLocationSuggestion &&
-                        active)
-                    ? 0
-                    : 100,
+                persistentContentHeight: (widget.fromSplash && Get.find<LocationController>().showLocationSuggestion && active) ? 0 : 100,
                 onIsContractedCallback: () {
                   if (!orderController.showOneOrder) {
                     orderController.showOrders();
@@ -369,17 +286,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                   }
                 },
                 enableToggle: true,
-                expandableContent: (widget.fromSplash &&
-                        Get.find<LocationController>().showLocationSuggestion &&
-                        active &&
-                        !ResponsiveHelper.isDesktop(context))
+                expandableContent: (widget.fromSplash && Get.find<LocationController>().showLocationSuggestion && active && !ResponsiveHelper.isDesktop(context))
                     ? const SizedBox()
-                    : (ResponsiveHelper.isDesktop(context) ||
-                            !_isLogin ||
-                            orderController.runningOrderModel == null ||
-                            orderController
-                                .runningOrderModel!.orders!.isEmpty ||
-                            !orderController.showBottomSheet)
+                    : (ResponsiveHelper.isDesktop(context) || !_isLogin || orderController.runningOrderModel == null || orderController.runningOrderModel!.orders!.isEmpty || !orderController.showBottomSheet)
                         ? const SizedBox()
                         : Dismissible(
                             key: UniqueKey(),
@@ -413,12 +322,6 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget trackView(BuildContext context, {required bool status}) {
-    return Container(
-        height: 3,
-        decoration: BoxDecoration(
-            color: status
-                ? Theme.of(context).primaryColor
-                : Theme.of(context).disabledColor.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(Dimensions.radiusDefault)));
+    return Container(height: 3, decoration: BoxDecoration(color: status ? Theme.of(context).primaryColor : Theme.of(context).disabledColor.withOpacity(0.5), borderRadius: BorderRadius.circular(Dimensions.radiusDefault)));
   }
 }

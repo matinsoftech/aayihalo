@@ -14,7 +14,6 @@ import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/discount_tag.dart';
 import 'package:sixam_mart/view/base/hover/on_hover.dart';
 import 'package:sixam_mart/view/base/not_available_widget.dart';
-import 'package:sixam_mart/view/base/rating_bar.dart';
 import 'package:sixam_mart/view/screens/store/store_screen.dart';
 class WebStoreWidget extends StatelessWidget {
   final Store? store;

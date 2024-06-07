@@ -19,7 +19,6 @@ import 'package:sixam_mart/view/screens/home/web/module_widget.dart';
 import 'package:sixam_mart/view/screens/parcel/widget/deliver_item_card.dart';
 import 'package:sixam_mart/view/screens/parcel/widget/get_service_video.dart';
 import 'package:sixam_mart/view/screens/parcel/widget/sevice_info_list.dart';
-import 'package:video_player/video_player.dart';
 
 class ParcelCategoryScreen extends StatefulWidget {
   const ParcelCategoryScreen({Key? key}) : super(key: key);

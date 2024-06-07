@@ -5,7 +5,6 @@ import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/view/base/card_design/store_card.dart';
 import 'package:sixam_mart/view/base/card_design/store_card_with_distance.dart';
-import 'package:sixam_mart/view/base/rating_bar.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';

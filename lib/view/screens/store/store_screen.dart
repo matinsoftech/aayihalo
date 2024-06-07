@@ -31,7 +31,6 @@ import 'package:sixam_mart/view/base/veg_filter_widget.dart';
 import 'package:sixam_mart/view/base/web_item_view.dart';
 import 'package:sixam_mart/view/base/web_item_widget.dart';
 import 'package:sixam_mart/view/base/web_menu_bar.dart';
-import 'package:sixam_mart/view/screens/checkout/checkout_screen.dart';
 import 'package:sixam_mart/view/screens/search/widget/custom_check_box.dart';
 import 'package:sixam_mart/view/screens/store/widget/customizable_space_bar.dart';
 import 'package:sixam_mart/view/screens/store/widget/store_banner.dart';

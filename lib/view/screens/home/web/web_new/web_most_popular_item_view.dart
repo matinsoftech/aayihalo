@@ -8,7 +8,6 @@ import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
-import 'package:sixam_mart/view/base/card_design/item_card.dart';
 import 'package:sixam_mart/view/screens/home/web/web_new/web_special_offer_view.dart';
 import 'package:sixam_mart/view/screens/home/web/widgets/arrow_icon_button.dart';
 

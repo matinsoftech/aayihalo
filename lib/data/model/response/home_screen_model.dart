@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:sixam_mart/data/model/response/item_model.dart';
 
 class HomeScreenDataModel {
     final NearestStore? nearestStore;
