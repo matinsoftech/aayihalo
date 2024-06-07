@@ -1,4 +1,3 @@
-import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/api/api_checker.dart';
 import 'package:sixam_mart/data/model/response/basic_campaign_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';

@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -9,14 +8,10 @@ import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/controller/store_controller.dart';
-import 'package:sixam_mart/data/model/response/address_model.dart';
-import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/data/model/response/store_model.dart';
-import 'package:sixam_mart/helper/checkout_helper.dart';
 import 'package:sixam_mart/helper/price_converter.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
-import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
@@ -24,24 +19,16 @@ import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/cart_count_view.dart';
 import 'package:sixam_mart/view/base/custom_app_bar.dart';
 import 'package:sixam_mart/view/base/custom_button.dart';
-import 'package:sixam_mart/view/base/custom_dropdown.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/footer_view.dart';
-import 'package:sixam_mart/view/base/item_widget.dart';
 import 'package:sixam_mart/view/base/menu_drawer.dart';
 import 'package:sixam_mart/view/base/no_data_screen.dart';
 import 'package:sixam_mart/view/base/web_constrained_box.dart';
 import 'package:sixam_mart/view/base/web_page_title_widget.dart';
-import 'package:sixam_mart/view/screens/cart/widget/cart_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sixam_mart/view/screens/cart/widget/delivery_option_button.dart';
 import 'package:sixam_mart/view/screens/cart/widget/web_cart_items_widget.dart';
-import 'package:sixam_mart/view/screens/cart/widget/web_suggested_item_view.dart';
-import 'package:sixam_mart/view/screens/checkout/checkout_screen.dart';
-import 'package:sixam_mart/view/screens/checkout/widget/delivery_section.dart';
 import 'package:sixam_mart/view/screens/dashboard/widget/address_bottom_sheet.dart';
-import 'package:sixam_mart/view/screens/home/home_screen.dart';
 
 import 'widget/not_available_bottom_sheet.dart';
 

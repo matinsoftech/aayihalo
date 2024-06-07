@@ -34,17 +34,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
 
-    if (Get.find<AuthController>().isLoggedIn() &&
-        Get.find<UserController>().userInfoModel == null) {
+    if (Get.find<AuthController>().isLoggedIn() && Get.find<UserController>().userInfoModel == null) {
       Get.find<UserController>().getUserInfo();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool showWalletCard =
-        Get.find<SplashController>().configModel!.customerWalletStatus == 1 ||
-            Get.find<SplashController>().configModel!.loyaltyPointStatus == 1;
+    final bool showWalletCard = Get.find<SplashController>().configModel!.customerWalletStatus == 1 || Get.find<SplashController>().configModel!.loyaltyPointStatus == 1;
 
     return Scaffold(
       appBar: ResponsiveHelper.isDesktop(context) ? const WebMenuBar() : null,
@@ -67,164 +64,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: (isLoggedIn && ResponsiveHelper.isDesktop(context))
                       ? const WebProfileWidget()
                       : Container(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.2),
+                          color: Theme.of(context).primaryColor.withOpacity(0.2),
                           width: Dimensions.webMaxWidth,
                           height: context.height,
                           child: Center(
                             child: Column(children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: Dimensions.paddingSizeLarge,
-                                    vertical: Dimensions.paddingSizeSmall),
+                                padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
                                 child: SafeArea(
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        !ResponsiveHelper.isDesktop(context)
-                                            ? IconButton(
-                                                onPressed: () => Get.back(),
-                                                icon: const Icon(
-                                                    Icons.arrow_back_ios),
-                                              )
-                                            : const SizedBox(),
-                                        Text('profile'.tr,
-                                            style: robotoBold.copyWith(
-                                                fontSize:
-                                                    Dimensions.fontSizeLarge)),
-                                        const SizedBox(width: 50),
-                                      ]),
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                    !ResponsiveHelper.isDesktop(context)
+                                        ? IconButton(
+                                            onPressed: () => Get.back(),
+                                            icon: const Icon(Icons.arrow_back_ios),
+                                          )
+                                        : const SizedBox(),
+                                    Text('profile'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                                    const SizedBox(width: 50),
+                                  ]),
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    left: Dimensions.paddingSizeExtremeLarge,
-                                    right: Dimensions.paddingSizeExtremeLarge,
-                                    bottom: Dimensions.paddingSizeLarge),
+                                padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtremeLarge, right: Dimensions.paddingSizeExtremeLarge, bottom: Dimensions.paddingSizeLarge),
                                 child: Row(children: [
                                   ClipOval(
                                       child: CustomImage(
                                     placeholder: Images.guestIcon,
-                                    image:
-                                        '${Get.find<SplashController>().configModel!.baseUrls!.customerImageUrl}'
-                                        '/${(userController.userInfoModel != null && isLoggedIn) ? userController.userInfoModel!.image : ''}',
+                                    image: (userController.userInfoModel != null && isLoggedIn && userController.userInfoModel!.image != null && userController.userInfoModel!.image!.isNotEmpty) ? '${Get.find<SplashController>().configModel!.baseUrls!.customerImageUrl}/${userController.userInfoModel!.image}' : '',
                                     height: 70,
                                     width: 70,
                                     fit: BoxFit.cover,
                                   )),
-                                  const SizedBox(
-                                      width: Dimensions.paddingSizeDefault),
+                                  const SizedBox(width: Dimensions.paddingSizeDefault),
                                   Expanded(
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            isLoggedIn
-                                                ? '${userController.userInfoModel!.fName} ${userController.userInfoModel!.lName}'
-                                                : 'guest_user'.tr,
-                                            style: robotoBold.copyWith(
-                                                fontSize: Dimensions
-                                                    .fontSizeExtraLarge),
-                                          ),
-                                          const SizedBox(
-                                              height: Dimensions
-                                                  .paddingSizeExtraSmall),
-                                          isLoggedIn
-                                              ? Text(
-                                                  '${'joined'.tr} ${DateConverter.containTAndZToUTCFormat(userController.userInfoModel!.createdAt!)}',
-                                                  style: robotoMedium.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeSmall,
-                                                      color: Theme.of(context)
-                                                          .primaryColor),
-                                                )
-                                              : InkWell(
-                                                  onTap: () async {
-                                                    if (!ResponsiveHelper
-                                                        .isDesktop(context)) {
-                                                      await Get.toNamed(RouteHelper
-                                                          .getSignInRoute(Get
-                                                              .currentRoute));
-                                                    } else {
-                                                      Get.dialog(
-                                                           SignInScreen(
-                                                            ));
-                                                    }
-                                                  },
-                                                  child: Text(
-                                                    'login_to_view_all_feature'
-                                                        .tr,
-                                                    style:
-                                                        robotoMedium.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeSmall,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor),
-                                                  ),
-                                                ),
-                                        ]),
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                      Text(
+                                        isLoggedIn ? '${userController.userInfoModel!.fName} ${userController.userInfoModel!.lName}' : 'guest_user'.tr,
+                                        style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
+                                      ),
+                                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                                      isLoggedIn
+                                          ? Text(
+                                              '${'joined'.tr} ${DateConverter.containTAndZToUTCFormat(userController.userInfoModel!.createdAt!)}',
+                                              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
+                                            )
+                                          : InkWell(
+                                              onTap: () async {
+                                                if (!ResponsiveHelper.isDesktop(context)) {
+                                                  await Get.toNamed(RouteHelper.getSignInRoute(Get.currentRoute));
+                                                } else {
+                                                  Get.dialog(SignInScreen());
+                                                }
+                                              },
+                                              child: Text(
+                                                'login_to_view_all_feature'.tr,
+                                                style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
+                                              ),
+                                            ),
+                                    ]),
                                   ),
                                   isLoggedIn
                                       ? InkWell(
-                                          onTap: () => Get.toNamed(RouteHelper
-                                              .getUpdateProfileRoute()),
+                                          onTap: () => Get.toNamed(RouteHelper.getUpdateProfileRoute()),
                                           child: Container(
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color:
-                                                    Theme.of(context).cardColor,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Theme.of(context)
-                                                          .primaryColor
-                                                          .withOpacity(0.05),
-                                                      blurRadius: 5,
-                                                      spreadRadius: 1,
-                                                      offset:
-                                                          const Offset(3, 3))
-                                                ]),
-                                            padding: const EdgeInsets.all(
-                                                Dimensions
-                                                    .paddingSizeExtraSmall),
-                                            child: const Icon(
-                                                Icons.edit_outlined,
-                                                size: 24,
-                                                color: Colors.blue),
+                                            decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).cardColor, boxShadow: [BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.05), blurRadius: 5, spreadRadius: 1, offset: const Offset(3, 3))]),
+                                            padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                                            child: const Icon(Icons.edit_outlined, size: 24, color: Colors.blue),
                                           ),
                                         )
                                       : InkWell(
                                           onTap: () async {
-                                            if (!ResponsiveHelper.isDesktop(
-                                                context)) {
-                                              await Get.toNamed(
-                                                  RouteHelper.getSignInRoute(
-                                                      Get.currentRoute));
+                                            if (!ResponsiveHelper.isDesktop(context)) {
+                                              await Get.toNamed(RouteHelper.getSignInRoute(Get.currentRoute));
                                             } else {
-                                              Get.dialog( SignInScreen(
-                                                  ));
+                                              Get.dialog(SignInScreen());
                                             }
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimensions.radiusDefault),
-                                              color: Theme.of(context)
-                                                  .primaryColor,
+                                              borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                              color: Theme.of(context).primaryColor,
                                             ),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical:
-                                                    Dimensions.paddingSizeSmall,
-                                                horizontal: Dimensions
-                                                    .paddingSizeLarge),
+                                            padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall, horizontal: Dimensions.paddingSizeLarge),
                                             child: Text(
                                               'login'.tr,
-                                              style: robotoMedium.copyWith(
-                                                  color: Theme.of(context)
-                                                      .cardColor),
+                                              style: robotoMedium.copyWith(color: Theme.of(context).cardColor),
                                             ),
                                           ),
                                         )
@@ -232,137 +156,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               Expanded(
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.vertical(
-                                          top: Radius.circular(
-                                              Dimensions.radiusExtraLarge)),
-                                      color: Theme.of(context).cardColor),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: Dimensions.paddingSizeLarge,
-                                      vertical: Dimensions.paddingSizeDefault),
+                                  decoration: BoxDecoration(borderRadius: const BorderRadius.vertical(top: Radius.circular(Dimensions.radiusExtraLarge)), color: Theme.of(context).cardColor),
+                                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeDefault),
                                   child: Column(children: [
-                                    const SizedBox(
-                                        height: Dimensions.paddingSizeLarge),
+                                    const SizedBox(height: Dimensions.paddingSizeLarge),
                                     (showWalletCard && isLoggedIn)
                                         ? Row(children: [
-                                            Get.find<SplashController>()
-                                                        .configModel!
-                                                        .loyaltyPointStatus ==
-                                                    1
+                                            Get.find<SplashController>().configModel!.loyaltyPointStatus == 1
                                                 ? Expanded(
                                                     child: ProfileCard(
                                                     image: Images.loyaltyIcon,
-                                                    data: userController
-                                                                .userInfoModel!
-                                                                .loyaltyPoint !=
-                                                            null
-                                                        ? userController
-                                                            .userInfoModel!
-                                                            .loyaltyPoint
-                                                            .toString()
-                                                        : '0',
+                                                    data: userController.userInfoModel!.loyaltyPoint != null ? userController.userInfoModel!.loyaltyPoint.toString() : '0',
                                                     title: 'loyalty_points'.tr,
                                                   ))
                                                 : const SizedBox(),
-                                            SizedBox(
-                                                width: Get.find<SplashController>()
-                                                            .configModel!
-                                                            .loyaltyPointStatus ==
-                                                        1
-                                                    ? Dimensions
-                                                        .paddingSizeSmall
-                                                    : 0),
+                                            SizedBox(width: Get.find<SplashController>().configModel!.loyaltyPointStatus == 1 ? Dimensions.paddingSizeSmall : 0),
                                             isLoggedIn
                                                 ? Expanded(
                                                     child: ProfileCard(
-                                                    image:
-                                                        Images.shoppingBagIcon,
-                                                    data: userController
-                                                        .userInfoModel!
-                                                        .orderCount
-                                                        .toString(),
+                                                    image: Images.shoppingBagIcon,
+                                                    data: userController.userInfoModel!.orderCount.toString(),
                                                     title: 'total_order'.tr,
                                                   ))
                                                 : const SizedBox(),
-                                            SizedBox(
-                                                width: Get.find<SplashController>()
-                                                            .configModel!
-                                                            .customerWalletStatus ==
-                                                        1
-                                                    ? Dimensions
-                                                        .paddingSizeSmall
-                                                    : 0),
-                                            Get.find<SplashController>()
-                                                        .configModel!
-                                                        .customerWalletStatus ==
-                                                    1
+                                            SizedBox(width: Get.find<SplashController>().configModel!.customerWalletStatus == 1 ? Dimensions.paddingSizeSmall : 0),
+                                            Get.find<SplashController>().configModel!.customerWalletStatus == 1
                                                 ? Expanded(
                                                     child: ProfileCard(
                                                     image: Images.walletProfile,
-                                                    data: PriceConverter
-                                                        .convertPrice(
-                                                            userController
-                                                                .userInfoModel!
-                                                                .walletBalance),
+                                                    data: PriceConverter.convertPrice(userController.userInfoModel!.walletBalance),
                                                     title: 'wallet_balance'.tr,
                                                   ))
                                                 : const SizedBox(),
                                           ])
                                         : const SizedBox(),
-                                    const SizedBox(
-                                        height: Dimensions.paddingSizeDefault),
+                                    const SizedBox(height: Dimensions.paddingSizeDefault),
                                     ProfileButton(
                                         icon: Icons.tonality_outlined,
                                         title: 'dark_mode'.tr,
                                         isButtonActive: Get.isDarkMode,
                                         onTap: () {
-                                          Get.find<ThemeController>()
-                                              .toggleTheme();
+                                          Get.find<ThemeController>().toggleTheme();
                                         }),
-                                    const SizedBox(
-                                        height: Dimensions.paddingSizeSmall),
+                                    const SizedBox(height: Dimensions.paddingSizeSmall),
                                     isLoggedIn
-                                        ? GetBuilder<AuthController>(
-                                            builder: (authController) {
+                                        ? GetBuilder<AuthController>(builder: (authController) {
                                             return ProfileButton(
                                               icon: Icons.notifications,
                                               title: 'notification'.tr,
-                                              isButtonActive:
-                                                  authController.notification,
+                                              isButtonActive: authController.notification,
                                               onTap: () {
-                                                authController
-                                                    .setNotificationActive(
-                                                        !authController
-                                                            .notification);
+                                                authController.setNotificationActive(!authController.notification);
                                               },
                                             );
                                           })
                                         : const SizedBox(),
-                                    SizedBox(
-                                        height: isLoggedIn
-                                            ? Dimensions.paddingSizeSmall
-                                            : 0),
+                                    SizedBox(height: isLoggedIn ? Dimensions.paddingSizeSmall : 0),
                                     isLoggedIn
-                                        ? userController
-                                                    .userInfoModel!.socialId ==
-                                                null
+                                        ? userController.userInfoModel!.socialId == null
                                             ? ProfileButton(
                                                 icon: Icons.lock,
                                                 title: 'change_password'.tr,
                                                 onTap: () {
-                                                  Get.toNamed(RouteHelper
-                                                      .getResetPasswordRoute(
-                                                          '',
-                                                          '',
-                                                          'password-change'));
+                                                  Get.toNamed(RouteHelper.getResetPasswordRoute('', '', 'password-change'));
                                                 })
                                             : const SizedBox()
                                         : const SizedBox(),
                                     SizedBox(
                                         height: isLoggedIn
-                                            ? userController.userInfoModel!
-                                                        .socialId ==
-                                                    null
+                                            ? userController.userInfoModel!.socialId == null
                                                 ? Dimensions.paddingSizeSmall
                                                 : 0
                                             : 0),
@@ -371,50 +233,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             icon: Icons.delete,
                                             title: 'delete_account'.tr,
                                             iconImage: Images.profileDelete,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .error,
+                                            color: Theme.of(context).colorScheme.error,
                                             onTap: () {
                                               Get.dialog(
                                                   ConfirmationDialog(
                                                     icon: Images.support,
-                                                    title:
-                                                        'are_you_sure_to_delete_account'
-                                                            .tr,
-                                                    description:
-                                                        'it_will_remove_your_all_information'
-                                                            .tr,
+                                                    title: 'are_you_sure_to_delete_account'.tr,
+                                                    description: 'it_will_remove_your_all_information'.tr,
                                                     isLogOut: true,
-                                                    onYesPressed: () =>
-                                                        userController
-                                                            .removeUser(),
+                                                    onYesPressed: () => userController.removeUser(),
                                                   ),
                                                   useSafeArea: false);
                                             },
                                           )
                                         : const SizedBox(),
-                                    SizedBox(
-                                        height: isLoggedIn
-                                            ? Dimensions.paddingSizeLarge
-                                            : 0),
-                                    Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text('${'version'.tr}:',
-                                              style: robotoRegular.copyWith(
-                                                  fontSize: Dimensions
-                                                      .fontSizeExtraSmall)),
-                                          const SizedBox(
-                                              width: Dimensions
-                                                  .paddingSizeExtraSmall),
-                                          Text(
-                                              AppConstants.appVersion
-                                                  .toString(),
-                                              style: robotoMedium.copyWith(
-                                                  fontSize: Dimensions
-                                                      .fontSizeExtraSmall)),
-                                        ]),
+                                    SizedBox(height: isLoggedIn ? Dimensions.paddingSizeLarge : 0),
+                                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                      Text('${'version'.tr}:', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall)),
+                                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                      Text(AppConstants.appVersion.toString(), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall)),
+                                    ]),
                                   ]),
                                 ),
                               )

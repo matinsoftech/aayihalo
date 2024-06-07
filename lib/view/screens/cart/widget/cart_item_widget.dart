@@ -4,15 +4,12 @@ import 'package:sixam_mart/controller/localization_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
-import 'package:sixam_mart/helper/cart_helper.dart';
 import 'package:sixam_mart/helper/price_converter.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
-import 'package:sixam_mart/view/base/item_bottom_sheet.dart';
 import 'package:sixam_mart/view/base/quantity_button.dart';
-import 'package:sixam_mart/view/base/rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,8 +1,6 @@
 import 'package:sixam_mart/controller/auth_controller.dart';
-import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/api/api_checker.dart';
-import 'package:sixam_mart/data/model/body/place_order_body.dart';
 import 'package:sixam_mart/data/model/response/address_model.dart';
 import 'package:sixam_mart/data/model/response/cart_data_model.dart';
 // import 'package:sixam_mart/data/model/response/cart_model.dart';
@@ -11,9 +9,6 @@ import 'package:sixam_mart/data/model/response/module_model.dart';
 import 'package:sixam_mart/data/model/response/online_cart_model.dart';
 import 'package:sixam_mart/data/repository/cart_repo.dart';
 import 'package:get/get.dart';
-import 'package:sixam_mart/helper/cart_helper.dart';
-import 'package:sixam_mart/helper/date_converter.dart';
-import 'package:sixam_mart/helper/price_converter.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/screens/home/home_screen.dart';
 

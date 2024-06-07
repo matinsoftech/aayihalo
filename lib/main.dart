@@ -32,7 +32,7 @@ import 'helper/get_di.dart' as di;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
-  if(ResponsiveHelper.isMobilePhone()) {
+  if (ResponsiveHelper.isMobilePhone()) {
     HttpOverrides.global = MyHttpOverrides();
   }
   setPathUrlStrategy();
@@ -43,24 +43,15 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
 
-
   // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
 
-  if(GetPlatform.isWeb){
-    await Firebase.initializeApp(options: const FirebaseOptions(
-        apiKey: "AIzaSyDFN-73p8zKVZbA0i5DtO215XzAb-xuGSE",
-        authDomain: "ammart-8885e.firebaseapp.com",
-        databaseURL: "https://ammart-8885e-default-rtdb.firebaseio.com",
-        projectId: "ammart-8885e",
-        storageBucket: "ammart-8885e.appspot.com",
-        messagingSenderId: "1000163153346",
-        appId: "1:1000163153346:web:4f702a4b5adbd5c906b25b",
-        measurementId: "G-L1GNL2YV61"
-    ));
+  if (GetPlatform.isWeb) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(apiKey: "AIzaSyDFN-73p8zKVZbA0i5DtO215XzAb-xuGSE", authDomain: "ammart-8885e.firebaseapp.com", databaseURL: "https://ammart-8885e-default-rtdb.firebaseio.com", projectId: "ammart-8885e", storageBucket: "ammart-8885e.appspot.com", messagingSenderId: "1000163153346", appId: "1:1000163153346:web:4f702a4b5adbd5c906b25b", measurementId: "G-L1GNL2YV61"));
 
     MetaSEO().config();
   }
@@ -77,7 +68,7 @@ Future<void> main() async {
       await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
       FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
     }
-  }catch(_) {}
+  } catch (_) {}
 
   if (ResponsiveHelper.isWeb()) {
     await FacebookAuth.instance.webAndDesktopInitialize(
@@ -100,7 +91,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
@@ -109,16 +99,16 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _route() async {
-    if(GetPlatform.isWeb) {
+    if (GetPlatform.isWeb) {
       await Get.find<SplashController>().initSharedData();
-      if(Get.find<LocationController>().getUserAddress() != null && Get.find<LocationController>().getUserAddress()!.zoneIds == null) {
+      if (Get.find<LocationController>().getUserAddress() != null && Get.find<LocationController>().getUserAddress()!.zoneIds == null) {
         Get.find<AuthController>().clearSharedAddress();
       }
 
-      if(!Get.find<AuthController>().isLoggedIn() && !Get.find<AuthController>().isGuestLoggedIn() /*&& !ResponsiveHelper.isDesktop(Get.context!)*/) {
+      if (!Get.find<AuthController>().isLoggedIn() && !Get.find<AuthController>().isGuestLoggedIn() /*&& !ResponsiveHelper.isDesktop(Get.context!)*/) {
         await Get.find<AuthController>().guestLogin();
       }
-      if((Get.find<AuthController>().isLoggedIn() || Get.find<AuthController>().isGuestLoggedIn()) && Get.find<SplashController>().cacheModule != null) {
+      if ((Get.find<AuthController>().isLoggedIn() || Get.find<AuthController>().isGuestLoggedIn()) && Get.find<SplashController>().cacheModule != null) {
         Get.find<CartController>().getCartDataOnline();
       }
     }
@@ -126,7 +116,7 @@ class _MyAppState extends State<MyApp> {
       if (isSuccess) {
         if (Get.find<AuthController>().isLoggedIn()) {
           Get.find<AuthController>().updateToken();
-          if(Get.find<SplashController>().module != null) {
+          if (Get.find<SplashController>().module != null) {
             await Get.find<WishListController>().getWishList();
           }
         }
@@ -136,42 +126,43 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return GetBuilder<ThemeController>(builder: (themeController) {
       return GetBuilder<LocalizationController>(builder: (localizeController) {
         return GetBuilder<SplashController>(builder: (splashController) {
-          return (GetPlatform.isWeb && splashController.configModel == null) ? const SizedBox() : GetMaterialApp(
-            title: AppConstants.appName,
-            debugShowCheckedModeBanner: false,
-            navigatorKey: Get.key,
-            scrollBehavior: const MaterialScrollBehavior().copyWith(
-              dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch},
-            ),
-            theme: themeController.darkTheme ? dark() : light(),
-            locale: localizeController.locale,
-            translations: Messages(languages: widget.languages),
-            fallbackLocale: Locale(AppConstants.languages[0].languageCode!, AppConstants.languages[0].countryCode),
-            initialRoute: GetPlatform.isWeb ? RouteHelper.getInitialRoute() : RouteHelper.getSplashRoute(widget.body),
-            getPages: RouteHelper.routes,
-            defaultTransition: Transition.topLevel,
-            transitionDuration: const Duration(milliseconds: 500),
-            builder: (BuildContext context, widget) {
-              return MediaQuery(data: MediaQuery.of(context), child: Material(
-                child: Stack(children: [
-
-                  widget!,
-
-                  GetBuilder<SplashController>(builder: (splashController){
-                    if(!splashController.savedCookiesData && !splashController.getAcceptCookiesStatus(splashController.configModel != null ? splashController.configModel!.cookiesText! : '')){
-                      return ResponsiveHelper.isWeb() ? const Align(alignment: Alignment.bottomCenter, child: CookiesView()) : const SizedBox();
-                    }else{
-                      return const SizedBox();
-                    }
-                  })
-                ]),
-              ));
-          },
-          );
+          return (GetPlatform.isWeb && splashController.configModel == null)
+              ? const SizedBox()
+              : GetMaterialApp(
+                  title: AppConstants.appName,
+                  debugShowCheckedModeBanner: false,
+                  navigatorKey: Get.key,
+                  scrollBehavior: const MaterialScrollBehavior().copyWith(
+                    dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch},
+                  ),
+                  theme: themeController.darkTheme ? dark() : light(),
+                  locale: localizeController.locale,
+                  translations: Messages(languages: widget.languages),
+                  fallbackLocale: Locale(AppConstants.languages[0].languageCode!, AppConstants.languages[0].countryCode),
+                  initialRoute: GetPlatform.isWeb ? RouteHelper.getInitialRoute() : RouteHelper.getSplashRoute(widget.body),
+                  getPages: RouteHelper.routes,
+                  defaultTransition: Transition.topLevel,
+                  transitionDuration: const Duration(milliseconds: 500),
+                  builder: (BuildContext context, widget) {
+                    return MediaQuery(
+                        data: MediaQuery.of(context),
+                        child: Material(
+                          child: Stack(children: [
+                            widget!,
+                            GetBuilder<SplashController>(builder: (splashController) {
+                              if (!splashController.savedCookiesData && !splashController.getAcceptCookiesStatus(splashController.configModel != null ? splashController.configModel!.cookiesText! : '')) {
+                                return ResponsiveHelper.isWeb() ? const Align(alignment: Alignment.bottomCenter, child: CookiesView()) : const SizedBox();
+                              } else {
+                                return const SizedBox();
+                              }
+                            })
+                          ]),
+                        ));
+                  },
+                );
         });
       });
     });

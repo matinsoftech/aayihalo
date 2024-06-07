@@ -1,5 +1,4 @@
 import 'package:sixam_mart/controller/search_controller.dart';
-import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';

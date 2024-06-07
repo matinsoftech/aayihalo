@@ -18,7 +18,6 @@ import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/new_tag.dart';
-import 'package:sixam_mart/view/base/rating_bar.dart';
 import 'package:sixam_mart/view/screens/store/store_screen.dart';
 
 class StoreCard extends StatelessWidget {

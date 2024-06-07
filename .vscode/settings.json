@@ -1,4 +1,4 @@
 {
-  "workbench.sideBar.location": "right",
+  "workbench.sideBar.location": "left",
   "dart.flutterSdkPath": ".fvm/versions/3.19.6"
 }

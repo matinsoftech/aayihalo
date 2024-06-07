@@ -16,7 +16,6 @@ import 'package:sixam_mart/view/base/discount_tag.dart';
 import 'package:sixam_mart/view/base/hover/on_hover.dart';
 import 'package:sixam_mart/view/base/not_available_widget.dart';
 import 'package:sixam_mart/view/base/organic_tag.dart';
-import 'package:sixam_mart/view/base/rating_bar.dart';
 import 'package:sixam_mart/view/screens/store/store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

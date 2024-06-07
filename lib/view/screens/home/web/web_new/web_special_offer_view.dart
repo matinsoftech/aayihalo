@@ -7,7 +7,6 @@ import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
-import 'package:sixam_mart/view/base/card_design/item_card.dart';
 import 'package:sixam_mart/view/screens/home/web/widgets/arrow_icon_button.dart';
 
 class WebSpecialOfferView extends StatefulWidget {

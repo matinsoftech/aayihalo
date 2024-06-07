@@ -1,22 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sixam_mart/controller/banner_controller.dart';
-import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/model/response/basic_campaign_model.dart';
-import 'package:sixam_mart/data/model/response/item_model.dart';
-import 'package:sixam_mart/data/model/response/module_model.dart';
-import 'package:sixam_mart/data/model/response/store_model.dart';
-import 'package:sixam_mart/helper/responsive_helper.dart';
-import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
-import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
-import 'package:sixam_mart/view/base/custom_snackbar.dart';
-import 'package:sixam_mart/view/screens/store/store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class BannerView extends StatelessWidget {
   final bool isFeatured;

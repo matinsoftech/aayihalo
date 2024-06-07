@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/api/api_checker.dart';
-import 'package:sixam_mart/data/model/body/place_order_body.dart';
 import 'package:sixam_mart/data/model/body/review_body.dart';
 import 'package:sixam_mart/data/model/response/basic_medicine_model.dart';
 import 'package:sixam_mart/data/model/response/cart_data_model.dart';
@@ -15,13 +14,8 @@ import 'package:sixam_mart/data/repository/item_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/helper/date_converter.dart';
-import 'package:sixam_mart/helper/price_converter.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
-import 'package:sixam_mart/util/app_constants.dart';
-import 'package:sixam_mart/util/images.dart';
-import 'package:sixam_mart/view/base/cart_snackbar.dart';
-import 'package:sixam_mart/view/base/confirmation_dialog.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/item_bottom_sheet.dart';
 import 'package:sixam_mart/view/screens/item/item_details_screen.dart';
@@ -99,8 +93,7 @@ class ItemController extends GetxController implements GetxService {
 
   void getHomeScreenData({required String lat, required String long}) async {
     _homeScreenDataModel = null;
-    Response response =
-        await itemRepo.getHomeScreenData(latitude: lat, longitude: long);
+    Response response = await itemRepo.getHomeScreenData(latitude: lat, longitude: long);
     if (response.statusCode == 200) {
       _homeScreenDataModel = HomeScreenDataModel.fromJson(response.body);
     } else {
@@ -148,8 +141,7 @@ class ItemController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getReviewedItemList(
-      bool reload, String type, bool notify) async {
+  Future<void> getReviewedItemList(bool reload, String type, bool notify) async {
     _reviewedType = type;
     if (reload) {
       _reviewedItemList = null;
@@ -163,8 +155,7 @@ class ItemController extends GetxController implements GetxService {
         _reviewedItemList = [];
         _reviewedCategoriesList = [];
         _reviewedItemList!.addAll(ItemModel.fromJson(response.body).items!);
-        _reviewedCategoriesList!
-            .addAll(ItemModel.fromJson(response.body).categories!);
+        _reviewedCategoriesList!.addAll(ItemModel.fromJson(response.body).categories!);
         _isLoading = false;
       } else {
         ApiChecker.checkApi(response);
@@ -191,8 +182,7 @@ class ItemController extends GetxController implements GetxService {
     }
   }
 
-  Future<void> getRecommendedItemList(
-      bool reload, String type, bool notify) async {
+  Future<void> getRecommendedItemList(bool reload, String type, bool notify) async {
     if (reload) {
       _recommendedItemList = null;
     }
@@ -254,8 +244,7 @@ class ItemController extends GetxController implements GetxService {
     }
     Response response = await itemRepo.getCommonConditions();
     if (response.statusCode == 200) {
-      response.body.forEach((condition) =>
-          _commonConditions!.add(CommonConditionModel.fromJson(condition)));
+      response.body.forEach((condition) => _commonConditions!.add(CommonConditionModel.fromJson(condition)));
       _isLoading = false;
     } else {
       ApiChecker.checkApi(response);
@@ -311,9 +300,7 @@ class ItemController extends GetxController implements GetxService {
         }
       }
 
-      if (Get.find<SplashController>()
-          .getModuleConfig(item.moduleType)
-          .newVariation!) {
+      if (Get.find<SplashController>().getModuleConfig(item.moduleType).newVariation!) {
         // _selectedVariations.addAll(cart.foodVariations!);
         for (int index = 0; index < item.foodVariations!.length; index++) {
           _collapsVariation.add(true);
@@ -326,8 +313,7 @@ class ItemController extends GetxController implements GetxService {
         int varIndex = 0;
         for (var choiceOption in item.choiceOptions!) {
           for (int index = 0; index < choiceOption.options!.length; index++) {
-            if (choiceOption.options![index].trim().replaceAll(' ', '') ==
-                variationTypes[varIndex].trim()) {
+            if (choiceOption.options![index].trim().replaceAll(' ', '') == variationTypes[varIndex].trim()) {
               _variationIndex!.add(index);
               break;
             }
@@ -336,15 +322,11 @@ class ItemController extends GetxController implements GetxService {
         }
       }
     } else {
-      if (Get.find<SplashController>()
-          .getModuleConfig(item!.moduleType)
-          .newVariation!) {
+      if (Get.find<SplashController>().getModuleConfig(item!.moduleType).newVariation!) {
         for (int index = 0; index < item.foodVariations!.length; index++) {
           _selectedVariations.add([]);
           _collapsVariation.add(true);
-          for (int i = 0;
-              i < item.foodVariations![index].variationValues!.length;
-              i++) {
+          for (int i = 0; i < item.foodVariations![index].variationValues!.length; i++) {
             _selectedVariations[index].add(false);
           }
         }
@@ -374,11 +356,7 @@ class ItemController extends GetxController implements GetxService {
 
   int setExistInCart(Item? item, {bool notify = false}) {
     String variationType = '';
-    if (!Get.find<SplashController>()
-        .getModuleConfig(Get.find<SplashController>().module != null
-            ? Get.find<SplashController>().module!.moduleType
-            : Get.find<SplashController>().cacheModule!.moduleType)
-        .newVariation!) {
+    if (!Get.find<SplashController>().getModuleConfig(Get.find<SplashController>().module != null ? Get.find<SplashController>().module!.moduleType : Get.find<SplashController>().cacheModule!.moduleType).newVariation!) {
       List<String> variationList = [];
       // for (int index = 0; index < item!.choiceOptions!.length; index++) {
       //   variationList.add(item.choiceOptions![index].options![_variationIndex![index]].replaceAll(' ', ''));
@@ -393,11 +371,7 @@ class ItemController extends GetxController implements GetxService {
         }
       }
     }
-    if (Get.find<SplashController>()
-        .getModuleConfig(Get.find<SplashController>().module != null
-            ? Get.find<SplashController>().module!.moduleType
-            : Get.find<SplashController>().cacheModule!.moduleType)
-        .newVariation!) {
+    if (Get.find<SplashController>().getModuleConfig(Get.find<SplashController>().module != null ? Get.find<SplashController>().module!.moduleType : Get.find<SplashController>().cacheModule!.moduleType).newVariation!) {
       _cartIndex = -1;
     } else {
       // _cartIndex = Get.find<CartController>()
@@ -440,21 +414,14 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
-  void setQuantity(bool isIncrement, int? stock, int? quantityLimit,
-      {bool getxSnackBar = false}) {
+  void setQuantity(bool isIncrement, int? stock, int? quantityLimit, {bool getxSnackBar = false}) {
     if (isIncrement) {
-      if (Get.find<SplashController>()
-              .configModel!
-              .moduleConfig!
-              .module!
-              .stock! &&
-          _quantity! >= stock!) {
+      if (Get.find<SplashController>().configModel!.moduleConfig!.module!.stock! && _quantity! >= stock!) {
         showCustomSnackBar('out_of_stock'.tr);
       } else {
         if (quantityLimit != null) {
           if (_quantity! >= quantityLimit && quantityLimit != 0) {
-            showCustomSnackBar('${'maximum_quantity_limit'.tr} $quantityLimit',
-                getXSnackBar: getxSnackBar);
+            showCustomSnackBar('${'maximum_quantity_limit'.tr} $quantityLimit', getXSnackBar: getxSnackBar);
           } else {
             _quantity = _quantity! + 1;
           }
@@ -494,9 +461,7 @@ class ItemController extends GetxController implements GetxService {
         }
       }
     } else {
-      if (!_selectedVariations[index][i]! &&
-          selectedVariationLength(_selectedVariations, index) >=
-              item.foodVariations![index].max!) {
+      if (!_selectedVariations[index][i]! && selectedVariationLength(_selectedVariations, index) >= item.foodVariations![index].max!) {
         showCustomSnackBar(
           '${'maximum_variation_for'.tr} ${item.foodVariations![index].name} ${'is'.tr} ${item.foodVariations![index].max}',
           getXSnackBar: true,
@@ -653,41 +618,26 @@ class ItemController extends GetxController implements GetxService {
   }
 
   bool isAvailable(Item item) {
-    return DateConverter.isAvailable(
-        item.availableTimeStarts, item.availableTimeEnds);
+    return DateConverter.isAvailable(item.availableTimeStarts, item.availableTimeEnds);
   }
 
-  double? getDiscount(Item item) =>
-      item.storeDiscount == 0 ? item.discount : item.storeDiscount;
+  double? getDiscount(Item item) => item.storeDiscount == 0 ? item.discount : item.storeDiscount;
 
-  String? getDiscountType(Item item) =>
-      item.storeDiscount == 0 ? item.discountType : 'percent';
+  String? getDiscountType(Item item) => item.storeDiscount == 0 ? item.discountType : 'percent';
 
-  void navigateToItemPage(Item? item, BuildContext context,
-      {bool inStore = false, bool isCampaign = false}) {
-    if (Get.find<SplashController>()
-            .configModel!
-            .moduleConfig!
-            .module!
-            .showRestaurantText! ||
-        item!.moduleType == 'food') {
+  void navigateToItemPage(Item? item, BuildContext context, {bool inStore = false, bool isCampaign = false}) {
+    if (Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText! || item!.moduleType == 'food') {
       ResponsiveHelper.isMobile(context)
           ? Get.bottomSheet(
-              ItemBottomSheet(
-                  item: item, inStorePage: inStore, isCampaign: isCampaign),
+              ItemBottomSheet(item: item, inStorePage: inStore, isCampaign: isCampaign),
               backgroundColor: Colors.transparent,
               isScrollControlled: true,
             )
           : Get.dialog(
-              Dialog(
-                  child: ItemBottomSheet(
-                      item: item,
-                      inStorePage: inStore,
-                      isCampaign: isCampaign)),
+              Dialog(child: ItemBottomSheet(item: item, inStorePage: inStore, isCampaign: isCampaign)),
             );
     } else {
-      Get.toNamed(RouteHelper.getItemDetailsRoute(item.id, inStore),
-          arguments: ItemDetailsScreen(item: item, inStorePage: inStore));
+      Get.toNamed(RouteHelper.getItemDetailsRoute(item.id, inStore), arguments: ItemDetailsScreen(item: item, inStorePage: inStore));
     }
   }
 
@@ -707,7 +657,7 @@ class ItemController extends GetxController implements GetxService {
   //         price, discount, item.discountType)!;
 
   //     CartDataModel cartModel = CartDataModel(
-       
+
   //       price,
   //       discount,
   //       [],
@@ -810,21 +760,11 @@ class ItemController extends GetxController implements GetxService {
   //   }
   // }
 
-  void addToCart(
-      {required int productId,
-      required int quantity,
-      String? variantType}) async {
-    await Get.find<CartController>().addToCart(
-        productId: productId, quantity: quantity, variantType: variantType);
+  void addToCart({required int productId, required int quantity, String? variantType}) async {
+    await Get.find<CartController>().addToCart(productId: productId, quantity: quantity, variantType: variantType);
   }
 
-  void getCartData(
-      {required int productId,
-      required int quantity,
-      String? variantType}) async {
+  void getCartData({required int productId, required int quantity, String? variantType}) async {
     Get.find<CartController>().getCartData();
   }
-
-
- 
 }

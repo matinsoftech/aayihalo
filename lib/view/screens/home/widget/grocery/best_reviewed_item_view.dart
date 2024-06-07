@@ -5,9 +5,7 @@ import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
-import 'package:sixam_mart/view/base/card_design/item_card.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
-import 'package:sixam_mart/view/screens/home/grocery/widget/components/review_item_card.dart';
 
 class BestReviewItemView extends StatefulWidget {
   const BestReviewItemView({Key? key}) : super(key: key);

@@ -3,7 +3,6 @@ import 'package:sixam_mart/data/model/response/order_model.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
-import 'package:sixam_mart/view/base/rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

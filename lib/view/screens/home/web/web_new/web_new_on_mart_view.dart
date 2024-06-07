@@ -15,7 +15,6 @@ import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/add_favourite_view.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
 import 'package:sixam_mart/view/base/hover/on_hover.dart';
-import 'package:sixam_mart/view/base/rating_bar.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
 import 'package:sixam_mart/view/screens/home/web/widgets/arrow_icon_button.dart';
 import 'package:sixam_mart/view/screens/store/store_screen.dart';
