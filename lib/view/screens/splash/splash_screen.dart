@@ -1,4 +1,4 @@
- import 'dart:async';
+import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:sixam_mart/controller/auth_controller.dart';
@@ -33,7 +33,7 @@ class SplashScreenState extends State<SplashScreen> {
 
     bool firstTime = true;
     _onConnectivityChanged = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if(!firstTime) {
+      if (!firstTime) {
         bool isNotConnected = result != ConnectivityResult.wifi && result != ConnectivityResult.mobile;
         isNotConnected ? const SizedBox() : ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -44,21 +44,20 @@ class SplashScreenState extends State<SplashScreen> {
             textAlign: TextAlign.center,
           ),
         ));
-        if(!isNotConnected) {
+        if (!isNotConnected) {
           _route();
         }
       }
       firstTime = false;
     });
 
-    Get.find<SplashController>().initSharedData(); 
-    print("hll ${Get.find<AuthController>().isLoggedIn()}");
-    if((Get.find<AuthController>().getGuestId().isNotEmpty || Get.find<AuthController>().isLoggedIn()) && Get.find<SplashController>().cacheModule != null) {
-      Get.find<CartController>().getCartData(); 
+    Get.find<SplashController>().initSharedData();
+    // print("hll ${Get.find<AuthController>().isLoggedIn()}");
+    if ((Get.find<AuthController>().getGuestId().isNotEmpty || Get.find<AuthController>().isLoggedIn()) && Get.find<SplashController>().cacheModule != null) {
+      Get.find<CartController>().getCartData();
       Get.find<LocationController>().getAddressList();
     }
     _route();
-
   }
 
   @override
@@ -70,30 +69,30 @@ class SplashScreenState extends State<SplashScreen> {
 
   void _route() {
     Get.find<SplashController>().getConfigData().then((isSuccess) {
-      if(isSuccess) {
+      if (isSuccess) {
         Timer(const Duration(seconds: 1), () async {
           double? minimumVersion = 0;
-          if(GetPlatform.isAndroid) {
+          if (GetPlatform.isAndroid) {
             minimumVersion = Get.find<SplashController>().configModel!.appMinimumVersionAndroid;
-          }else if(GetPlatform.isIOS) {
+          } else if (GetPlatform.isIOS) {
             minimumVersion = Get.find<SplashController>().configModel!.appMinimumVersionIos;
           }
-          if(AppConstants.appVersion < minimumVersion! || Get.find<SplashController>().configModel!.maintenanceMode!) {
+          if (AppConstants.appVersion < minimumVersion! || Get.find<SplashController>().configModel!.maintenanceMode!) {
             Get.offNamed(RouteHelper.getUpdateRoute(AppConstants.appVersion < minimumVersion));
-          }else {
-            if(widget.body != null) {
+          } else {
+            if (widget.body != null) {
               if (widget.body!.notificationType == NotificationType.order) {
                 Get.offNamed(RouteHelper.getOrderDetailsRoute(widget.body!.orderId, fromNotification: true));
-              }else if(widget.body!.notificationType == NotificationType.general){
+              } else if (widget.body!.notificationType == NotificationType.general) {
                 Get.offNamed(RouteHelper.getNotificationRoute(fromNotification: true));
-              }else {
+              } else {
                 Get.offNamed(RouteHelper.getChatRoute(notificationBody: widget.body, conversationID: widget.body!.conversationId, fromNotification: true));
               }
-            }else {
+            } else {
               if (Get.find<AuthController>().isLoggedIn()) {
                 Get.find<AuthController>().updateToken();
                 if (Get.find<LocationController>().getUserAddress() != null) {
-                  if(Get.find<SplashController>().module != null) {
+                  if (Get.find<SplashController>().module != null) {
                     await Get.find<WishListController>().getWishList();
                   }
                   Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
@@ -102,13 +101,13 @@ class SplashScreenState extends State<SplashScreen> {
                 }
               } else {
                 if (Get.find<SplashController>().showIntro()!) {
-                  if(AppConstants.languages.length > 1) {
+                  if (AppConstants.languages.length > 1) {
                     Get.offNamed(RouteHelper.getLanguageRoute('splash'));
-                  }else {
+                  } else {
                     Get.offNamed(RouteHelper.getOnBoardingRoute());
                   }
                 } else {
-                  if(Get.find<AuthController>().isGuestLoggedIn()) {
+                  if (Get.find<AuthController>().isGuestLoggedIn()) {
                     if (Get.find<LocationController>().getUserAddress() != null) {
                       Get.offNamed(RouteHelper.getInitialRoute(fromSplash: true));
                     } else {
@@ -129,7 +128,7 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     Get.find<SplashController>().initSharedData();
-    if(Get.find<LocationController>().getUserAddress() != null && Get.find<LocationController>().getUserAddress()!.zoneIds == null) {
+    if (Get.find<LocationController>().getUserAddress() != null && Get.find<LocationController>().getUserAddress()!.zoneIds == null) {
       Get.find<AuthController>().clearSharedAddress();
     }
 
@@ -137,14 +136,16 @@ class SplashScreenState extends State<SplashScreen> {
       key: _globalKey,
       body: GetBuilder<SplashController>(builder: (splashController) {
         return Center(
-          child: splashController.hasConnection ? Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(Images.logo, width: 200),
-              const SizedBox(height: Dimensions.paddingSizeSmall),
-              // Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),
-            ],
-          ) : NoInternetScreen(child: SplashScreen(body: widget.body)),
+          child: splashController.hasConnection
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(Images.logo, width: 200),
+                    const SizedBox(height: Dimensions.paddingSizeSmall),
+                    // Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),
+                  ],
+                )
+              : NoInternetScreen(child: SplashScreen(body: widget.body)),
         );
       }),
     );

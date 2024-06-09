@@ -21,174 +21,173 @@ class CategoryViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
 
-    return GetBuilder<SplashController>(builder: (splashController) {
-      bool isPharmacy = splashController.module != null &&
-          splashController.module!.moduleType.toString() ==
-              AppConstants.pharmacy;
-      bool isFood = splashController.module != null &&
-          splashController.module!.moduleType.toString() == AppConstants.food;
+    return GetBuilder<SplashController>(
+      builder: (splashController) {
+        bool isPharmacy = splashController.module != null && splashController.module!.moduleType.toString() == AppConstants.pharmacy;
+        bool isFood = splashController.module != null && splashController.module!.moduleType.toString() == AppConstants.food;
 
-      return GetBuilder<CategoryController>(builder: (categoryController) {
-        return (categoryController.categoryList != null &&
-                categoryController.categoryList!.isEmpty)
-            ? const SizedBox()
-            :
-            // isPharmacy
-            //     ? PharmacyCategoryView(categoryController: categoryController)
-            //     :
+        return GetBuilder<CategoryController>(
+          builder: (categoryController) {
+            return (categoryController.categoryList != null && categoryController.categoryList!.isEmpty)
+                ? const SizedBox()
+                :
+                // isPharmacy
+                //     ? PharmacyCategoryView(categoryController: categoryController)
+                //     :
 
-            // isFood
-            //     ?
+                // isFood
+                //     ?
 
-            Center(child: FoodCategoryView(categoryController: categoryController));
+                Center(child: FoodCategoryView(categoryController: categoryController));
 
-        // :
-        //  Column(
-        //     children: [
-        //       Row(
-        //         children: [
-        //           Expanded(
-        //             child: SizedBox(
-        //               height: 155,
-        //               child: categoryController.categoryList != null
-        //                   ? ListView.builder(
-        //                       controller: scrollController,
-        //                       itemCount: categoryController
-        //                           .categoryList!.length,
-        //                       padding: const EdgeInsets.only(
-        //                           left: Dimensions.paddingSizeSmall,
-        //                           top: Dimensions.paddingSizeDefault),
-        //                       physics: const BouncingScrollPhysics(),
-        //                       scrollDirection: Axis.horizontal,
-        //                       itemBuilder: (context, index) {
-        //                         return Padding(
-        //                           padding: const EdgeInsets.only(
-        //                               bottom:
-        //                                   Dimensions.paddingSizeDefault,
-        //                               right:
-        //                                   Dimensions.paddingSizeSmall,
-        //                               top: Dimensions
-        //                                   .paddingSizeDefault),
-        //                           child: InkWell(
-        //                             onTap: () => Get.toNamed(RouteHelper
-        //                                 .getCategoryItemRoute(
-        //                               categoryController
-        //                                   .categoryList![index].id,
-        //                               categoryController
-        //                                   .categoryList![index].name!,
-        //                             )),
-        //                             child: SizedBox(
-        //                               width: 80,
-        //                               child: Column(children: [
-        //                                 SizedBox(
-        //                                   height: 75,
-        //                                   width: 75,
-        //                                   child: Stack(children: [
-        //                                     ClipRRect(
-        //                                       borderRadius:
-        //                                           BorderRadius.circular(
-        //                                               Dimensions
-        //                                                   .radiusSmall),
-        //                                       child: CustomImage(
-        //                                         image:
-        //                                             '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![index].image}',
-        //                                         height: 75,
-        //                                         width: 75,
-        //                                         fit: BoxFit.cover,
-        //                                       ),
-        //                                     ),
-        //                                   ]),
-        //                                 ),
-        //                                 const SizedBox(
-        //                                     height: Dimensions
-        //                                         .paddingSizeExtraSmall),
-        //                                 Padding(
-        //                                   padding: EdgeInsets.only(
-        //                                       right: index == 0
-        //                                           ? Dimensions
-        //                                               .paddingSizeExtraSmall
-        //                                           : 0),
-        //                                   child: Text(
-        //                                     categoryController
-        //                                         .categoryList![index]
-        //                                         .name!,
-        //                                     style: robotoMedium
-        //                                         .copyWith(fontSize: 11),
-        //                                     maxLines: Get.find<
-        //                                                 LocalizationController>()
-        //                                             .isLtr
-        //                                         ? 2
-        //                                         : 1,
-        //                                     overflow:
-        //                                         TextOverflow.ellipsis,
-        //                                     textAlign: TextAlign.center,
-        //                                   ),
-        //                                 ),
-        //                               ]),
-        //                             ),
-        //                           ),
-        //                         );
-        //                       },
-        //                     )
-        //                   : CategoryShimmer(
-        //                       categoryController: categoryController),
-        //             ),
-        //           ),
-        //           ResponsiveHelper.isMobile(context)
-        //               ? const SizedBox()
-        //               : categoryController.categoryList != null
-        //                   ? Column(
-        //                       children: [
-        //                         InkWell(
-        //                           onTap: () {
-        //                             showDialog(
-        //                                 context: context,
-        //                                 builder: (con) => Dialog(
-        //                                     child: SizedBox(
-        //                                         height: 550,
-        //                                         width: 600,
-        //                                         child: CategoryPopUp(
-        //                                           categoryController:
-        //                                               categoryController,
-        //                                         ))));
-        //                           },
-        //                           child: Padding(
-        //                             padding: const EdgeInsets.only(
-        //                                 right: Dimensions
-        //                                     .paddingSizeSmall),
-        //                             child: CircleAvatar(
-        //                               radius: 35,
-        //                               backgroundColor: Theme.of(context)
-        //                                   .primaryColor,
-        //                               child: Text('view_all'.tr,
-        //                                   style: TextStyle(
-        //                                       fontSize: Dimensions
-        //                                           .paddingSizeDefault,
-        //                                       color: Theme.of(context)
-        //                                           .cardColor)),
-        //                             ),
-        //                           ),
-        //                         ),
-        //                         const SizedBox(
-        //                           height: 10,
-        //                         )
-        //                       ],
-        //                     )
-        //                   : CategoryShimmer(
-        //                       categoryController: categoryController),
-        //         ],
-        //       ),
-        //     ],
-        //   );
-      });
-    });
+            // :
+            //  Column(
+            //     children: [
+            //       Row(
+            //         children: [
+            //           Expanded(
+            //             child: SizedBox(
+            //               height: 155,
+            //               child: categoryController.categoryList != null
+            //                   ? ListView.builder(
+            //                       controller: scrollController,
+            //                       itemCount: categoryController
+            //                           .categoryList!.length,
+            //                       padding: const EdgeInsets.only(
+            //                           left: Dimensions.paddingSizeSmall,
+            //                           top: Dimensions.paddingSizeDefault),
+            //                       physics: const BouncingScrollPhysics(),
+            //                       scrollDirection: Axis.horizontal,
+            //                       itemBuilder: (context, index) {
+            //                         return Padding(
+            //                           padding: const EdgeInsets.only(
+            //                               bottom:
+            //                                   Dimensions.paddingSizeDefault,
+            //                               right:
+            //                                   Dimensions.paddingSizeSmall,
+            //                               top: Dimensions
+            //                                   .paddingSizeDefault),
+            //                           child: InkWell(
+            //                             onTap: () => Get.toNamed(RouteHelper
+            //                                 .getCategoryItemRoute(
+            //                               categoryController
+            //                                   .categoryList![index].id,
+            //                               categoryController
+            //                                   .categoryList![index].name!,
+            //                             )),
+            //                             child: SizedBox(
+            //                               width: 80,
+            //                               child: Column(children: [
+            //                                 SizedBox(
+            //                                   height: 75,
+            //                                   width: 75,
+            //                                   child: Stack(children: [
+            //                                     ClipRRect(
+            //                                       borderRadius:
+            //                                           BorderRadius.circular(
+            //                                               Dimensions
+            //                                                   .radiusSmall),
+            //                                       child: CustomImage(
+            //                                         image:
+            //                                             '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![index].image}',
+            //                                         height: 75,
+            //                                         width: 75,
+            //                                         fit: BoxFit.cover,
+            //                                       ),
+            //                                     ),
+            //                                   ]),
+            //                                 ),
+            //                                 const SizedBox(
+            //                                     height: Dimensions
+            //                                         .paddingSizeExtraSmall),
+            //                                 Padding(
+            //                                   padding: EdgeInsets.only(
+            //                                       right: index == 0
+            //                                           ? Dimensions
+            //                                               .paddingSizeExtraSmall
+            //                                           : 0),
+            //                                   child: Text(
+            //                                     categoryController
+            //                                         .categoryList![index]
+            //                                         .name!,
+            //                                     style: robotoMedium
+            //                                         .copyWith(fontSize: 11),
+            //                                     maxLines: Get.find<
+            //                                                 LocalizationController>()
+            //                                             .isLtr
+            //                                         ? 2
+            //                                         : 1,
+            //                                     overflow:
+            //                                         TextOverflow.ellipsis,
+            //                                     textAlign: TextAlign.center,
+            //                                   ),
+            //                                 ),
+            //                               ]),
+            //                             ),
+            //                           ),
+            //                         );
+            //                       },
+            //                     )
+            //                   : CategoryShimmer(
+            //                       categoryController: categoryController),
+            //             ),
+            //           ),
+            //           ResponsiveHelper.isMobile(context)
+            //               ? const SizedBox()
+            //               : categoryController.categoryList != null
+            //                   ? Column(
+            //                       children: [
+            //                         InkWell(
+            //                           onTap: () {
+            //                             showDialog(
+            //                                 context: context,
+            //                                 builder: (con) => Dialog(
+            //                                     child: SizedBox(
+            //                                         height: 550,
+            //                                         width: 600,
+            //                                         child: CategoryPopUp(
+            //                                           categoryController:
+            //                                               categoryController,
+            //                                         ))));
+            //                           },
+            //                           child: Padding(
+            //                             padding: const EdgeInsets.only(
+            //                                 right: Dimensions
+            //                                     .paddingSizeSmall),
+            //                             child: CircleAvatar(
+            //                               radius: 35,
+            //                               backgroundColor: Theme.of(context)
+            //                                   .primaryColor,
+            //                               child: Text('view_all'.tr,
+            //                                   style: TextStyle(
+            //                                       fontSize: Dimensions
+            //                                           .paddingSizeDefault,
+            //                                       color: Theme.of(context)
+            //                                           .cardColor)),
+            //                             ),
+            //                           ),
+            //                         ),
+            //                         const SizedBox(
+            //                           height: 10,
+            //                         )
+            //                       ],
+            //                     )
+            //                   : CategoryShimmer(
+            //                       categoryController: categoryController),
+            //         ],
+            //       ),
+            //     ],
+            //   );
+          },
+        );
+      },
+    );
   }
 }
 
 class PharmacyCategoryView extends StatelessWidget {
   final CategoryController categoryController;
-  const PharmacyCategoryView({Key? key, required this.categoryController})
-      : super(key: key);
+  const PharmacyCategoryView({Key? key, required this.categoryController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -202,29 +201,21 @@ class PharmacyCategoryView extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(
-                    left: Dimensions.paddingSizeDefault,
-                    top: Dimensions.paddingSizeDefault),
+                padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
                 itemCount: categoryController.categoryList!.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: Dimensions.paddingSizeDefault,
-                        right: Dimensions.paddingSizeSmall,
-                        top: Dimensions.paddingSizeDefault),
+                    padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeDefault),
                     child: InkWell(
                       onTap: () => Get.toNamed(RouteHelper.getCategoryItemRoute(
                         categoryController.categoryList![index].id,
                         categoryController.categoryList![index].name!,
                       )),
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusSmall),
+                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                       child: Container(
                         width: 70,
                         decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(100),
-                              topRight: Radius.circular(100)),
+                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(100), topRight: Radius.circular(100)),
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
@@ -236,12 +227,9 @@ class PharmacyCategoryView extends StatelessWidget {
                         ),
                         child: Column(children: [
                           ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(100),
-                                topRight: Radius.circular(100)),
+                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(100), topRight: Radius.circular(100)),
                             child: CustomImage(
-                              image:
-                                  '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![index].image}',
+                              image: '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![index].image}',
                               height: 60,
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -251,12 +239,7 @@ class PharmacyCategoryView extends StatelessWidget {
                           Expanded(
                               child: Text(
                             categoryController.categoryList![index].name!,
-                            style: robotoMedium.copyWith(
-                                fontSize: Dimensions.fontSizeSmall,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .color),
+                            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).textTheme.bodyMedium!.color),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
@@ -275,8 +258,7 @@ class PharmacyCategoryView extends StatelessWidget {
 
 class FoodCategoryView extends StatelessWidget {
   final CategoryController categoryController;
-  const FoodCategoryView({Key? key, required this.categoryController})
-      : super(key: key);
+  const FoodCategoryView({Key? key, required this.categoryController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -304,25 +286,23 @@ class FoodCategoryView extends StatelessWidget {
                           // },
                         ),
                       ),
-          
+
                       Wrap(
                         alignment: WrapAlignment.start,
                         children: [
-                          for (int i = 0;
-                              i < categoryController.categoryList!.length;
-                              i++)
+                          for (int i = 0; i < categoryController.categoryList!.length; i++)
                             Padding(
-                              padding: const EdgeInsets.all( 
-                               8,
-                                  ),
+                              padding: const EdgeInsets.all(
+                                8,
+                              ),
                               child: InkWell(
-                                onTap: () =>
-                                    Get.toNamed(RouteHelper.getCategoryItemRoute(
-                                  categoryController.categoryList![i].id,
-                                  categoryController.categoryList![i].name!,
-                                )),
-                                borderRadius:
-                                    BorderRadius.circular(Dimensions.radiusSmall),
+                                onTap: () => Get.toNamed(
+                                  RouteHelper.getCategoryItemRoute(
+                                    categoryController.categoryList![i].id,
+                                    categoryController.categoryList![i].name!,
+                                  ),
+                                ),
+                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                                 child: SizedBox(
                                   width: 80,
                                   child: Column(children: [
@@ -330,9 +310,7 @@ class FoodCategoryView extends StatelessWidget {
                                       height: 75,
                                       width: 75,
                                       margin: EdgeInsets.only(
-                                        left: i == 0
-                                            ? 0
-                                            : Dimensions.paddingSizeExtraSmall,
+                                        left: i == 0 ? 0 : Dimensions.paddingSizeExtraSmall,
                                         right: Dimensions.paddingSizeExtraSmall,
                                       ),
                                       decoration: BoxDecoration(
@@ -350,29 +328,22 @@ class FoodCategoryView extends StatelessWidget {
                                         // ),
                                         color: const Color(0xFFFAFCEF),
                                       ),
-                      
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: CachedNetworkImage(imageUrl: '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![i].image}',),
+                                        child: CachedNetworkImage(
+                                          imageUrl: '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![i].image}',
+                                        ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                        height: Dimensions.paddingSizeExtraSmall),
+                                    const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                        right: i == 0
-                                            ? Dimensions.paddingSizeExtraSmall
-                                            : 0,
+                                        right: i == 0 ? Dimensions.paddingSizeExtraSmall : 0,
                                       ),
                                       child: Text(
                                         categoryController.categoryList![i].name!,
-                                        style:
-                                            robotoMedium.copyWith(fontSize: 11),
-                                        maxLines:
-                                            Get.find<LocalizationController>()
-                                                    .isLtr
-                                                ? 2
-                                                : 1,
+                                        style: robotoMedium.copyWith(fontSize: 11),
+                                        maxLines: Get.find<LocalizationController>().isLtr ? 2 : 1,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.center,
                                       ),
@@ -479,22 +450,18 @@ class FoodCategoryView extends StatelessWidget {
 
 class CategoryShimmer extends StatelessWidget {
   final CategoryController categoryController;
-  const CategoryShimmer({Key? key, required this.categoryController})
-      : super(key: key);
+  const CategoryShimmer({Key? key, required this.categoryController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: 8,
-      padding: const EdgeInsets.only(
-          left: Dimensions.paddingSizeSmall,
-          top: Dimensions.paddingSizeDefault),
+      padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeDefault),
       physics: const NeverScrollableScrollPhysics(),
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 1, vertical: Dimensions.paddingSizeDefault),
+          padding: const EdgeInsets.symmetric(horizontal: 1, vertical: Dimensions.paddingSizeDefault),
           child: Shimmer(
             duration: const Duration(seconds: 2),
             enabled: true,
@@ -509,14 +476,12 @@ class CategoryShimmer extends StatelessWidget {
                       right: Dimensions.paddingSizeExtraSmall,
                     ),
                     decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusSmall),
+                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                       color: Colors.grey[300],
                     )),
                 const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                 Padding(
-                  padding: EdgeInsets.only(
-                      right: index == 0 ? Dimensions.paddingSizeExtraSmall : 0),
+                  padding: EdgeInsets.only(right: index == 0 ? Dimensions.paddingSizeExtraSmall : 0),
                   child: Container(
                     height: 10,
                     width: 50,
@@ -534,8 +499,7 @@ class CategoryShimmer extends StatelessWidget {
 
 class FoodCategoryShimmer extends StatelessWidget {
   final CategoryController categoryController;
-  const FoodCategoryShimmer({Key? key, required this.categoryController})
-      : super(key: key);
+  const FoodCategoryShimmer({Key? key, required this.categoryController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -547,15 +511,11 @@ class FoodCategoryShimmer extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        padding:
-            const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
+        padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
         itemCount: 8,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.only(
-                bottom: Dimensions.paddingSizeDefault,
-                left: Dimensions.paddingSizeDefault,
-                top: Dimensions.paddingSizeDefault),
+            padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, left: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
             child: Shimmer(
               duration: const Duration(seconds: 2),
               enabled: true,
@@ -565,11 +525,9 @@ class FoodCategoryShimmer extends StatelessWidget {
                   Container(
                       height: 60,
                       width: double.infinity,
-                      margin: const EdgeInsets.only(
-                          bottom: Dimensions.paddingSizeSmall),
+                      margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
                       decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(100)),
+                        borderRadius: const BorderRadius.all(Radius.circular(100)),
                         color: Colors.grey[300],
                       )),
                   const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -592,8 +550,7 @@ class FoodCategoryShimmer extends StatelessWidget {
 
 class PharmacyCategoryShimmer extends StatelessWidget {
   final CategoryController categoryController;
-  const PharmacyCategoryShimmer({Key? key, required this.categoryController})
-      : super(key: key);
+  const PharmacyCategoryShimmer({Key? key, required this.categoryController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -601,35 +558,26 @@ class PharmacyCategoryShimmer extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
-      padding:
-          const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
+      padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
       itemCount: 8,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.only(
-              bottom: Dimensions.paddingSizeDefault,
-              left: Dimensions.paddingSizeDefault,
-              top: Dimensions.paddingSizeDefault),
+          padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, left: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
           child: Shimmer(
             duration: const Duration(seconds: 2),
             enabled: true,
             child: Container(
               width: 70,
               decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(100),
-                    topRight: Radius.circular(100)),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(100), topRight: Radius.circular(100)),
               ),
               child: Column(children: [
                 Container(
                     height: 60,
                     width: double.infinity,
-                    margin: const EdgeInsets.only(
-                        bottom: Dimensions.paddingSizeSmall),
+                    margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
                     decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(100),
-                          topRight: Radius.circular(100)),
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(100), topRight: Radius.circular(100)),
                       color: Colors.grey[300],
                     )),
                 const SizedBox(height: Dimensions.paddingSizeSmall),

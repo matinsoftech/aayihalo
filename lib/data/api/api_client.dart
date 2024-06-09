@@ -67,6 +67,7 @@ class ApiClient extends GetxService {
       if (kDebugMode) {
         print('====> API Call: $uri\nHeader: $_mainHeaders');
       }
+
       http.Response response = await http
           .get(
             Uri.parse(appBaseUrl + uri),
@@ -75,7 +76,6 @@ class ApiClient extends GetxService {
           .timeout(Duration(seconds: timeoutInSeconds));
 
       if (uri == AppConstants.homeScreenDataUrl) {
-        print('nirajan');
         print('====> API Call: $uri\nHeader: $_mainHeaders');
       }
 
