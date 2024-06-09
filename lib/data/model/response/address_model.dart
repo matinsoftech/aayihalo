@@ -18,28 +18,32 @@ class AddressModel {
   List<ZoneData>? zoneData;
   List<int>? areaIds;
   String? email;
+  int? storeid;
 
-  AddressModel(
-      {this.id,
-      this.addressType,
-      this.contactPersonNumber,
-      this.address,
-      this.additionalAddress,
-      this.latitude,
-      this.longitude,
-      this.zoneId,
-      this.zoneIds,
-      this.method,
-      this.contactPersonName,
-      this.streetNumber,
-      this.house,
-      this.floor,
-      this.zoneData,
-      this.areaIds,
-      this.email,
-      });
+  AddressModel({
+    this.id,
+    this.addressType,
+    this.contactPersonNumber,
+    this.address,
+    this.additionalAddress,
+    this.latitude,
+    this.longitude,
+    this.zoneId,
+    this.zoneIds,
+    this.method,
+    this.contactPersonName,
+    this.streetNumber,
+    this.house,
+    this.floor,
+    this.zoneData,
+    this.areaIds,
+    this.email,
+    this.storeid,
+  });
 
   AddressModel.fromJson(Map<String, dynamic> json) {
+    storeid = json['store_id'];
+
     id = json['id'];
     addressType = json['address_type'];
     contactPersonNumber = json['contact_person_number'].toString();
@@ -47,13 +51,15 @@ class AddressModel {
     additionalAddress = json['additional_address'];
     latitude = json['latitude'].toString();
     longitude = json['longitude'].toString();
-    zoneId = (json['zone_id'] != null && json['zone_id'] != 'null') ? int.parse(json['zone_id'].toString()) : null;
+    zoneId = (json['zone_id'] != null && json['zone_id'] != 'null')
+        ? int.parse(json['zone_id'].toString())
+        : null;
     zoneIds = json['zone_ids']?.cast<int>();
     method = json['_method'];
     contactPersonName = json['contact_person_name'];
     streetNumber = json['road'];
     house = json['house'];
-    floor = json['floor'] ;
+    floor = json['floor'];
     if (json['zone_data'] != null) {
       zoneData = [];
       json['zone_data'].forEach((v) {
@@ -61,7 +67,7 @@ class AddressModel {
       });
     }
     areaIds = json['area_ids']?.cast<int>();
-    if(json['contact_person_email'] != null) {
+    if (json['contact_person_email'] != null) {
       email = json['contact_person_email'];
     }
   }
@@ -82,11 +88,13 @@ class AddressModel {
     data['road'] = streetNumber;
     data['house'] = house;
     data['floor'] = floor;
+    data['store_id'] = storeid;
+
     if (zoneData != null) {
       data['zone_data'] = zoneData!.map((v) => v.toJson()).toList();
     }
     data['area_ids'] = areaIds;
-    if(email != null) {
+    if (email != null) {
       data['contact_person_email'] = email;
     }
     return data;

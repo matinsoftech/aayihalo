@@ -21,6 +21,7 @@ class _BadWeatherWidgetState extends State<BadWeatherWidget> {
     super.initState();
 
     ZoneData? zoneData;
+    
     for (var data in Get.find<LocationController>().getUserAddress()!.zoneData!) {
       if(data.id == Get.find<LocationController>().getUserAddress()!.zoneId){
         if(data.increaseDeliveryFeeStatus == 1 && data.increaseDeliveryFeeMessage != null){

@@ -67,7 +67,7 @@ class LocationController extends GetxController implements GetxService {
   List<AddressModel>? _addressList;
   late List<AddressModel> _allAddressList;
   int _addressTypeIndex = 0;
-  final List<String?> _addressTypeList = ['home', 'office', 'others'];
+  final List<String?> _addressTypeList = ['home', 'office', 'others', 'hotel'];
   bool _isLoading = false;
   bool _inZone = false;
   int _zoneID = 0;
@@ -78,8 +78,8 @@ class LocationController extends GetxController implements GetxService {
   bool _updateAddAddressData = true;
   bool _showLocationSuggestion = true;
   bool _showSearchField = false;
-  String ? _userAddressId ;
-  String? get userAddressId =>_userAddressId;
+  String? _userAddressId;
+  String? get userAddressId => _userAddressId;
 
   List<PredictionModel> get predictionList => _predictionList;
   bool get isLoading => _isLoading;
@@ -97,10 +97,9 @@ class LocationController extends GetxController implements GetxService {
   bool get buttonDisabled => _buttonDisabled;
   bool get showLocationSuggestion => _showLocationSuggestion;
   GoogleMapController? get mapController => _mapController;
-  bool? get showSearchField => _showSearchField; 
+  bool? get showSearchField => _showSearchField;
 
-
-  AddressModel? _userAddressModel ; 
+  AddressModel? _userAddressModel;
   AddressModel? get userAddressModel => _userAddressModel;
 
   double getRestaurantDistance(LatLng storeLatLng) {
@@ -480,7 +479,7 @@ class LocationController extends GetxController implements GetxService {
 
   Future<bool> saveUserAddress(AddressModel address) async {
     String userAddress = jsonEncode(address.toJson());
-        _userAddressModel = address; 
+    _userAddressModel = address;
     return await locationRepo.saveUserAddress(userAddress, address.zoneIds,
         address.areaIds, address.latitude, address.longitude);
   }
@@ -488,14 +487,12 @@ class LocationController extends GetxController implements GetxService {
   AddressModel? getUserAddress() {
     AddressModel? addressModel;
     try {
-       
       addressModel =
           AddressModel.fromJson(jsonDecode(locationRepo.getUserAddress()!));
-          _userAddressId = addressModel.id.toString();
-          _address=addressModel.address;
+      _userAddressId = addressModel.id.toString();
+      _address = addressModel.address;
 
-           _userAddressModel = addressModel; 
-          
+      _userAddressModel = addressModel;
     } catch (_) {}
     return addressModel;
   }
@@ -659,7 +656,7 @@ class LocationController extends GetxController implements GetxService {
     }
     _loading = false;
     update();
- final _address =  AddressModel(
+    final _address = AddressModel(
       latitude: _pickPosition.latitude.toString(),
       longitude: _pickPosition.longitude.toString(),
       addressType: 'others',
@@ -700,7 +697,7 @@ class LocationController extends GetxController implements GetxService {
     );
     _userAddressModel = address;
     _address = address.address;
-    
+
     _addressTypeIndex = _addressTypeList.indexOf(address.addressType);
   }
 

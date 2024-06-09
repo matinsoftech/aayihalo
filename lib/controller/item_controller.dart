@@ -92,7 +92,7 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
-  void getHomeScreenData({required String lat, required String long}) async {
+  Future<void> getHomeScreenData({required String lat, required String long}) async {
     _homeScreenDataModel = null;
     Response response = await itemRepo.getHomeScreenData(latitude: lat, longitude: long);
     if (response.statusCode == 200) {
