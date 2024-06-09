@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/data/api/api_checker.dart';
 import 'package:sixam_mart/data/model/response/banner_model.dart';
@@ -7,8 +11,10 @@ import 'package:sixam_mart/data/model/response/zone_response_model.dart';
 import 'package:sixam_mart/data/repository/banner_repo.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
+import 'package:sixam_mart/models/BannerWithStoreIdModel';
 
 class BannerController extends GetxController implements GetxService {
+  final ItemController itemController = Get.find<ItemController>();
   final BannerRepo bannerRepo;
   BannerController({required this.bannerRepo});
 
@@ -34,6 +40,7 @@ class BannerController extends GetxController implements GetxService {
 
   Future<void> getFeaturedBanner() async {
     Response response = await bannerRepo.getFeaturedBannerList();
+
     if (response.statusCode == 200) {
       _featuredBannerList = [];
       _featuredBannerDataList = [];
@@ -50,13 +57,13 @@ class BannerController extends GetxController implements GetxService {
       }
       for (var banner in bannerModel.banners!) {
         _featuredBannerList!.add(banner.image);
-        if(banner.item != null && moduleIdList.contains(banner.item!.moduleId)) {
+        if (banner.item != null && moduleIdList.contains(banner.item!.moduleId)) {
           _featuredBannerDataList!.add(banner.item);
-        }else if(banner.store != null && moduleIdList.contains(banner.store!.moduleId)) {
+        } else if (banner.store != null && moduleIdList.contains(banner.store!.moduleId)) {
           _featuredBannerDataList!.add(banner.store);
-        }else if(banner.type == 'default') {
+        } else if (banner.type == 'default') {
           _featuredBannerDataList!.add(banner.link);
-        }else{
+        } else {
           _featuredBannerDataList!.add(null);
         }
       }
@@ -67,9 +74,10 @@ class BannerController extends GetxController implements GetxService {
   }
 
   Future<void> getBannerList(bool reload) async {
-    if(_bannerImageList == null || reload) {
+    if (_bannerImageList == null || reload) {
       _bannerImageList = null;
       Response response = await bannerRepo.getBannerList();
+
       if (response.statusCode == 200) {
         _bannerImageList = [];
         _bannerDataList = [];
@@ -80,13 +88,13 @@ class BannerController extends GetxController implements GetxService {
         }
         for (var banner in bannerModel.banners!) {
           _bannerImageList!.add(banner.image);
-          if(banner.item != null) {
+          if (banner.item != null) {
             _bannerDataList!.add(banner.item);
-          }else if(banner.store != null){
+          } else if (banner.store != null) {
             _bannerDataList!.add(banner.store);
-          }else if(banner.type == 'default'){
+          } else if (banner.type == 'default') {
             _bannerDataList!.add(banner.link);
-          }else{
+          } else {
             _bannerDataList!.add(null);
           }
         }
@@ -98,7 +106,7 @@ class BannerController extends GetxController implements GetxService {
   }
 
   Future<void> getTaxiBannerList(bool reload) async {
-    if(_taxiBannerImageList == null || reload) {
+    if (_taxiBannerImageList == null || reload) {
       _taxiBannerImageList = null;
       Response response = await bannerRepo.getTaxiBannerList();
       if (response.statusCode == 200) {
@@ -111,17 +119,17 @@ class BannerController extends GetxController implements GetxService {
         }
         for (var banner in bannerModel.banners!) {
           _taxiBannerImageList!.add(banner.image);
-          if(banner.item != null) {
+          if (banner.item != null) {
             _taxiBannerDataList!.add(banner.item);
-          }else if(banner.store != null){
+          } else if (banner.store != null) {
             _taxiBannerDataList!.add(banner.store);
-          }else if(banner.type == 'default'){
+          } else if (banner.type == 'default') {
             _taxiBannerDataList!.add(banner.link);
-          }else{
+          } else {
             _taxiBannerDataList!.add(null);
           }
         }
-        if(ResponsiveHelper.isDesktop(Get.context) && _taxiBannerImageList!.length % 2 != 0){
+        if (ResponsiveHelper.isDesktop(Get.context) && _taxiBannerImageList!.length % 2 != 0) {
           _taxiBannerImageList!.add(_taxiBannerImageList![0]);
           _taxiBannerDataList!.add(_taxiBannerDataList![0]);
         }
@@ -133,7 +141,7 @@ class BannerController extends GetxController implements GetxService {
   }
 
   Future<void> getParcelOtherBannerList(bool reload) async {
-    if(_parcelOtherBannerModel == null || reload) {
+    if (_parcelOtherBannerModel == null || reload) {
       Response response = await bannerRepo.getParcelOtherBannerList();
       if (response.statusCode == 200) {
         _parcelOtherBannerModel = ParcelOtherBannerModel.fromJson(response.body);
@@ -145,7 +153,7 @@ class BannerController extends GetxController implements GetxService {
   }
 
   Future<void> getPromotionalBanner(bool reload) async {
-    if(_promotionalBanner == null || reload) {
+    if (_promotionalBanner == null || reload) {
       Response response = await bannerRepo.getPromotionalBanner();
       if (response.statusCode == 200) {
         _promotionalBanner = PromotionalBanner.fromJson(response.body);
@@ -158,7 +166,36 @@ class BannerController extends GetxController implements GetxService {
 
   void setCurrentIndex(int index, bool notify) {
     _currentIndex = index;
-    if(notify) {
+    if (notify) {
+      update();
+    }
+  }
+
+  // by nirajan
+  var isLoading = false;
+  BannerWithStoreIdModel? bannerWithStoreIdModel;
+  List<String> allBannerImages = [];
+  Future<void> getBannerWithStoreId(var storeId) async {
+    try {
+      isLoading = true;
+      update();
+      var response = await bannerRepo.getBannerWithStoreId(storeId);
+      // print('store id is nirajan $storeId in here and response is ${response.statusCode}');
+      if (response.statusCode == 200) {
+        bannerWithStoreIdModel = BannerWithStoreIdModel.fromJson(response.body);
+        allBannerImages = [
+          ...bannerWithStoreIdModel!.topBanners.map((bannerImage) => bannerImage.image.toString()),
+          ...bannerWithStoreIdModel!.midBanners.map((bannerImage) => bannerImage.image.toString()),
+          // if (bannerWithStoreIdModel!.moduleBottomBanner != null) bannerWithStoreIdModel!.moduleBottomBanner!.value.toString(),
+        ];
+        // print('$storeId is here to ');
+      } else {
+        debugPrint('Failed to load banners: ${response.statusCode}');
+      }
+    } catch (exception) {
+      debugPrint('Error getBanner with store id $exception');
+    } finally {
+      isLoading = false;
       update();
     }
   }

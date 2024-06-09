@@ -539,15 +539,15 @@ class OrderInfoWidget extends StatelessWidget {
           SizedBox(height: !parcel ? Dimensions.paddingSizeSmall : 0),
 
           isDesktop ? const SizedBox(height: Dimensions.paddingSizeDefault) : const SizedBox(),
-          isDesktop
-              ? Text(
-                  parcel
-                      ? 'parcel_category'.tr
-                      : Get.find<SplashController>().getModuleConfig(order.moduleType).showRestaurantText!
-                          ? 'restaurant_details'.tr
-                          : 'store_details'.tr,
-                  style: robotoMedium)
-              : const SizedBox(),
+          // isDesktop
+          //     ? Text(
+          //         parcel
+          //             ? 'parcel_category'.tr
+          //             : Get.find<SplashController>().getModuleConfig(order.moduleType).showRestaurantText!
+          //                 ? 'restaurant_details'.tr
+          //                 : 'store_details'.tr,
+          //         style: robotoMedium)
+          //     : const SizedBox(),
           isDesktop ? const SizedBox(height: Dimensions.paddingSizeDefault) : const SizedBox(),
           Container(
             decoration: BoxDecoration(
@@ -557,6 +557,7 @@ class OrderInfoWidget extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              /*
               !isDesktop
                   ? Text(
                       parcel
@@ -575,72 +576,76 @@ class OrderInfoWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
                           child: Text('no_restaurant_data_found'.tr, maxLines: 1, overflow: TextOverflow.ellipsis, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
                         ))
-                      : Row(children: [
-                          ClipOval(
-                              child: CustomImage(
-                            image: parcel ? '${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}/${order.parcelCategory!.image}' : '${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${order.store!.logo}',
-                            height: 35,
-                            width: 35,
-                            fit: BoxFit.cover,
-                          )),
-                          const SizedBox(width: Dimensions.paddingSizeSmall),
-                          Expanded(
-                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text(
-                              parcel ? order.parcelCategory!.name! : order.store!.name!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                            ),
-                            Text(
-                              parcel ? order.parcelCategory!.description! : order.store?.address ?? '',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
-                            ),
-                          ])),
-                          (!parcel && order.orderType == 'take_away' && (order.orderStatus == 'pending' || order.orderStatus == 'accepted' || order.orderStatus == 'confirmed' || order.orderStatus == 'processing' || order.orderStatus == 'handover' || order.orderStatus == 'picked_up'))
-                              ? TextButton.icon(
-                                  onPressed: () async {
-                                    if (!parcel) {
-                                      String url = 'https://www.google.com/maps/dir/?api=1&destination=${order.store!.latitude}'
-                                          ',${order.store!.longitude}&mode=d';
-                                      if (await canLaunchUrlString(url)) {
-                                        await launchUrlString(url);
-                                      } else {
-                                        showCustomSnackBar('unable_to_launch_google_map'.tr);
-                                      }
-                                    }
-                                  },
-                                  icon: const Icon(Icons.directions),
-                                  label: Text('direction'.tr),
-                                )
-                              : const SizedBox(),
-                          (!parcel && order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refunded')
-                              ? InkWell(
-                                  onTap: () async {
-                                    await Get.toNamed(RouteHelper.getChatRoute(
-                                      notificationBody: NotificationBody(orderId: order.id, restaurantId: order.store!.vendorId),
-                                      user: User(id: order.store!.vendorId, fName: order.store!.name, lName: '', image: order.store!.logo),
-                                    ));
-                                  },
-                                  child: Image.asset(Images.chatOrderDetails, height: 20, width: 20),
-                                )
-                              : const SizedBox(),
-                          !isGuestLoggedIn && (Get.find<SplashController>().configModel!.refundActiveStatus! && order.orderStatus == 'delivered' && !parcel && (parcel || (orderController.orderDetails!.isNotEmpty && orderController.orderDetails![0].itemCampaignId == null)))
-                              ? InkWell(
-                                  onTap: () => Get.toNamed(RouteHelper.getRefundRequestRoute(order.id.toString())),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Theme.of(context).primaryColor, width: 1),
-                                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall, vertical: Dimensions.paddingSizeSmall),
-                                    child: Text('refund_this_order'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)),
-                                  ),
-                                )
-                              : const SizedBox(),
-                        ]),
+                      : */
+
+              Row(children: [
+                // ClipOval(
+                //   child: CustomImage(
+                //     image: parcel ? '${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}/${order.parcelCategory!.image}' : '${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${order.store!.logo}',
+                //     height: 35,
+                //     width: 35,
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
+                const SizedBox(width: Dimensions.paddingSizeSmall),
+                // Expanded(
+                //     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                //   Text(
+                //     parcel ? order.parcelCategory!.name! : order.store!.name!,
+                //     maxLines: 1,
+                //     overflow: TextOverflow.ellipsis,
+                //     style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                //   ),
+                //   Text(
+                //     parcel ? order.parcelCategory!.description! : order.store?.address ?? '',
+                //     maxLines: 1,
+                //     overflow: TextOverflow.ellipsis,
+                //     style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                //   ),
+                // ])),
+
+                (!parcel && order.orderType == 'take_away' && (order.orderStatus == 'pending' || order.orderStatus == 'accepted' || order.orderStatus == 'confirmed' || order.orderStatus == 'processing' || order.orderStatus == 'handover' || order.orderStatus == 'picked_up'))
+                    ? TextButton.icon(
+                        onPressed: () async {
+                          if (!parcel) {
+                            String url = 'https://www.google.com/maps/dir/?api=1&destination=${order.store!.latitude}'
+                                ',${order.store!.longitude}&mode=d';
+                            if (await canLaunchUrlString(url)) {
+                              await launchUrlString(url);
+                            } else {
+                              showCustomSnackBar('unable_to_launch_google_map'.tr);
+                            }
+                          }
+                        },
+                        icon: const Icon(Icons.directions),
+                        label: Text('direction'.tr),
+                      )
+                    : const SizedBox(),
+                (!parcel && order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refunded')
+                    ? InkWell(
+                        onTap: () async {
+                          await Get.toNamed(RouteHelper.getChatRoute(
+                            notificationBody: NotificationBody(orderId: order.id, restaurantId: order.store!.vendorId),
+                            user: User(id: order.store!.vendorId, fName: order.store!.name, lName: '', image: order.store!.logo),
+                          ));
+                        },
+                        child: Image.asset(Images.chatOrderDetails, height: 20, width: 20),
+                      )
+                    : const SizedBox(),
+                !isGuestLoggedIn && (Get.find<SplashController>().configModel!.refundActiveStatus! && order.orderStatus == 'delivered' && !parcel && (parcel || (orderController.orderDetails!.isNotEmpty && orderController.orderDetails![0].itemCampaignId == null)))
+                    ? InkWell(
+                        onTap: () => Get.toNamed(RouteHelper.getRefundRequestRoute(order.id.toString())),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+                            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall, vertical: Dimensions.paddingSizeSmall),
+                          child: Text('refund_this_order'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)),
+                        ),
+                      )
+                    : const SizedBox(),
+              ]),
             ]),
           ),
           const SizedBox(height: Dimensions.paddingSizeSmall),

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:sixam_mart/controller/banner_controller.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/api/api_checker.dart';
@@ -96,6 +97,9 @@ class ItemController extends GetxController implements GetxService {
     Response response = await itemRepo.getHomeScreenData(latitude: lat, longitude: long);
     if (response.statusCode == 200) {
       _homeScreenDataModel = HomeScreenDataModel.fromJson(response.body);
+      // print('nirajan showing data ${_homeScreenDataModel?.nearestStore?.id}');
+      //by nirajan call banner using store id
+      Get.find<BannerController>().getBannerWithStoreId(_homeScreenDataModel?.nearestStore!.id);
     } else {
       ApiChecker.checkApi(response);
     }
@@ -399,9 +403,9 @@ class ItemController extends GetxController implements GetxService {
       //   }
       // }
     }
-    if (notify) {
-      update();
-    }
+    // if (notify) {
+    //   update();
+    // }
     return _cartIndex;
   }
 

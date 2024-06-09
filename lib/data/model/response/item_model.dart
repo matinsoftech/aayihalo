@@ -131,24 +131,24 @@ class Item {
     image = json['image'];
     images = json['images'] != null ? json['images'].cast<String>() : [];
     categoryId = json['category_id'];
-    if (json['category_ids'] != null) {
-      categoryIds = [];
-      json['category_ids'].forEach((v) {
-        categoryIds!.add(CategoryIds.fromJson(v));
-      });
-    }
+    // if (json['category_ids'] != null) {
+    //   categoryIds = [];
+    //   json['category_ids'].forEach((v) {
+    //     categoryIds!.add(CategoryIds.fromJson(v));
+    //   });
+    // }
     variations = [];
-    if (json['variations'] != null) {
-      json['variations'].forEach((v) {
-        variations!.add(Variation.fromJson(v));
-      });
-    }
+    // if (json['variations'] != null) {
+    //   json['variations'].forEach((v) {
+    //     variations!.add(Variation.fromJson(v));
+    //   });
+    // }
     foodVariations = [];
-    if (json['food_variations'] != null && json['food_variations'].isNotEmpty) {
-      json['food_variations'].forEach((v) {
-        foodVariations!.add(FoodVariation.fromJson(v));
-      });
-    }
+    // if (json['food_variations'] != null && json['food_variations'].isNotEmpty) {
+    //   json['food_variations'].forEach((v) {
+    //     foodVariations!.add(FoodVariation.fromJson(v));
+    //   });
+    // }
     if (json['add_ons'] != null) {
       addOns = [];
       if (json['add_ons'].length > 0 && json['add_ons'][0] != '[') {
@@ -162,11 +162,24 @@ class Item {
       }
     }
     if (json['choice_options'] != null) {
-      choiceOptions = [];
-      json['choice_options'].forEach((v) {
-        choiceOptions!.add(ChoiceOptions.fromJson(v));
-      });
+      // Check if json['choice_options'] is a List
+      if (json['choice_options'] is List) {
+        // Parse json['choice_options'] as List<dynamic>
+        List<dynamic> choiceOptionsJson = json['choice_options'];
+        choiceOptions = [];
+
+        // Iterate over the list and parse each element
+        choiceOptionsJson.forEach((v) {
+          choiceOptions!.add(ChoiceOptions.fromJson(v));
+        });
+      } else {
+        // Handle the case where json['choice_options'] is not a List
+        // It could be a String, so you might need to parse it differently
+        // For example:
+        // choiceOptions = [ChoiceOptions.fromJson(json['choice_options'])];
+      }
     }
+
     price = json['price'].toDouble();
     tax = json['tax']?.toDouble();
     discount = json['discount'].toDouble();
@@ -176,7 +189,15 @@ class Item {
     storeId = json['store_id'];
     storeName = json['store_name'];
     zoneId = json['zone_id'];
-    storeDiscount = json['store_discount'].toDouble();
+    if (json['store_discount'] != null) {
+      // Check if json['store_discount'] is not null
+      storeDiscount = json['store_discount'].toDouble();
+    } else {
+      // Handle the case where json['store_discount'] is null
+      // You may assign a default value or handle it based on your application logic
+      storeDiscount = 0.0; // or any other default value you prefer
+    }
+
     scheduleOrder = json['schedule_order'];
     avgRating = json['avg_rating'].toDouble();
     ratingCount = json['rating_count'];

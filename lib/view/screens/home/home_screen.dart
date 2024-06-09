@@ -372,135 +372,60 @@ class _HomeScreenState extends State<HomeScreen> {
                                               //     ?
                                               iController.homeScreenDataModel?.deliveryTime != null
                                                   ? const GroceryHomeScreen()
-                                                  : SizedBox(
-                                                      width: Get.size.width,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                                        child: Column(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                          children: [
-                                                            const SizedBox(
-                                                              height: 120,
+                                                  : FutureBuilder(
+                                                      future: Future.delayed(const Duration(seconds: 3)),
+                                                      builder: (context, snapshot) {
+                                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                                          return const Padding(
+                                                            padding: EdgeInsets.only(top: 30.0),
+                                                            child: Center(
+                                                              child: CircularProgressIndicator(),
                                                             ),
-                                                            Image.asset(
-                                                              'assets/image/unserviceable.png',
-                                                              width: 150,
-                                                              height: 150,
-                                                            ),
-                                                            const SizedBox(height: 20),
-                                                            Text(
-                                                              'Hold tight! Faster deliveries are on the way',
-                                                              textAlign: TextAlign.justify,
-                                                              style: robotoMedium.copyWith(
-                                                                fontWeight: FontWeight.w600,
-                                                                color: Theme.of(context).textTheme.bodyLarge!.color,
-                                                                fontSize: Dimensions.fontSizeLarge,
+                                                          );
+                                                        } else {
+                                                          return SizedBox(
+                                                            width: Get.size.width,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                children: [
+                                                                  const SizedBox(
+                                                                    height: 120,
+                                                                  ),
+                                                                  Image.asset(
+                                                                    'assets/image/unserviceable.png',
+                                                                    width: 150,
+                                                                    height: 150,
+                                                                  ),
+                                                                  const SizedBox(height: 20),
+                                                                  Text(
+                                                                    'Hold tight! Faster deliveries are on the way',
+                                                                    textAlign: TextAlign.justify,
+                                                                    style: robotoMedium.copyWith(
+                                                                      fontWeight: FontWeight.w600,
+                                                                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                                                                      fontSize: Dimensions.fontSizeLarge,
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(height: 4),
+                                                                  Text(
+                                                                    'Unfortunately we are yet to commence operation in your location. Please select a different location.',
+                                                                    textAlign: TextAlign.center,
+                                                                    style: robotoMedium.copyWith(
+                                                                      fontWeight: FontWeight.w400,
+                                                                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                                                                      fontSize: Dimensions.fontSizeLarge,
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
                                                             ),
-                                                            const SizedBox(height: 4),
-                                                            Text(
-                                                              'Unfortunately we are yet to commence operation in you location, Please select a  different location',
-                                                              textAlign: TextAlign.center,
-                                                              style: robotoMedium.copyWith(
-                                                                fontWeight: FontWeight.w400,
-                                                                color: Theme.of(context).textTheme.bodyLarge!.color,
-                                                                fontSize: Dimensions.fontSizeLarge,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
+                                                          );
+                                                        }
+                                                      },
                                                     ),
-
-                                              // : isPharmacy
-                                              //     ? const PharmacyHomeScreen()
-                                              //     : isFood
-                                              //         ? const FoodHomeScreen()
-                                              //         : isShop
-                                              //             ? const ShopHomeScreen()
-                                              //             : const SizedBox(),
-                                              // Padding(
-                                              //   padding: EdgeInsets.fromLTRB(
-                                              //       Get.find<LocalizationController>()
-                                              //               .isLtr
-                                              //           ? 10
-                                              //           : 0,
-                                              //       15,
-                                              //       0,
-                                              //       5),
-                                              //   child:
-                                              //       GetBuilder<StoreController>(
-                                              //           builder:
-                                              //               (storeController) {
-                                              //     return Row(children: [
-                                              //       Expanded(
-                                              //           child: Padding(
-                                              //         padding: EdgeInsets.only(
-                                              //             right: Get.find<
-                                              //                         LocalizationController>()
-                                              //                     .isLtr
-                                              //                 ? 0
-                                              //                 : 10),
-                                              //         child: Text(
-                                              //           '${storeController.storeModel?.totalSize ?? 0} ${Get.find<SplashController>().configModel!.moduleConfig!.module!.showRestaurantText! ? 'restaurants'.tr : 'stores'.tr}',
-                                              //           style: robotoMedium.copyWith(
-                                              //               fontSize: Dimensions
-                                              //                   .fontSizeLarge),
-                                              //         ),
-                                              //       )),
-                                              //       FilterView(
-                                              //           storeController:
-                                              //               storeController),
-                                              //     ]);
-                                              //   }),
-                                              // ),
-
-                                              // GetBuilder<StoreController>(
-                                              //     builder: (storeController) {
-                                              //   return PaginatedListView(
-                                              //     scrollController:
-                                              //         _scrollController,
-                                              //     totalSize: storeController
-                                              //         .storeModel?.totalSize,
-                                              //     offset: storeController
-                                              //         .storeModel?.offset,
-                                              //     onPaginate:
-                                              //         (int? offset) async =>
-                                              //             await storeController
-                                              //                 .getStoreList(
-                                              //                     offset!, false),
-                                              //     itemView: ItemsView(
-                                              //       isStore: true,
-                                              //       items: null,
-                                              //       isFoodOrGrocery:
-                                              //           (isFood || isGrocery),
-                                              //       stores: storeController
-                                              //           .storeModel?.stores,
-                                              //       padding: EdgeInsets.symmetric(
-                                              //         horizontal: ResponsiveHelper
-                                              //                 .isDesktop(context)
-                                              //             ? Dimensions
-                                              //                 .paddingSizeExtraSmall
-                                              //             : Dimensions
-                                              //                 .paddingSizeSmall,
-                                              //         vertical: ResponsiveHelper
-                                              //                 .isDesktop(context)
-                                              //             ? Dimensions
-                                              //                 .paddingSizeExtraSmall
-                                              //             : Dimensions
-                                              //                 .paddingSizeDefault,
-                                              //       ),
-                                              //     ),
-                                              //   );
-                                              // }),
-
-                                              // SizedBox(
-                                              //     height:
-                                              //         ResponsiveHelper.isDesktop(
-                                              //                 context)
-                                              //             ? 0
-                                              //             : 100),
                                             ],
                                           )
                                         : ModuleView(splashController: splashController),
