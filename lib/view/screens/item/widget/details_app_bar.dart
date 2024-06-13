@@ -23,16 +23,14 @@ class DetailsAppBar extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size(double.maxFinite, 50);
 }
 
-class DetailsAppBarState extends State<DetailsAppBar>
-    with SingleTickerProviderStateMixin {
+class DetailsAppBarState extends State<DetailsAppBar> with SingleTickerProviderStateMixin {
   late AnimationController controller;
 
   @override
   void initState() {
     super.initState();
 
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 1000), vsync: this);
+    controller = AnimationController(duration: const Duration(milliseconds: 1000), vsync: this);
   }
 
   @override
@@ -47,9 +45,7 @@ class DetailsAppBarState extends State<DetailsAppBar>
 
   @override
   Widget build(BuildContext context) {
-    final Animation<double> offsetAnimation = Tween(begin: 0.0, end: 15.0)
-        .chain(CurveTween(curve: Curves.elasticIn))
-        .animate(controller)
+    final Animation<double> offsetAnimation = Tween(begin: 0.0, end: 15.0).chain(CurveTween(curve: Curves.elasticIn)).animate(controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           controller.reverse();
@@ -58,20 +54,17 @@ class DetailsAppBarState extends State<DetailsAppBar>
 
     return AppBar(
       leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios,
-              color: Theme.of(context).textTheme.bodyLarge!.color),
-          onPressed: () => Get.back(),),
+        icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).textTheme.bodyLarge!.color),
+        onPressed: () => Get.back(),
+      ),
       backgroundColor: Theme.of(context).cardColor,
       elevation: 0,
       title: Text(
         'item_details'.tr,
-        style: robotoMedium.copyWith(
-            fontSize: Dimensions.fontSizeLarge,
-            color: Theme.of(context).textTheme.bodyLarge!.color),
+        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyLarge!.color),
       ),
       centerTitle: true,
       actions: [
-        
         GetBuilder<WishListController>(builder: (wishController) {
           return InkWell(
             onTap: () {
@@ -86,9 +79,7 @@ class DetailsAppBarState extends State<DetailsAppBar>
               }
             },
             child: Icon(
-              wishController.wishItemIdList.contains(widget.item.id)
-                  ? Icons.favorite
-                  : Icons.favorite_border,
+              wishController.wishItemIdList.contains(widget.item.id) ? Icons.favorite : Icons.favorite_border,
               size: 25,
               color: Theme.of(context).primaryColor,
             ),

@@ -19,15 +19,14 @@ class CartController extends GetxController implements GetxService {
   List<CartDataModel> _cartList = [];
   List<OnlineCartModel> _onlineCartList = [];
 
-  AddressModel? addressModel; 
+  AddressModel? addressModel;
 
-  int _deliveryAddressId =-1 ;  
-  int get deliveryAddressId => _deliveryAddressId ;
+  int _deliveryAddressId = -1;
+  int get deliveryAddressId => _deliveryAddressId;
 
   set deliveryAddressId(int id) {
-    _deliveryAddressId = id ; 
+    _deliveryAddressId = id;
   }
-
 
   double _subTotal = 0;
   double _itemPrice = 0;
@@ -35,30 +34,25 @@ class CartController extends GetxController implements GetxService {
   double _addOns = 0;
   double _variationPrice = 0;
   List<List<AddOns>> _addOnsList = [];
-  List<bool> _availableList = []; 
+  List<bool> _availableList = [];
   String _variationType = '';
-  String get variationType => _variationType; 
+  String get variationType => _variationType;
 
   set variationType(String type) {
-    _variationType = type ; 
+    _variationType = type;
   }
-  List<String> notAvailableList = [
-    'Remove it from my cart',
-    'I’ll wait until it’s restocked',
-    'Please cancel the order',
-    'Call me ASAP',
-    'Notify me when it’s back'
-  ];
+
+  List<String> notAvailableList = ['Remove it from my cart', 'I’ll wait until it’s restocked', 'Please cancel the order', 'Call me ASAP', 'Notify me when it’s back'];
   bool _addCutlery = false;
   int _notAvailableIndex = -1;
   int _currentIndex = 0;
   bool _isLoading = false;
 
-  int _currentItemId = 0 ; 
-  int get currentItemId => _currentItemId; 
+  int _currentItemId = 0;
+  int get currentItemId => _currentItemId;
 
   set currentItemId(int index) {
-    _currentItemId = index ; 
+    _currentItemId = index;
   }
 
   bool _addingToCart = false;
@@ -326,19 +320,14 @@ class CartController extends GetxController implements GetxService {
 
   void clearCartList() {
     _cartList = [];
-    if ((Get.find<AuthController>().isLoggedIn() ||
-            Get.find<AuthController>().isGuestLoggedIn()) &&
-        (Get.find<SplashController>().module != null ||
-            Get.find<SplashController>().cacheModule != null)) {
+    if ((Get.find<AuthController>().isLoggedIn() || Get.find<AuthController>().isGuestLoggedIn()) && (Get.find<SplashController>().module != null || Get.find<SplashController>().cacheModule != null)) {
       clearCartOnline();
     }
   }
 
-  int isExistInCart(
-      int? itemID, String variationType, bool isUpdate, int? cartIndex) {
+  int isExistInCart(int? itemID, String variationType, bool isUpdate, int? cartIndex) {
     for (int i = 0; i < _cartList.length; i++) {
-      if (_cartList[i].item!.id == itemID &&
-          _cartList[i].variation == variationType) {
+      if (_cartList[i].item!.id == itemID && _cartList[i].variation == variationType) {
         if (isUpdate) {
           // setQuantity(true, i, _cartList[i].item!.stock, _cartList[i].item!.quantityLimit);
         }
@@ -426,12 +415,10 @@ class CartController extends GetxController implements GetxService {
   //   return success;
   // }
 
-  Future<void> updateCartQuantityOnline(
-      int cartId, double price, int quantity) async {
+  Future<void> updateCartQuantityOnline(int cartId, double price, int quantity) async {
     _isLoading = true;
     update();
-    Response response =
-        await cartRepo.updateCartQuantityOnline(cartId, quantity);
+    Response response = await cartRepo.updateCartQuantityOnline(cartId, quantity);
     if (response.statusCode == 200) {
       getCartDataOnline();
       // calculationCart();
@@ -443,8 +430,7 @@ class CartController extends GetxController implements GetxService {
   }
 
   Future<void> getCartDataOnline() async {
-    if (Get.find<SplashController>().module != null ||
-        Get.find<SplashController>().cacheModule != null) {
+    if (Get.find<SplashController>().module != null || Get.find<SplashController>().cacheModule != null) {
       print('---------cart data call------');
       _isLoading = true;
 
@@ -485,11 +471,7 @@ class CartController extends GetxController implements GetxService {
     final cartId = _cartList[cartIndex].id!;
     _cartList.removeAt(cartIndex);
 
-    Response response = await cartRepo.removeCartItemOnline(
-        cartId,
-        Get.find<AuthController>().isLoggedIn()
-            ? null
-            : Get.find<AuthController>().getGuestId());
+    Response response = await cartRepo.removeCartItemOnline(cartId, Get.find<AuthController>().isLoggedIn() ? null : Get.find<AuthController>().getGuestId());
     if (response.statusCode == 201) {
       isSuccess = true;
 
@@ -540,11 +522,7 @@ class CartController extends GetxController implements GetxService {
   //   return variant;
   // }
 
-  Future<void> addToCart(
-      {required int quantity,
-      required int productId,
-      int? index,
-      required String? variantType}) async {
+  Future<void> addToCart({required int quantity, required int productId, int? index, required String? variantType}) async {
     final Map<String, dynamic> body = {
       "product_id": productId,
       "quantity": quantity,
@@ -554,7 +532,7 @@ class CartController extends GetxController implements GetxService {
     try {
       /// the product id is the id of the product that is being added to the cart
 
-      _addingToCart = true; 
+      _addingToCart = true;
       _isLoading = true;
       update();
       if (index != null) {
@@ -577,19 +555,18 @@ class CartController extends GetxController implements GetxService {
   int getItemQuantity({required var item}) {
     for (CartDataModel data in _cartList) {
       if (data.item!.id == item.id) {
+        print('items is found in cart');
         return data.quantity!;
       }
     }
+    print('items is not found in cart');
+
     return 0; // Return 0 if the item is not found
   }
 
-  Future<void> placeOrder(
-      {String? couponCode, required int deliveryAddressId}) async {
+  Future<void> placeOrder({String? couponCode, required int deliveryAddressId}) async {
     try {
-      final body = {
-        "delivery_address_id": deliveryAddressId,
-        "coupon_code": couponCode
-      };
+      final body = {"delivery_address_id": deliveryAddressId, "coupon_code": couponCode};
 
       final res = await cartRepo.placeOrder(body: body);
 

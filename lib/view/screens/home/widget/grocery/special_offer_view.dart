@@ -12,85 +12,77 @@ import 'package:sixam_mart/view/base/card_design/item_card.dart';
 class SpecialOfferView extends StatelessWidget {
   final bool isFood;
   final bool isShop;
-  const SpecialOfferView({Key? key, required this.isFood, required this.isShop})
-      : super(key: key);
+  const SpecialOfferView({
+    Key? key,
+    required this.isFood,
+    required this.isShop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ItemController>(builder: (itemController) {
-      List<Item>? discountedItemList = itemController.discountedItemList;
+    return GetBuilder<ItemController>(
+      builder: (itemController) {
+        List<Item>? discountedItemList = itemController.discountedItemList;
 
-      return discountedItemList != null
-          ? discountedItemList.isNotEmpty
-              ? Column(children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: Dimensions.paddingSizeDefault,
-                      left: Dimensions.paddingSizeDefault,
-                      right: Dimensions.paddingSizeDefault),
-                  child: TitleWidget(
-                    title: 'special_offer'.tr,
-                    image: Images.discountOfferIcon,
-                    onTap: () => Get.toNamed(
-                        RouteHelper.getPopularItemRoute(false, true)),
-                  ),
-                ),
-               
-                SizedBox(
-                  height: 285,
-                  width: Get.width,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                        left: Dimensions.paddingSizeDefault),
-                    itemCount: discountedItemList.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: Dimensions.paddingSizeDefault,
-                            right: Dimensions.paddingSizeDefault,
-                            top: Dimensions.paddingSizeDefault),
-                        child: ItemCard(
-                            item: discountedItemList[index],
-                            isPopularItem: false,
-                            isFood: isFood,
-                            isShop: isShop),
-                      );
-                    },
-                  ),
-                ),
-              ])
-              : const SizedBox()
-          : const ItemShimmerView(isPopularItem: false);
-    });
+        return discountedItemList != null
+            ? discountedItemList.isNotEmpty
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault, left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault),
+                        child: TitleWidget(
+                          title: 'special_offer'.tr,
+                          image: Images.discountOfferIcon,
+                          onTap: () => Get.toNamed(RouteHelper.getPopularItemRoute(false, true)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 285,
+                        width: Get.width,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
+                          itemCount: discountedItemList.length,
+                          itemBuilder: (context, index) {
+                            // print('Category product length: ${discountedItemList[index].categoryProducts?.length}');
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
+                              child: ItemCard(
+                                item: discountedItemList[index],
+                                isPopularItem: false,
+                                isFood: isFood,
+                                isShop: isShop,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                : const SizedBox()
+            : const ItemShimmerView(isPopularItem: false);
+      },
+    );
   }
 }
 
 class ItemShimmerView extends StatelessWidget {
   final bool isPopularItem;
-  const ItemShimmerView({Key? key, required this.isPopularItem})
-      : super(key: key);
+  const ItemShimmerView({Key? key, required this.isPopularItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
+      padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
       child: Container(
         color: Theme.of(context).disabledColor.withOpacity(0.1),
         child: Column(children: [
           Padding(
-            padding: const EdgeInsets.only(
-                top: Dimensions.paddingSizeDefault,
-                left: Dimensions.paddingSizeDefault,
-                right: Dimensions.paddingSizeDefault),
+            padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault, left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault),
             child: TitleWidget(
-              title:
-                  isPopularItem ? 'most_popular_items'.tr : 'special_offer'.tr,
-              image: isPopularItem
-                  ? Images.mostPopularIcon
-                  : Images.discountOfferIcon,
+              title: isPopularItem ? 'most_popular_items'.tr : 'special_offer'.tr,
+              image: isPopularItem ? Images.mostPopularIcon : Images.discountOfferIcon,
             ),
           ),
           SizedBox(
@@ -99,15 +91,11 @@ class ItemShimmerView extends StatelessWidget {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               physics: const NeverScrollableScrollPhysics(),
-              padding:
-                  const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
+              padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
               itemCount: 6,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: Dimensions.paddingSizeDefault,
-                      right: Dimensions.paddingSizeDefault,
-                      top: Dimensions.paddingSizeDefault),
+                  padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
                   child: Shimmer(
                     duration: const Duration(seconds: 2),
                     enabled: true,
@@ -116,8 +104,7 @@ class ItemShimmerView extends StatelessWidget {
                       width: 200,
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusLarge),
+                        borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
                       ),
                       child: Column(children: [
                         Container(
@@ -125,13 +112,11 @@ class ItemShimmerView extends StatelessWidget {
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
-                            borderRadius:
-                                BorderRadius.circular(Dimensions.radiusLarge),
+                            borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
                           ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                          padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
                           child: Column(children: [
                             Container(
                               height: 20,

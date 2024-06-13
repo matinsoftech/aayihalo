@@ -5,6 +5,7 @@ import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
+import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
 
 class ItemImageView extends StatelessWidget {
@@ -15,18 +16,13 @@ class ItemImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String?> imageList = [];
-    imageList.add(item!.image);
+    // List<String?> imageList = [];
+    // imageList.add(item!.image);
     // imageList.addAll(item!.images!);
 
     return GetBuilder<ItemController>(
       builder: (itemController) {
-        String? baseUrl = item!.availableDateStarts == null
-            ? Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl
-            : Get.find<SplashController>()
-                .configModel!
-                .baseUrls!
-                .campaignImageUrl;
+        String? baseUrl = item!.availableDateStarts == null ? Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl : Get.find<SplashController>().configModel!.baseUrls!.campaignImageUrl;
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -38,17 +34,16 @@ class ItemImageView extends StatelessWidget {
               child: Stack(
                 children: [
                   SizedBox(
-                    height: ResponsiveHelper.isDesktop(context)
-                        ? 350
-                        : MediaQuery.of(context).size.width * 0.7,
+                    height: ResponsiveHelper.isDesktop(context) ? 350 : MediaQuery.of(context).size.width * 0.7,
                     child: PageView.builder(
                       controller: _controller,
-                      itemCount: imageList.length,
+                      itemCount: item?.images?.length,
                       itemBuilder: (context, index) {
+                        var imageData = item?.images?[index];
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: CustomImage(
-                            image: '$baseUrl/${imageList[index]}',
+                            image: '$baseUrl/$imageData',
                             height: 200,
                             fit: BoxFit.contain,
                             width: MediaQuery.of(context).size.width,
@@ -60,20 +55,18 @@ class ItemImageView extends StatelessWidget {
                       },
                     ),
                   ),
-
-                  // Positioned(
-                  //   left: 0,
-                  //   right: 0,
-                  //   bottom: 0,
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(
-                  //         bottom: Dimensions.paddingSizeSmall),
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: _indicators(context, itemController, imageList),
-                  //     ),
-                  //   ),
-                  // ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: _indicators(context, itemController, item?.images ?? []),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -83,17 +76,16 @@ class ItemImageView extends StatelessWidget {
     );
   }
 
-  List<Widget> _indicators(BuildContext context, ItemController itemController,
-      List<String?> imageList) {
+  List<Widget> _indicators(BuildContext context, ItemController itemController, List<String?> imageList) {
     List<Widget> indicators = [];
     for (int index = 0; index < imageList.length; index++) {
-      indicators.add(TabPageSelectorIndicator(
-        backgroundColor: index == itemController.imageSliderIndex
-            ? Theme.of(context).primaryColor
-            : Colors.white,
-        borderColor: Colors.white,
-        size: 10,
-      ));
+      indicators.add(
+        TabPageSelectorIndicator(
+          backgroundColor: index == itemController.imageSliderIndex ? Theme.of(context).primaryColor : Colors.white,
+          borderColor: Colors.grey.shade500,
+          size: 10,
+        ),
+      );
     }
     return indicators;
   }

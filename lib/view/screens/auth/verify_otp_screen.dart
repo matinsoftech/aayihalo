@@ -22,7 +22,7 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 // class VerifyOTPScreen extends StatefulWidget {
 //   final bool exitFromApp;
 //   final bool backFromThis;
-//   final String phoneNumber; 
+//   final String phoneNumber;
 //   const VerifyOTPScreen(
 //       {Key? key, required this.exitFromApp, required this.backFromThis, required this.phoneNumber,})
 //       : super(key: key);
@@ -38,13 +38,10 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //   final TextEditingController _passwordController = TextEditingController();
 //   String? _countryDialCode;
 
-
-
 //   @override
 //   Widget build(BuildContext context) {
 //     return
-    
-    
+
 //      Scaffold(
 //       backgroundColor: ResponsiveHelper.isDesktop(context)
 //           ? Colors.transparent
@@ -72,7 +69,7 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //             padding: context.width > 700
 //                 ? const EdgeInsets.symmetric(horizontal: 0)
 //                 : const EdgeInsets.all(Dimensions.paddingSizeExtremeLarge),
-          
+
 //             decoration: context.width > 700
 //                 ? BoxDecoration(
 //                     color: Theme.of(context).cardColor,
@@ -116,10 +113,10 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //                             mainAxisAlignment: MainAxisAlignment.center,
 //                             children: [
 //                               Image.asset(Images.logo, width: 125),
-                           
+
 //                               const SizedBox(
 //                                   height: Dimensions.paddingSizeExtraLarge),
-    
+
 //                               Align(
 //                                 alignment:
 //                                     Get.find<LocalizationController>().isLtr
@@ -132,7 +129,7 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //                               ),
 //                               const SizedBox(
 //                                   height: Dimensions.paddingSizeDefault),
-    
+
 //                               CustomTextField(
 //                                 titleText: ResponsiveHelper.isDesktop(context)
 //                                     ? 'phone'.tr
@@ -142,7 +139,7 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //                                 focusNode: _phoneFocus,
 //                                 nextFocus: _passwordFocus,
 //                                 inputType: TextInputType.phone,
-                             
+
 //                                 showTitle:
 //                                     ResponsiveHelper.isDesktop(context),
 //                                 // onCountryChanged: (CountryCode countryCode) {
@@ -153,12 +150,11 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //                                 //         .locale
 //                                 //         .countryCode,
 //                               ),
-    
+
 //                               const SizedBox(
 //                                 height: Dimensions.paddingSizeExtraLarge,
 //                               ),
-    
-    
+
 //                               Row(
 //                                 children: [
 //                                   Expanded(
@@ -185,19 +181,19 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //                                   ),
 //                                 ],
 //                               ),
-    
+
 //                               const SizedBox(
 //                                   height: Dimensions.paddingSizeLarge),
-    
+
 //                               Align(
 //                                   alignment: Alignment.center,
 //                                   child: ConditionCheckBox(
 //                                       authController: authController,
 //                                       fromSignUp: false)),
-    
+
 //                               const SizedBox(
 //                                   height: Dimensions.paddingSizeDefault),
-    
+
 //                               CustomButton(
 //                                 height: ResponsiveHelper.isDesktop(context)
 //                                     ? 45
@@ -222,10 +218,10 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //                               ),
 //                               const SizedBox(
 //                                   height: Dimensions.paddingSizeExtraLarge),
-    
+
 //                               // ResponsiveHelper.isDesktop(context) ? const SizedBox() : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
 //                               //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
-    
+
 //                               //   InkWell(
 //                               //     onTap: () {
 //                               //       if(ResponsiveHelper.isDesktop(context)){
@@ -242,14 +238,14 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //                               //   ),
 //                               // ]),
 //                               // const SizedBox(height: Dimensions.paddingSizeSmall),
-    
+
 //                               ResponsiveHelper.isDesktop(context)
 //                                   ? const SizedBox()
 //                                   : const GuestButton(),
-    
+
 //                               // ResponsiveHelper.isDesktop(context) ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
 //                               //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
-    
+
 //                               //   InkWell(
 //                               //     onTap: () {
 //                               //       if(ResponsiveHelper.isDesktop(context)){
@@ -276,39 +272,26 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //         ),
 //       )),
 //     );
- 
- 
+
 //   }
-
-
 
 // }
 
-
-
 class VerifyOTPScreen extends StatelessWidget {
-  
-   VerifyOTPScreen({super.key, required this.phoneNumber}); 
+  VerifyOTPScreen({super.key, required this.phoneNumber});
 
-   final String phoneNumber;
+  final String phoneNumber;
 
-    final TextEditingController _codeController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-
-  void _login(AuthController authController, {required String phone, required  String code}) async {
-    
-  
-    
-
+  void _login(AuthController authController, {required String phone, required String code}) async {
     if (phone.isEmpty) {
       showCustomSnackBar('enter_phone_number'.tr);
     } else if (code.isEmpty) {
       showCustomSnackBar('invalid_phone_number'.tr);
     } else {
-      authController
-          .verifyOtp( phone: phone, otp:   code)
-          .then((status) async {
+      authController.verifyOtp(phone: phone, otp: code).then((status) async {
         if (status.isSuccess) {
           Get.find<CartController>().getCartDataOnline();
           if (authController.isActiveRememberMe) {
@@ -321,18 +304,12 @@ class VerifyOTPScreen extends StatelessWidget {
             authController.clearUserNumberAndPassword();
           }
           String token = status.message!.substring(1, status.message!.length);
-          if (Get.find<SplashController>().configModel!.customerVerification! &&
-              int.parse(status.message![0]) == 0) {
+          if (Get.find<SplashController>().configModel!.customerVerification! && int.parse(status.message![0]) == 0) {
             List<int> encoded = utf8.encode("password");
             String data = base64Encode(encoded);
-            
-         
           } else {
-          
-              Get.find<LocationController>()
-                  .navigateToLocationScreen('sign-in', offNamed: true);
-            
-          } 
+            Get.find<LocationController>().navigateToLocationScreen('sign-in', offNamed: true);
+          }
 
           Get.to(SplashScreen(body: null));
         } else {
@@ -342,25 +319,19 @@ class VerifyOTPScreen extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return     Scaffold(
-      backgroundColor: ResponsiveHelper.isDesktop(context)
-          ? Colors.transparent
-          : Theme.of(context).cardColor,
-      appBar:
-              AppBar(
-                  leading: IconButton(
-                    onPressed: () => Get.back(),
-                    icon: Icon(Icons.arrow_back_ios_rounded,
-                        color: Theme.of(context).textTheme.bodyLarge!.color),
-                  ),
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
-                  actions: const [SizedBox()],
-                )
-          ,
+    return Scaffold(
+      backgroundColor: ResponsiveHelper.isDesktop(context) ? Colors.transparent : Theme.of(context).cardColor,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: Icon(Icons.arrow_back_ios_rounded, color: Theme.of(context).textTheme.bodyLarge!.color),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: const [SizedBox()],
+      ),
       endDrawer: const MenuDrawer(),
       endDrawerEnableOpenDragGesture: false,
       body: SafeArea(
@@ -369,24 +340,12 @@ class VerifyOTPScreen extends StatelessWidget {
           child: Container(
             height: ResponsiveHelper.isDesktop(context) ? 690 : null,
             width: context.width > 700 ? 500 : context.width,
-            padding: context.width > 700
-                ? const EdgeInsets.symmetric(horizontal: 0)
-                : const EdgeInsets.all(Dimensions.paddingSizeExtremeLarge),
-          
+            padding: context.width > 700 ? const EdgeInsets.symmetric(horizontal: 0) : const EdgeInsets.all(Dimensions.paddingSizeExtremeLarge),
             decoration: context.width > 700
                 ? BoxDecoration(
                     color: Theme.of(context).cardColor,
-                    borderRadius:
-                        BorderRadius.circular(Dimensions.radiusSmall),
-                    boxShadow: ResponsiveHelper.isDesktop(context)
-                        ? null
-                        : [
-                            BoxShadow(
-                                color:
-                                    Colors.grey[Get.isDarkMode ? 700 : 300]!,
-                                blurRadius: 5,
-                                spreadRadius: 1)
-                          ],
+                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                    boxShadow: ResponsiveHelper.isDesktop(context) ? null : [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300]!, blurRadius: 5, spreadRadius: 1)],
                   )
                 : null,
             child: GetBuilder<AuthController>(builder: (authController) {
@@ -409,163 +368,119 @@ class VerifyOTPScreen extends StatelessWidget {
                             )
                           : const SizedBox(),
                       Padding(
-                        padding: ResponsiveHelper.isDesktop(context)
-                            ? const EdgeInsets.all(40)
-                            : EdgeInsets.zero,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        padding: ResponsiveHelper.isDesktop(context) ? const EdgeInsets.all(40) : EdgeInsets.zero,
+                        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          Image.asset(Images.logo, width: 125),
+
+                          const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+
+                          Align(
+                            alignment: Get.find<LocalizationController>().isLtr ? Alignment.topLeft : Alignment.topRight,
+                            child: Text('Verify OTP'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
+                          ),
+                          const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                          CustomTextField(
+                            titleText: ResponsiveHelper.isDesktop(context) ? 'phone'.tr : 'Enter otp sent to your phone'.tr,
+                            hintText: '',
+                            controller: _codeController,
+
+                            inputType: TextInputType.phone,
+
+                            showTitle: ResponsiveHelper.isDesktop(context),
+                            // onCountryChanged: (CountryCode countryCode) {
+                            //   _countryDialCode = countryCode.dialCode;
+                            // },
+                            // countryDialCode: _countryDialCode ??
+                            //     Get.find<LocalizationController>()
+                            //         .locale
+                            //         .countryCode,
+                          ),
+
+                          const SizedBox(
+                            height: Dimensions.paddingSizeExtraLarge,
+                          ),
+
+                          Row(
                             children: [
-                              Image.asset(Images.logo, width: 125),
-                           
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeExtraLarge),
-    
-                              Align(
-                                alignment:
-                                    Get.find<LocalizationController>().isLtr
-                                        ? Alignment.topLeft
-                                        : Alignment.topRight,
-                                child: Text('Verify OTP'.tr,
-                                    style: robotoBold.copyWith(
-                                        fontSize:
-                                            Dimensions.fontSizeExtraLarge)),
-                              ),
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeDefault),
-    
-                              CustomTextField(
-                                titleText: ResponsiveHelper.isDesktop(context)
-                                    ? 'phone'.tr
-                                    : 'Enter otp sent to your phone'.tr,
-                                hintText: '',
-                                controller: _codeController,
-                             
-                             
-                                inputType: TextInputType.phone,
-                             
-                                showTitle:
-                                    ResponsiveHelper.isDesktop(context),
-                                // onCountryChanged: (CountryCode countryCode) {
-                                //   _countryDialCode = countryCode.dialCode;
-                                // },
-                                // countryDialCode: _countryDialCode ??
-                                //     Get.find<LocalizationController>()
-                                //         .locale
-                                //         .countryCode,
-                              ),
-    
-                              const SizedBox(
-                                height: Dimensions.paddingSizeExtraLarge,
-                              ),
-    
-    
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: ListTile(
-                                      onTap: () =>
-                                          authController.toggleRememberMe(),
-                                      leading: Checkbox(
-                                        visualDensity: const VisualDensity(
-                                            horizontal: -4, vertical: -4),
-                                        activeColor:
-                                            Theme.of(context).primaryColor,
-                                        value:
-                                            authController.isActiveRememberMe,
-                                        onChanged: (bool? isChecked) =>
-                                            authController.toggleRememberMe(),
-                                      ),
-                                      title: Text('remember_me'.tr),
-                                      contentPadding: EdgeInsets.zero,
-                                      visualDensity: const VisualDensity(
-                                          horizontal: 0, vertical: -4),
-                                      dense: true,
-                                      horizontalTitleGap: 0,
-                                    ),
+                              Expanded(
+                                child: ListTile(
+                                  onTap: () => authController.toggleRememberMe(),
+                                  leading: Checkbox(
+                                    visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                                    activeColor: Theme.of(context).primaryColor,
+                                    value: authController.isActiveRememberMe,
+                                    onChanged: (bool? isChecked) => authController.toggleRememberMe(),
                                   ),
-                                ],
+                                  title: Text('remember_me'.tr),
+                                  contentPadding: EdgeInsets.zero,
+                                  visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+                                  dense: true,
+                                  horizontalTitleGap: 0,
+                                ),
                               ),
-    
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeLarge),
-    
-                              Align(
-                                  alignment: Alignment.center,
-                                  child: ConditionCheckBox(
-                                      authController: authController,
-                                      fromSignUp: false)),
-    
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeDefault),
-    
-                              CustomButton(
-                                height: ResponsiveHelper.isDesktop(context)
-                                    ? 45
-                                    : null,
-                                width: ResponsiveHelper.isDesktop(context)
-                                    ? 180
-                                    : null,
-                                buttonText:
-                                    ResponsiveHelper.isDesktop(context)
-                                        ? 'login'.tr
-                                        : 'sign_in'.tr,
-                                onPressed: () =>
-                                    _login(authController, code: _codeController.text.trim(), phone:phoneNumber ),
-                                isLoading: authController.isLoading,
-                                radius: ResponsiveHelper.isDesktop(context)
-                                    ? Dimensions.radiusSmall
-                                    : Dimensions.radiusDefault,
-                                isBold: !ResponsiveHelper.isDesktop(context),
-                                fontSize: ResponsiveHelper.isDesktop(context)
-                                    ? Dimensions.fontSizeExtraSmall
-                                    : null,
-                              ),
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeExtraLarge),
-    
-                              // ResponsiveHelper.isDesktop(context) ? const SizedBox() : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                              //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
-    
-                              //   InkWell(
-                              //     onTap: () {
-                              //       if(ResponsiveHelper.isDesktop(context)){
-                              //         Get.back();
-                              //         Get.dialog(const SignUpScreen());
-                              //       }else{
-                              //         Get.toNamed(RouteHelper.getSignUpRoute());
-                              //       }
-                              //     },
-                              //     child: Padding(
-                              //       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                              //       child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
-                              //     ),
-                              //   ),
-                              // ]),
-                              // const SizedBox(height: Dimensions.paddingSizeSmall),
-    
-                              ResponsiveHelper.isDesktop(context)
-                                  ? const SizedBox()
-                                  : const GuestButton(),
-    
-                              // ResponsiveHelper.isDesktop(context) ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                              //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
-    
-                              //   InkWell(
-                              //     onTap: () {
-                              //       if(ResponsiveHelper.isDesktop(context)){
-                              //         Get.back();
-                              //         Get.dialog(const SignUpScreen());
-                              //       }else{
-                              //         Get.toNamed(RouteHelper.getSignUpRoute());
-                              //       }
-                              //     },
-                              //     child: Padding(
-                              //       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                              //       child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
-                              //     ),
-                              //   ),
-                              // ]) :  const SizedBox(),
-                            ]),
+                            ],
+                          ),
+
+                          const SizedBox(height: Dimensions.paddingSizeLarge),
+
+                          Align(alignment: Alignment.center, child: ConditionCheckBox(authController: authController, fromSignUp: false)),
+
+                          const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                          CustomButton(
+                            height: ResponsiveHelper.isDesktop(context) ? 45 : null,
+                            width: ResponsiveHelper.isDesktop(context) ? 180 : null,
+                            buttonText: ResponsiveHelper.isDesktop(context) ? 'login'.tr : 'sign_in'.tr,
+                            onPressed: () => _login(authController, code: _codeController.text.trim(), phone: phoneNumber),
+                            isLoading: authController.isLoading,
+                            radius: ResponsiveHelper.isDesktop(context) ? Dimensions.radiusSmall : Dimensions.radiusDefault,
+                            isBold: !ResponsiveHelper.isDesktop(context),
+                            fontSize: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeExtraSmall : null,
+                          ),
+                          const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+
+                          // ResponsiveHelper.isDesktop(context) ? const SizedBox() : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
+
+                          //   InkWell(
+                          //     onTap: () {
+                          //       if(ResponsiveHelper.isDesktop(context)){
+                          //         Get.back();
+                          //         Get.dialog(const SignUpScreen());
+                          //       }else{
+                          //         Get.toNamed(RouteHelper.getSignUpRoute());
+                          //       }
+                          //     },
+                          //     child: Padding(
+                          //       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                          //       child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
+                          //     ),
+                          //   ),
+                          // ]),
+                          // const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                          ResponsiveHelper.isDesktop(context) ? const SizedBox() : const GuestButton(),
+
+                          // ResponsiveHelper.isDesktop(context) ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
+
+                          //   InkWell(
+                          //     onTap: () {
+                          //       if(ResponsiveHelper.isDesktop(context)){
+                          //         Get.back();
+                          //         Get.dialog(const SignUpScreen());
+                          //       }else{
+                          //         Get.toNamed(RouteHelper.getSignUpRoute());
+                          //       }
+                          //     },
+                          //     child: Padding(
+                          //       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                          //       child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
+                          //     ),
+                          //   ),
+                          // ]) :  const SizedBox(),
+                        ]),
                       )
                     ],
                   ),
@@ -576,7 +491,5 @@ class VerifyOTPScreen extends StatelessWidget {
         ),
       )),
     );
- 
- 
   }
 }

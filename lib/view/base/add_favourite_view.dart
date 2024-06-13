@@ -14,15 +14,17 @@ class AddFavouriteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: top, right: right, left: left,
+      top: top,
+      right: right,
+      left: left,
       child: GetBuilder<WishListController>(builder: (wishController) {
         bool isWished = wishController.wishItemIdList.contains(item.id);
         return InkWell(
           onTap: () {
-            if(Get.find<AuthController>().isLoggedIn()) {
-              isWished ? wishController.removeFromWishList(item.id, false)
-                  : wishController.addToWishList(item, null, false);
-            }else {
+            if (Get.find<AuthController>().isLoggedIn()) {
+              isWished ? wishController.removeFromWishList(item.id, false) : wishController.addToWishList(item, null, false);
+              // print('isWished $isWished');
+            } else {
               showCustomSnackBar('you_are_not_logged_in'.tr);
             }
           },
