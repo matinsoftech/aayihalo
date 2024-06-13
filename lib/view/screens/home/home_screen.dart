@@ -145,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         await Get.find<FlashSaleController>().getFlashSale(true, true);
                       }
                       await Get.find<BannerController>().getPromotionalBanner(true);
+                      //gets special offer list using discounted item list
                       await Get.find<ItemController>().getDiscountedItemList(true, false);
                       await Get.find<CategoryController>().getCategoryList(true);
                       await Get.find<StoreController>().getPopularStoreList(true, 'all', false);

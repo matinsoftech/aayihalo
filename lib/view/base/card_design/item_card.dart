@@ -25,12 +25,14 @@ class ItemCardCollection extends StatelessWidget {
   final bool isFood;
   final bool isShop;
   final bool isPopularItemCart;
-  const ItemCardCollection(
-      {required this.item,
-      this.isPopularItem = false,
-      required this.isFood,
-      required this.isShop,
-      this.isPopularItemCart = false});
+  const ItemCardCollection({
+    super.key,
+    required this.item,
+    this.isPopularItem = false,
+    required this.isFood,
+    required this.isShop,
+    this.isPopularItemCart = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +49,13 @@ class ItemCardCollection extends StatelessWidget {
                 id: item.id,
                 name: item.name,
                 image: item.image,
-               description: item.description,
+                description: item.description,
                 avgRating: double.parse(item.avgRating.toString()),
                 ratingCount: item.ratingCount,
                 discount: double.parse((item.discount ?? '0.0').toString()),
                 discountType: item.discountType.toString(),
                 unitType: item.unitType.toString(),
                 storeName: '',
-                
                 stock: item.stock,
                 price: item.price,
               ),
@@ -68,21 +69,17 @@ class ItemCardCollection extends StatelessWidget {
                   color: Theme.of(context).dividerColor,
                   width: 0.5,
                 )),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
                 flex: 6,
                 child: Stack(children: [
                   Padding(
-                    padding:
-                        const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                    padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
                     child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusDefault),
+                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                       child: CustomImage(
                         placeholder: Images.placeholder,
-                        image:
-                            '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
+                        image: '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
                             '/${item.image}',
                         fit: BoxFit.cover,
                         width: double.infinity,
@@ -97,8 +94,7 @@ class ItemCardCollection extends StatelessWidget {
                       image: item.image,
                       avgRating: double.parse(item.avgRating.toString()),
                       ratingCount: item.ratingCount,
-                      discount:
-                          double.parse((item.discount ?? '0.0').toString()),
+                      discount: double.parse((item.discount ?? '0.0').toString()),
                       discountType: item.discountType.toString(),
                       unitType: item.unitType.toString(),
                       storeName: '',
@@ -118,8 +114,7 @@ class ItemCardCollection extends StatelessWidget {
                         image: item.image,
                         avgRating: double.parse(item.avgRating.toString()),
                         ratingCount: item.ratingCount,
-                        discount:
-                            double.parse((item.discount ?? '0.0').toString()),
+                        discount: double.parse((item.discount ?? '0.0').toString()),
                         discountType: item.discountType.toString(),
                         unitType: item.unitType.toString(),
                         storeName: '',
@@ -132,18 +127,12 @@ class ItemCardCollection extends StatelessWidget {
                           bottom: 10,
                           left: 0,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: Dimensions.paddingSizeSmall,
-                                vertical: Dimensions.paddingSizeExtraSmall),
+                            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
                             decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.5),
+                              color: Theme.of(context).primaryColor.withOpacity(0.5),
                               borderRadius: const BorderRadius.only(
-                                topRight:
-                                    Radius.circular(Dimensions.radiusLarge),
-                                bottomRight:
-                                    Radius.circular(Dimensions.radiusLarge),
+                                topRight: Radius.circular(Dimensions.radiusLarge),
+                                bottomRight: Radius.circular(Dimensions.radiusLarge),
                               ),
                             ),
                             child: Text('out_of_stock'.tr,
@@ -168,218 +157,172 @@ class ItemCardCollection extends StatelessWidget {
                     price: item.price,
                   ))
                       ? const SizedBox()
-                      : NotAvailableWidget(
-                          radius: Dimensions.radiusLarge,
-                          isAllSideRound: isPopularItem),
+                      : NotAvailableWidget(radius: Dimensions.radiusLarge, isAllSideRound: isPopularItem),
                 ]),
               ),
               Expanded(
                 flex: 4,
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      left: Dimensions.paddingSizeSmall,
-                      right: isShop ? 0 : Dimensions.paddingSizeSmall,
-                      top: Dimensions.paddingSizeSmall,
-                      bottom: isShop ? 0 : Dimensions.paddingSizeSmall),
+                  padding: EdgeInsets.only(left: Dimensions.paddingSizeSmall, right: isShop ? 0 : Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeSmall, bottom: isShop ? 0 : Dimensions.paddingSizeSmall),
                   child: Stack(clipBehavior: Clip.none, children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      // (isFood || isShop)
+                      //     ? Text(item.storeName ?? '',
+                      //         style: robotoRegular.copyWith(
+                      //             color: Theme.of(context).disabledColor))
+                      //     :
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // (isFood || isShop)
-                          //     ? Text(item.storeName ?? '',
-                          //         style: robotoRegular.copyWith(
-                          //             color: Theme.of(context).disabledColor))
-                          //     :
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 120,
-                                child: Text(
-                                  item.name!,
-                                  style: robotoBold.copyWith(fontSize: 12),
-                                  overflow: TextOverflow.visible,
-                                ),
-                              ),
-                            ],
+                          SizedBox(
+                            width: 120,
+                            child: Text(
+                              item.name!,
+                              style: robotoBold.copyWith(fontSize: 12),
+                              overflow: TextOverflow.visible,
+                            ),
                           ),
+                        ],
+                      ),
 
-                          (isFood || isShop)
-                              ? Flexible(
-                                  child: Text(
-                                    item.name!.length > 10
-                                        ? '${item.name!.substring(0, 10)}..'
-                                        : item.name ?? '',
-                                    style: robotoBold,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                )
-                              : Row(
-                                  mainAxisAlignment: isPopularItem
-                                      ? MainAxisAlignment.center
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                      // Icon(Icons.star,
-                                      //     size: 14,
-                                      //     color:
-                                      //         Theme.of(context).primaryColor),
-
-                                      // const SizedBox(
-                                      //     width:
-                                      //         Dimensions.paddingSizeExtraSmall),
-                                      // Text(
-                                      //     (item.description ?? ' ').substring(
-                                      //         0,
-                                      //         (item.description ?? '').length <
-                                      //                 20
-                                      //             ? (item.description ?? '')
-                                      //                 .length
-                                      //             : 20),
-                                      //     style: robotoRegular.copyWith(
-                                      //         fontSize:
-                                      //             Dimensions.fontSizeSmall)),
-                                      // const SizedBox(
-                                      //     width:
-                                      //         Dimensions.paddingSizeExtraSmall),
-                                      // Text("(${item.ratingCount})",
-                                      //     style: robotoRegular.copyWith(
-                                      //         fontSize:
-                                      //             Dimensions.fontSizeSmall,
-                                      //         color: Theme.of(context)
-                                      //             .disabledColor)),
-                                    ]),
-
-                          (isFood || isShop)
-                              ? Row(
-                                  mainAxisAlignment: isPopularItem
-                                      ? MainAxisAlignment.center
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                      Icon(Icons.star,
-                                          size: 14,
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                      const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall),
-                                      Text(item.avgRating!.toStringAsFixed(1),
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall)),
-                                      const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall),
-                                      Text("(${item.ratingCount})",
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall,
-                                              color: Theme.of(context)
-                                                  .disabledColor)),
-                                    ])
-                              :
-
-                              // (Get.find<SplashController>()
-                              //             .configModel!
-                              //             .moduleConfig!
-                              //             .module!
-                              //             .unit! &&
-                              //         item.unitType != null)
-                              //     ? Text(
-                              //         '(${item.unitType ?? ''})',
-                              //         style: robotoRegular.copyWith(
-                              //             fontSize:
-                              //                 Dimensions.fontSizeExtraSmall,
-                              //             color: Theme.of(context).hintColor),
-                              //       )
-                              //     :
-
-                              const SizedBox(),
-
-                          item.discount != null && item.discount! > 0
-                              ? Text(
-                                  PriceConverter.convertPrice(
-                                      Get.find<ItemController>()
-                                          .getStartingPrice(Item(
-                                    id: item.id,
-                                    name: item.name,
-                                    image: item.image,
-                                    avgRating:
-                                        double.parse(item.avgRating.toString()),
-                                    ratingCount: item.ratingCount,
-                                    discount: double.parse(
-                                        (item.discount ?? '0.0').toString()),
-                                    discountType: item.discountType.toString(),
-                                    unitType: item.unitType.toString(),
-                                    storeName: '',
-                                    stock: item.stock,
-                                    price: item.price,
-                                  ))),
-                                  style: robotoMedium.copyWith(
-                                    fontSize: Dimensions.fontSizeExtraSmall,
-                                    color: Theme.of(context).disabledColor,
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                  textDirection: TextDirection.ltr,
-                                )
-                              : const SizedBox(),
-                          // SizedBox(height: item.discount != null && item.discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                PriceConverter.convertPrice(
-                                  Get.find<ItemController>()
-                                      .getStartingPrice(Item(
-                                    id: item.id,
-                                    name: item.name,
-                                    image: item.image,
-                                    avgRating:
-                                        double.parse(item.avgRating.toString()),
-                                    ratingCount: item.ratingCount,
-                                    discount: double.parse(
-                                        (item.discount ?? '0.0').toString()),
-                                    discountType: item.discountType.toString(),
-                                    unitType: item.unitType.toString(),
-                                    storeName: '',
-                                    stock: item.stock,
-                                    price: item.price,
-                                  )),
-                                  discount: double.parse(
-                                      (item.discount ?? '0.0').toString()),
-                                  discountType: item.discountType.toString(),
-                                ),
-                                textDirection: TextDirection.ltr,
-                                style: robotoMedium,
+                      (isFood || isShop)
+                          ? Flexible(
+                              child: Text(
+                                item.name!.length > 10 ? '${item.name!.substring(0, 10)}..' : item.name ?? '',
+                                style: robotoBold,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              // delivery in
+                            )
+                          : Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
+                              // Icon(Icons.star,
+                              //     size: 14,
+                              //     color:
+                              //         Theme.of(context).primaryColor),
 
-                              CartCountView( 
-                                fromItemDetail: false,
-                              
-                                  item: Item(
+                              // const SizedBox(
+                              //     width:
+                              //         Dimensions.paddingSizeExtraSmall),
+                              // Text(
+                              //     (item.description ?? ' ').substring(
+                              //         0,
+                              //         (item.description ?? '').length <
+                              //                 20
+                              //             ? (item.description ?? '')
+                              //                 .length
+                              //             : 20),
+                              //     style: robotoRegular.copyWith(
+                              //         fontSize:
+                              //             Dimensions.fontSizeSmall)),
+                              // const SizedBox(
+                              //     width:
+                              //         Dimensions.paddingSizeExtraSmall),
+                              // Text("(${item.ratingCount})",
+                              //     style: robotoRegular.copyWith(
+                              //         fontSize:
+                              //             Dimensions.fontSizeSmall,
+                              //         color: Theme.of(context)
+                              //             .disabledColor)),
+                            ]),
+
+                      (isFood || isShop)
+                          ? Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
+                              Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
+                              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                              Text(item.avgRating!.toStringAsFixed(1), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                              Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
+                            ])
+                          :
+
+                          // (Get.find<SplashController>()
+                          //             .configModel!
+                          //             .moduleConfig!
+                          //             .module!
+                          //             .unit! &&
+                          //         item.unitType != null)
+                          //     ? Text(
+                          //         '(${item.unitType ?? ''})',
+                          //         style: robotoRegular.copyWith(
+                          //             fontSize:
+                          //                 Dimensions.fontSizeExtraSmall,
+                          //             color: Theme.of(context).hintColor),
+                          //       )
+                          //     :
+
+                          const SizedBox(),
+
+                      item.discount != null && item.discount! > 0
+                          ? Text(
+                              PriceConverter.convertPrice(Get.find<ItemController>().getStartingPrice(Item(
                                 id: item.id,
                                 name: item.name,
                                 image: item.image,
-                                avgRating:
-                                    double.parse(item.avgRating.toString()),
+                                avgRating: double.parse(item.avgRating.toString()),
                                 ratingCount: item.ratingCount,
-                                discount: double.parse(
-                                    (item.discount ?? '0.0').toString()),
+                                discount: double.parse((item.discount ?? '0.0').toString()),
+                                discountType: item.discountType.toString(),
+                                unitType: item.unitType.toString(),
+                                storeName: '',
+                                stock: item.stock,
+                                price: item.price,
+                              ))),
+                              style: robotoMedium.copyWith(
+                                fontSize: Dimensions.fontSizeExtraSmall,
+                                color: Theme.of(context).disabledColor,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                              textDirection: TextDirection.ltr,
+                            )
+                          : const SizedBox(),
+                      // SizedBox(height: item.discount != null && item.discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            PriceConverter.convertPrice(
+                              Get.find<ItemController>().getStartingPrice(Item(
+                                id: item.id,
+                                name: item.name,
+                                image: item.image,
+                                avgRating: double.parse(item.avgRating.toString()),
+                                ratingCount: item.ratingCount,
+                                discount: double.parse((item.discount ?? '0.0').toString()),
+                                discountType: item.discountType.toString(),
+                                unitType: item.unitType.toString(),
+                                storeName: '',
+                                stock: item.stock,
+                                price: item.price,
+                              )),
+                              discount: double.parse((item.discount ?? '0.0').toString()),
+                              discountType: item.discountType.toString(),
+                            ),
+                            textDirection: TextDirection.ltr,
+                            style: robotoMedium,
+                          ),
+                          // delivery in
+
+                          CartCountView(
+                              fromItemDetail: false,
+                              item: Item(
+                                id: item.id,
+                                name: item.name,
+                                image: item.image,
+                                avgRating: double.parse(item.avgRating.toString()),
+                                ratingCount: item.ratingCount,
+                                discount: double.parse((item.discount ?? '0.0').toString()),
                                 discountType: item.discountType.toString(),
                                 unitType: item.unitType.toString(),
                                 storeName: '',
                                 stock: item.stock,
                                 price: item.price,
                               ))
-                            ],
-                          ),
+                        ],
+                      ),
 
-                          const SizedBox(
-                              height: Dimensions.paddingSizeExtraSmall),
-                        ]),
+                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                    ]),
                     // isShop
                     //     ? Positioned(
                     //         bottom: 0,
@@ -427,12 +370,14 @@ class ItemCard extends StatelessWidget {
   final bool isFood;
   final bool isShop;
   final bool isPopularItemCart;
-  const ItemCard(
-      {required this.item,
-      this.isPopularItem = false,
-      required this.isFood,
-      required this.isShop,
-      this.isPopularItemCart = false});
+  const ItemCard({
+    super.key,
+    required this.item,
+    this.isPopularItem = false,
+    required this.isFood,
+    required this.isShop,
+    this.isPopularItemCart = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -441,152 +386,152 @@ class ItemCard extends StatelessWidget {
 
     return OnHover(
       isItem: true,
-      child: Stack(children: [
-        InkWell(
-          hoverColor: Colors.transparent,
-          onTap: () {
-          Item itemD =    Item(
-                id: item.id,
-                name: item.name,
-                image: item.image,
-                avgRating: double.parse(item.avgRating.toString()),
-                ratingCount: item.ratingCount,
-                discount: double.parse((item.discount ?? '0.0').toString()),
-                discountType: item.discountType.toString(),
-                unitType: item.unitType.toString(),
-                storeName: '',
-                stock: item.stock,
-                price: item.price,
+      child: Stack(
+        children: [
+          InkWell(
+            hoverColor: Colors.transparent,
+            onTap: () {
+              // Item itemD = Item(
+              //   id: item.id,
+              //   name: item.name,
+              //   image: item.image,
+              //   avgRating: double.parse(item.avgRating.toString()),
+              //   ratingCount: item.ratingCount,
+              //   discount: double.parse((item.discount ?? '0.0').toString()),
+              //   discountType: item.discountType.toString(),
+              //   unitType: item.unitType.toString(),
+              //   storeName: '',
+              //   stock: item.stock,
+              //   price: item.price,
+              //   categoryProducts: item.categoryProducts,
+              // );
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ItemDetailsScreen(
+                    item: item,
+                    inStorePage: false,
+                  ),
+                ),
               );
-           Navigator.of(context).push(MaterialPageRoute(builder: (_)=>ItemDetailsScreen(item: item, inStorePage: false)));
-          },
-          child: Container(
-            width: 150,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-                color: Theme.of(context).cardColor,
-                border: Border.all(
-                  color: Theme.of(context).dividerColor,
-                  width: 0.5,
-                )),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(
-                flex: 6,
-                child: Stack(children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                    child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusDefault),
-                      child: CustomImage(
-                        placeholder: Images.placeholder,
-                        image:
-                            '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
-                            '/${item.image}',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    ),
-                  ),
-                  AddFavouriteView(
-                    item: Item(
-                      id: item.id,
-                      name: item.name,
-                      image: item.image,
-                      avgRating: double.parse(item.avgRating.toString()),
-                      ratingCount: item.ratingCount,
-                      discount:
-                          double.parse((item.discount ?? '0.0').toString()),
-                      discountType: item.discountType.toString(),
-                      unitType: item.unitType.toString(),
-                      storeName: '',
-                      stock: item.stock,
-                      price: item.price,
-                    ),
-                  ),
-                  DiscountTag(
-                    discount: discount,
-                    discountType: discountType,
-                    freeDelivery: false,
-                  ),
-                  OrganicTag(
-                      item: Item(
-                        id: item.id,
-                        name: item.name,
-                        image: item.image,
-                        avgRating: double.parse(item.avgRating.toString()),
-                        ratingCount: item.ratingCount,
-                        discount:
-                            double.parse((item.discount ?? '0.0').toString()),
-                        discountType: item.discountType.toString(),
-                        unitType: item.unitType.toString(),
-                        storeName: '',
-                        stock: item.stock,
-                        price: item.price,
-                      ),
-                      placeInImage: false),
-                  (item.stock != null && item.stock! < 0)
-                      ? Positioned(
-                          bottom: 10,
-                          left: 0,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: Dimensions.paddingSizeSmall,
-                                vertical: Dimensions.paddingSizeExtraSmall),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.5),
-                              borderRadius: const BorderRadius.only(
-                                topRight:
-                                    Radius.circular(Dimensions.radiusLarge),
-                                bottomRight:
-                                    Radius.circular(Dimensions.radiusLarge),
-                              ),
+            },
+            child: Container(
+              width: 150,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                  color: Theme.of(context).cardColor,
+                  border: Border.all(
+                    color: Theme.of(context).dividerColor,
+                    width: 0.5,
+                  )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                            child: CustomImage(
+                              placeholder: Images.placeholder,
+                              image: '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
+                                  '/${item.image}',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
                             ),
-                            child: Text('out_of_stock'.tr,
-                                style: robotoRegular.copyWith(
-                                  color: Theme.of(context).cardColor,
-                                  fontSize: Dimensions.fontSizeSmall,
-                                )),
+                          ),
+                        ),
+                        AddFavouriteView(
+                          item: Item(
+                            id: item.id,
+                            name: item.name,
+                            image: item.image,
+                            avgRating: double.parse(item.avgRating.toString()),
+                            ratingCount: item.ratingCount,
+                            discount: double.parse((item.discount ?? '0.0').toString()),
+                            discountType: item.discountType.toString(),
+                            unitType: item.unitType.toString(),
+                            storeName: '',
+                            stock: item.stock,
+                            price: item.price,
+                          ),
+                        ),
+                        DiscountTag(
+                          discount: discount,
+                          discountType: discountType,
+                          freeDelivery: false,
+                        ),
+                        OrganicTag(
+                          item: Item(
+                            id: item.id,
+                            name: item.name,
+                            image: item.image,
+                            avgRating: double.parse(item.avgRating.toString()),
+                            ratingCount: item.ratingCount,
+                            discount: double.parse((item.discount ?? '0.0').toString()),
+                            discountType: item.discountType.toString(),
+                            unitType: item.unitType.toString(),
+                            storeName: '',
+                            stock: item.stock,
+                            price: item.price,
+                          ),
+                          placeInImage: false,
+                        ),
+                        //tag of stock available
+                        (item.stock != null && item.stock! < 0)
+                            ? Positioned(
+                                bottom: 10,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor.withOpacity(0.5),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(Dimensions.radiusLarge),
+                                      bottomRight: Radius.circular(Dimensions.radiusLarge),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'out_of_stock'.tr,
+                                    style: robotoRegular.copyWith(
+                                      color: Theme.of(context).cardColor,
+                                      fontSize: Dimensions.fontSizeSmall,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+
+                        Get.find<ItemController>().isAvailable(
+                          Item(
+                            id: item.id,
+                            name: item.name,
+                            image: item.image,
+                            avgRating: double.parse(item.avgRating.toString()),
+                            ratingCount: item.ratingCount,
+                            discount: double.parse((item.discount ?? '0.0').toString()),
+                            discountType: item.discountType.toString(),
+                            unitType: item.unitType.toString(),
+                            storeName: '',
+                            stock: item.stock,
+                            price: item.price,
                           ),
                         )
-                      : const SizedBox(),
-                  Get.find<ItemController>().isAvailable(Item(
-                    id: item.id,
-                    name: item.name,
-                    image: item.image,
-                    avgRating: double.parse(item.avgRating.toString()),
-                    ratingCount: item.ratingCount,
-                    discount: double.parse((item.discount ?? '0.0').toString()),
-                    discountType: item.discountType.toString(),
-                    unitType: item.unitType.toString(),
-                    storeName: '',
-                    stock: item.stock,
-                    price: item.price,
-                  ))
-                      ? const SizedBox()
-                      : NotAvailableWidget(
-                          radius: Dimensions.radiusLarge,
-                          isAllSideRound: isPopularItem),
-                ]),
-              ),
-              Expanded(
-                flex: 4,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: Dimensions.paddingSizeSmall,
-                      right: isShop ? 0 : Dimensions.paddingSizeSmall,
-                      top: Dimensions.paddingSizeSmall,
-                      bottom: isShop ? 0 : Dimensions.paddingSizeSmall),
-                  child: Stack(clipBehavior: Clip.none, children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                            ? const SizedBox()
+                            : NotAvailableWidget(radius: Dimensions.radiusLarge, isAllSideRound: isPopularItem),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: Dimensions.paddingSizeSmall, right: isShop ? 0 : Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeSmall, bottom: isShop ? 0 : Dimensions.paddingSizeSmall),
+                      child: Stack(clipBehavior: Clip.none, children: [
+                        Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                           // (isFood || isShop)
                           //     ? Text(item.storeName ?? '',
                           //         style: robotoRegular.copyWith(
@@ -609,76 +554,51 @@ class ItemCard extends StatelessWidget {
                           (isFood || isShop)
                               ? Flexible(
                                   child: Text(
-                                    item.name!.length > 10
-                                        ? '${item.name!.substring(0, 10)}..'
-                                        : item.name ?? '',
+                                    item.name!.length > 10 ? '${item.name!.substring(0, 10)}..' : item.name ?? '',
                                     style: robotoBold,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 )
-                              : Row(
-                                  mainAxisAlignment: isPopularItem
-                                      ? MainAxisAlignment.center
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                      // Icon(Icons.star,
-                                      //     size: 14,
-                                      //     color:
-                                      //         Theme.of(context).primaryColor),
+                              : Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
+                                  // Icon(Icons.star,
+                                  //     size: 14,
+                                  //     color:
+                                  //         Theme.of(context).primaryColor),
 
-                                      // const SizedBox(
-                                      //     width:
-                                      //         Dimensions.paddingSizeExtraSmall),
-                                      // Text(
-                                      //     (item.description ?? ' ').substring(
-                                      //         0,
-                                      //         (item.description ?? '').length <
-                                      //                 20
-                                      //             ? (item.description ?? '')
-                                      //                 .length
-                                      //             : 20),
-                                      //     style: robotoRegular.copyWith(
-                                      //         fontSize:
-                                      //             Dimensions.fontSizeSmall)),
-                                      // const SizedBox(
-                                      //     width:
-                                      //         Dimensions.paddingSizeExtraSmall),
-                                      // Text("(${item.ratingCount})",
-                                      //     style: robotoRegular.copyWith(
-                                      //         fontSize:
-                                      //             Dimensions.fontSizeSmall,
-                                      //         color: Theme.of(context)
-                                      //             .disabledColor)),
-                                    ]),
+                                  // const SizedBox(
+                                  //     width:
+                                  //         Dimensions.paddingSizeExtraSmall),
+                                  // Text(
+                                  //     (item.description ?? ' ').substring(
+                                  //         0,
+                                  //         (item.description ?? '').length <
+                                  //                 20
+                                  //             ? (item.description ?? '')
+                                  //                 .length
+                                  //             : 20),
+                                  //     style: robotoRegular.copyWith(
+                                  //         fontSize:
+                                  //             Dimensions.fontSizeSmall)),
+                                  // const SizedBox(
+                                  //     width:
+                                  //         Dimensions.paddingSizeExtraSmall),
+                                  // Text("(${item.ratingCount})",
+                                  //     style: robotoRegular.copyWith(
+                                  //         fontSize:
+                                  //             Dimensions.fontSizeSmall,
+                                  //         color: Theme.of(context)
+                                  //             .disabledColor)),
+                                ]),
 
                           (isFood || isShop)
-                              ? Row(
-                                  mainAxisAlignment: isPopularItem
-                                      ? MainAxisAlignment.center
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                      Icon(Icons.star,
-                                          size: 14,
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                      const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall),
-                                      Text(item.avgRating!.toStringAsFixed(1),
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall)),
-                                      const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall),
-                                      Text("(${item.ratingCount})",
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall,
-                                              color: Theme.of(context)
-                                                  .disabledColor)),
-                                    ])
+                              ? Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
+                                  Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
+                                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                  Text(item.avgRating!.toStringAsFixed(1), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                  Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
+                                ])
                               :
 
                               // (Get.find<SplashController>()
@@ -700,17 +620,13 @@ class ItemCard extends StatelessWidget {
 
                           item.discount != null && item.discount! > 0
                               ? Text(
-                                  PriceConverter.convertPrice(
-                                      Get.find<ItemController>()
-                                          .getStartingPrice(Item(
+                                  PriceConverter.convertPrice(Get.find<ItemController>().getStartingPrice(Item(
                                     id: item.id,
                                     name: item.name,
                                     image: item.image,
-                                    avgRating:
-                                        double.parse(item.avgRating.toString()),
+                                    avgRating: double.parse(item.avgRating.toString()),
                                     ratingCount: item.ratingCount,
-                                    discount: double.parse(
-                                        (item.discount ?? '0.0').toString()),
+                                    discount: double.parse((item.discount ?? '0.0').toString()),
                                     discountType: item.discountType.toString(),
                                     unitType: item.unitType.toString(),
                                     storeName: '',
@@ -732,92 +648,89 @@ class ItemCard extends StatelessWidget {
                             children: [
                               Text(
                                 PriceConverter.convertPrice(
-                                  Get.find<ItemController>()
-                                      .getStartingPrice(Item(
+                                  Get.find<ItemController>().getStartingPrice(Item(
                                     id: item.id,
                                     name: item.name,
                                     image: item.image,
-                                    avgRating:
-                                        double.parse(item.avgRating.toString()),
+                                    avgRating: double.parse(item.avgRating.toString()),
                                     ratingCount: item.ratingCount,
-                                    discount: double.parse(
-                                        (item.discount ?? '0.0').toString()),
+                                    discount: double.parse((item.discount ?? '0.0').toString()),
                                     discountType: item.discountType.toString(),
                                     unitType: item.unitType.toString(),
                                     storeName: '',
                                     stock: item.stock,
                                     price: item.price,
                                   )),
-                                  discount: double.parse(
-                                      (item.discount ?? '0.0').toString()),
+                                  discount: double.parse((item.discount ?? '0.0').toString()),
                                   discountType: item.discountType.toString(),
                                 ),
                                 textDirection: TextDirection.ltr,
                                 style: robotoMedium,
                               ),
                               // delivery in
-
-                              CartCountView(
-                                  item: Item(
-                                id: item.id,
-                                name: item.name,
-                                image: item.image, 
-                                variations: item.variations, 
-                                images: item.images,
-                                avgRating:
-                                    double.parse(item.avgRating.toString()),
-                                ratingCount: item.ratingCount,
-                                discount: double.parse(
-                                    (item.discount ?? '0.0').toString()),
-                                discountType: item.discountType.toString(),
-                                unitType: item.unitType.toString(),
-                                storeName: '',
-                                stock: item.stock,
-                                price: item.price,
-                              ))
+                              item.variations == null && item.variations!.isEmpty
+                                  ? CartCountView(
+                                      item: Item(
+                                        id: item.id,
+                                        name: item.name,
+                                        image: item.image,
+                                        variations: item.variations,
+                                        images: item.images,
+                                        avgRating: double.parse(item.avgRating.toString()),
+                                        ratingCount: item.ratingCount,
+                                        discount: double.parse((item.discount ?? '0.0').toString()),
+                                        discountType: item.discountType.toString(),
+                                        unitType: item.unitType.toString(),
+                                        storeName: '',
+                                        stock: item.stock,
+                                        price: item.price,
+                                      ),
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
 
-                          const SizedBox(
-                              height: Dimensions.paddingSizeExtraSmall),
+                          const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                         ]),
-                    // isShop
-                    //     ? Positioned(
-                    //         bottom: 0,
-                    //         right: 0,
-                    //         child:
+                        // isShop
+                        //     ? Positioned(
+                        //         bottom: 0,
+                        //         right: 0,
+                        //         child:
 
-                    //          CartCountView(
-                    //           item: item,
-                    //           child: Container(
-                    //             height: 35,
-                    //             width: 38,
-                    //             decoration: BoxDecoration(
-                    //               color: Theme.of(context).primaryColor,
-                    //               borderRadius: const BorderRadius.only(
-                    //                 topLeft:
-                    //                     Radius.circular(Dimensions.radiusLarge),
-                    //                 bottomRight:
-                    //                     Radius.circular(Dimensions.radiusLarge),
-                    //               ),
-                    //             ),
-                    //             child: Icon(
-                    //                 isPopularItemCart
-                    //                     ? Icons.add_shopping_cart
-                    //                     : Icons.add,
-                    //                 color: Theme.of(context).cardColor,
-                    //                 size: 20),
-                    //           ),
-                    //         ),
-                    //       )
-                    //     : const SizedBox(),
-                  ]),
-                ),
+                        //          CartCountView(
+                        //           item: item,
+                        //           child: Container(
+                        //             height: 35,
+                        //             width: 38,
+                        //             decoration: BoxDecoration(
+                        //               color: Theme.of(context).primaryColor,
+                        //               borderRadius: const BorderRadius.only(
+                        //                 topLeft:
+                        //                     Radius.circular(Dimensions.radiusLarge),
+                        //                 bottomRight:
+                        //                     Radius.circular(Dimensions.radiusLarge),
+                        //               ),
+                        //             ),
+                        //             child: Icon(
+                        //                 isPopularItemCart
+                        //                     ? Icons.add_shopping_cart
+                        //                     : Icons.add,
+                        //                 color: Theme.of(context).cardColor,
+                        //                 size: 20),
+                        //           ),
+                        //         ),
+                        //       )
+                        //     : const SizedBox(),
+                      ]),
+                    ),
+                  ),
+                ],
               ),
-            ]),
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }

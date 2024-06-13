@@ -256,6 +256,7 @@ class ItemController extends GetxController implements GetxService {
     update();
   }
 
+//get special offer list using discounted  items list
   Future<void> getDiscountedItemList(bool reload, bool notify) async {
     if (reload) {
       _discountedItemList = null;
@@ -268,6 +269,7 @@ class ItemController extends GetxController implements GetxService {
       if (response.statusCode == 200) {
         _discountedItemList = [];
         _discountedItemList!.addAll(ItemModel.fromJson(response.body).items!);
+        // print('discountedItemList ${_discountedItemList?[0].categoryProducts?.length}');
         _isLoading = false;
       } else {
         ApiChecker.checkApi(response);

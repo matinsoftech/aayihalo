@@ -14,32 +14,34 @@ class FavItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GetBuilder<WishListController>(builder: (wishController) {
-        return RefreshIndicator(
-          onRefresh: () async {
-            await wishController.getWishList();
-          },
-          child: Wrap(
-            // physics: const AlwaysScrollableScrollPhysics(),
-            children: [
-               FooterView(
-              child: SizedBox(
-                width: Dimensions.webMaxWidth,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: ResponsiveHelper.isDesktop(context) ? 0 : 80.0),
-                  child: ItemsView(
-                    isStore: isStore, items: wishController.wishItemList, stores: wishController.wishStoreList,
-                    noDataText: 'no_wish_data_found'.tr, isFeatured: true,
+      body: GetBuilder<WishListController>(
+        builder: (wishController) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              await wishController.getWishList();
+            },
+            child: Wrap(
+                // physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  FooterView(
+                    child: SizedBox(
+                      width: Dimensions.webMaxWidth,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: ResponsiveHelper.isDesktop(context) ? 0 : 80.0),
+                        child: ItemsView(
+                          isStore: isStore,
+                          items: wishController.wishItemList,
+                          stores: wishController.wishStoreList,
+                          noDataText: 'no_wish_data_found'.tr,
+                          isFeatured: true,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-         
-            ]
-            
-          ),
-        );
-      }),
+                ]),
+          );
+        },
+      ),
     );
   }
 }

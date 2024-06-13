@@ -31,31 +31,27 @@ class AuthRepo {
       "phone": phone!,
       "password": password!,
     };
-    if(guestId.isNotEmpty) {
+    if (guestId.isNotEmpty) {
       data.addAll({"guest_id": guestId});
     }
     return await apiClient.postData(AppConstants.loginUri, data);
   }
 
-    Future<Response> loginWithPhoneNumber({String? phone}) async {
+  Future<Response> loginWithPhoneNumber({String? phone}) async {
     String guestId = getGuestId();
     Map<String, String> data = {
       "phone_number": phone!,
     };
-    if(guestId.isNotEmpty) {
+    if (guestId.isNotEmpty) {
       data.addAll({"guest_id": guestId});
     }
     return await apiClient.postData(AppConstants.customerUri, data);
   }
 
-   Future<Response> verifyOTP({required String phone, required String code}) async {
+  Future<Response> verifyOTP({required String phone, required String code}) async {
     String guestId = getGuestId();
-    Map<String, dynamic> data = {
-      "phone_number": phone, 
-      "code": code
-
-    };
-    if(guestId.isNotEmpty) {
+    Map<String, dynamic> data = {"phone_number": phone, "code": code};
+    if (guestId.isNotEmpty) {
       data.addAll({"guest_id": guestId});
     }
     return await apiClient.postData(AppConstants.customerUri, data);
@@ -71,20 +67,25 @@ class AuthRepo {
 
   Future<Response> updateToken({String notificationDeviceToken = ''}) async {
     String? deviceToken;
-    if(notificationDeviceToken.isEmpty){
+    if (notificationDeviceToken.isEmpty) {
       if (GetPlatform.isIOS && !GetPlatform.isWeb) {
         FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
         NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
-          alert: true, announcement: false, badge: true, carPlay: false,
-          criticalAlert: false, provisional: false, sound: true,
+          alert: true,
+          announcement: false,
+          badge: true,
+          carPlay: false,
+          criticalAlert: false,
+          provisional: false,
+          sound: true,
         );
-        if(settings.authorizationStatus == AuthorizationStatus.authorized) {
+        if (settings.authorizationStatus == AuthorizationStatus.authorized) {
           deviceToken = await _saveDeviceToken();
         }
-      }else {
+      } else {
         deviceToken = await _saveDeviceToken();
       }
-      if(!GetPlatform.isWeb) {
+      if (!GetPlatform.isWeb) {
         FirebaseMessaging.instance.subscribeToTopic(AppConstants.topic);
       }
     }
@@ -93,10 +94,10 @@ class AuthRepo {
 
   Future<String?> _saveDeviceToken() async {
     String? deviceToken = '@';
-    if(!GetPlatform.isWeb) {
+    if (!GetPlatform.isWeb) {
       try {
         deviceToken = (await FirebaseMessaging.instance.getToken())!;
-      }catch(_) {}
+      } catch (_) {}
     }
     if (deviceToken != null) {
       if (kDebugMode) {
@@ -140,19 +141,21 @@ class AuthRepo {
   // for  user token
   Future<bool> saveUserToken(String token) async {
     apiClient.token = token;
-    if(sharedPreferences.getString(AppConstants.userAddress) != null){
-      AddressModel? addressModel = AddressModel.fromJson(jsonDecode(sharedPreferences.getString(AppConstants.userAddress)!));
-      apiClient.updateHeader(
-          token, addressModel.zoneIds, addressModel.areaIds, sharedPreferences.getString(AppConstants.languageCode),
-          Get.find<SplashController>().module?.id,
-          addressModel.latitude, addressModel.longitude,
+    if (sharedPreferences.getString(AppConstants.userAddress) != null) {
+      AddressModel? addressModel = AddressModel.fromJson(
+        jsonDecode(sharedPreferences.getString(AppConstants.userAddress)!),
       );
-    }else{
       apiClient.updateHeader(
-          token, null, null, sharedPreferences.getString(AppConstants.languageCode),
-          Get.find<SplashController>().module?.id,
-          null, null
+        token,
+        addressModel.zoneIds,
+        addressModel.areaIds,
+        sharedPreferences.getString(AppConstants.languageCode),
+        Get.find<SplashController>().module?.id,
+        addressModel.latitude,
+        addressModel.longitude,
       );
+    } else {
+      apiClient.updateHeader(token, null, null, sharedPreferences.getString(AppConstants.languageCode), Get.find<SplashController>().module?.id, null, null);
     }
 
     return await sharedPreferences.setString(AppConstants.token, token);
@@ -183,7 +186,7 @@ class AuthRepo {
   }
 
   bool clearSharedData() {
-    if(!GetPlatform.isWeb) {
+    if (!GetPlatform.isWeb) {
       FirebaseMessaging.instance.unsubscribeFromTopic(AppConstants.topic);
       apiClient.postData(AppConstants.tokenUri, {"_method": "put", "cm_firebase_token": '@'});
     }
@@ -196,7 +199,7 @@ class AuthRepo {
     return true;
   }
 
-  bool clearSharedAddress(){
+  bool clearSharedAddress() {
     sharedPreferences.remove(AppConstants.userAddress);
     return true;
   }
@@ -229,13 +232,13 @@ class AuthRepo {
   }
 
   void setNotificationActive(bool isActive) {
-    if(isActive) {
+    if (isActive) {
       updateToken();
-    }else {
-      if(!GetPlatform.isWeb) {
+    } else {
+      if (!GetPlatform.isWeb) {
         updateToken(notificationDeviceToken: '@');
         FirebaseMessaging.instance.unsubscribeFromTopic(AppConstants.topic);
-        if(isLoggedIn()) {
+        if (isLoggedIn()) {
           FirebaseMessaging.instance.unsubscribeFromTopic('zone_${Get.find<LocationController>().getUserAddress()!.zoneId}_customer');
         }
       }
@@ -255,7 +258,9 @@ class AuthRepo {
 
   Future<Response> registerStore(StoreBody store, XFile? logo, XFile? cover) async {
     return apiClient.postMultipartData(
-      AppConstants.storeRegisterUri, store.toJson(), [MultipartBody('logo', logo), MultipartBody('cover_photo', cover)],
+      AppConstants.storeRegisterUri,
+      store.toJson(),
+      [MultipartBody('logo', logo), MultipartBody('cover_photo', cover)],
     );
   }
 
@@ -264,7 +269,8 @@ class AuthRepo {
   }
 
   Future<Response> getModules(int? zoneId) async {
-    return await apiClient.getData('${AppConstants.moduleUri}?zone_id=$zoneId',
+    return await apiClient.getData(
+      '${AppConstants.moduleUri}?zone_id=$zoneId',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -303,5 +309,4 @@ class AuthRepo {
   String getGuestContactNumber() {
     return sharedPreferences.getString(AppConstants.guestNumber) ?? "";
   }
-
 }

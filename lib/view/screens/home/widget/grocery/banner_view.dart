@@ -18,7 +18,6 @@ class BannerView extends StatelessWidget {
     return GetBuilder<BannerController>(
       builder: (bannerController) {
         String? baseUrl = Get.find<SplashController>().configModel!.baseUrls!.bannerImageUrl;
-        print('image base url is here as follow : $baseUrl');
         if (bannerController.isLoading) {
           return Shimmer(
             duration: const Duration(seconds: 2),
