@@ -47,13 +47,14 @@ class GroceryHomeScreen extends StatelessWidget {
                       : Column(
                           children: [
                             ...List.generate(
-                                controller.homeScreenDataModel!.storeCollections!.length,
-                                (index) => HomeScreenSections(
-                                      isFood: false,
-                                      isShop: false,
-                                      title: controller.homeScreenDataModel!.storeCollections![index].name!,
-                                      products: controller.homeScreenDataModel!.storeCollections![index].products!,
-                                    )),
+                              controller.homeScreenDataModel!.storeCollections!.length,
+                              (index) => HomeScreenSections(
+                                isFood: false,
+                                isShop: false,
+                                title: controller.homeScreenDataModel!.storeCollections![index].name!,
+                                products: controller.homeScreenDataModel!.storeCollections![index].products!,
+                              ),
+                            ),
                           ],
                         ),
 

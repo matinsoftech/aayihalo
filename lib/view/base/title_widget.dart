@@ -12,24 +12,29 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Row(children: [
-        Text(title, style: robotoBold.copyWith(fontSize: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeLarge : Dimensions.fontSizeLarge)),
-        const SizedBox(width: Dimensions.paddingSizeSmall),
-
-        image != null ? Image.asset(image!, height: 20, width: 20) : const SizedBox(),
-        ],
-      ),
-      (onTap != null /*&& ResponsiveHelper.isDesktop(context)*/) ? InkWell(
-        onTap: onTap as void Function()?,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-          child: Text(
-            'see_all'.tr,
-            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor, decoration: TextDecoration.underline),
-          ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Text(title, style: robotoBold.copyWith(fontSize: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeLarge : Dimensions.fontSizeLarge)),
+            const SizedBox(width: Dimensions.paddingSizeSmall),
+            image != null ? Image.asset(image!, height: 20, width: 20) : const SizedBox(),
+          ],
         ),
-      ) : const SizedBox(),
-    ]);
+        (onTap != null /*&& ResponsiveHelper.isDesktop(context)*/)
+            ? InkWell(
+                onTap: onTap as void Function()?,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+                  child: Text(
+                    'see_all'.tr,
+                    style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor, decoration: TextDecoration.underline),
+                  ),
+                ),
+              )
+            : const SizedBox(),
+      ],
+    );
   }
 }

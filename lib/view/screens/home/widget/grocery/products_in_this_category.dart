@@ -1,7 +1,10 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:sixam_mart/controller/auth_controller.dart';
+import 'package:sixam_mart/controller/cart_controller.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/controller/wishlist_controller.dart';
@@ -17,12 +20,13 @@ import 'package:sixam_mart/view/base/custom_image.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/discount_tag.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
+import 'package:sixam_mart/view/screens/home/widget/grocery/special_offer/similar_product_details_view.dart';
 
 class ProductsInThisCategory extends StatelessWidget {
   final bool isFood;
   final bool isShop;
   final bool isPopularItem;
-  final List categoryDetails;
+  final List<CategoryProduct> categoryDetails;
   const ProductsInThisCategory({
     Key? key,
     required this.isFood,
@@ -35,7 +39,6 @@ class ProductsInThisCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ItemController>(builder: (itemController) {
       // List<Item>? discountedItemList = itemController.discountedItemList;
-
       return categoryDetails.isNotEmpty
           ? Padding(
               padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault),
@@ -62,29 +65,23 @@ class ProductsInThisCategory extends StatelessWidget {
                           child: InkWell(
                             hoverColor: Colors.transparent,
                             onTap: () {
-                              // Item itemD = Item(
-                              //   id: item.id,
-                              //   name: item.name,
-                              //   image: item.image,
-                              //   avgRating: double.parse(item.avgRating.toString()),
-                              //   ratingCount: item.ratingCount,
-                              //   discount: double.parse((item.discount ?? '0.0').toString()),
-                              //   discountType: item.discountType.toString(),
-                              //   unitType: item.unitType.toString(),
-                              //   storeName: '',
-                              //   stock: item.stock,
-                              //   price: item.price,
-                              //   categoryProducts: item.categoryProducts,
-                              // );
-
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (_) => ItemDetailsScreen(
-                              //       item: item,
-                              //       inStorePage: false,
-                              //     ),
-                              //   ),
-                              // );
+                              // print(product.images);
+                              Get.to(
+                                () => SimilarProductDetailsScreen(
+                                  productId: product.id as int,
+                                  images: product.images as List,
+                                  productPrice: product.price!.toDouble(),
+                                  variations: product.variations as List,
+                                  inStorePage: false,
+                                  availableTimeStarts: product.availableTimeStarts as String,
+                                  productName: product.name!.toString(),
+                                  unitType: product.unitType!.toString(),
+                                  veg: product.veg!.toInt(),
+                                  discount: product.discount!.toDouble(),
+                                  discountType: product.discountType!.toString(),
+                                  description: product.description.toString(),
+                                ),
+                              );
                             },
                             child: Container(
                               width: 150,
@@ -126,7 +123,7 @@ class ProductsInThisCategory extends StatelessWidget {
                                             return InkWell(
                                               onTap: () {
                                                 if (Get.find<AuthController>().isLoggedIn()) {
-                                                  isWished ? wishController.removeFromWishList(product.id, false) : wishController.newAddToWishList(product.id);
+                                                  isWished ? wishController.removeFromWishList(product.id, false) : wishController.newAddToWishList(product.id!.toInt());
                                                 } else {
                                                   showCustomSnackBar('you_are_not_logged_in'.tr);
                                                 }
@@ -345,6 +342,130 @@ class ProductsInThisCategory extends StatelessWidget {
                                               ),
                                               //?
                                               // delivery in
+                                              product.variations!.isEmpty
+                                                  ? GetBuilder<CartController>(
+                                                      builder: (cartController) {
+                                                        int cartQty = cartController.newGetItemQuantity(itemId: product.id);
+                                                        // print('card quantity  here is : ${cartQty != 0}');
+                                                        bool fromItemDetail = false;
+
+                                                        return cartQty != 0
+                                                            ? Center(
+                                                                child: Container(
+                                                                  width: fromItemDetail ? 100 : null,
+                                                                  decoration: BoxDecoration(
+                                                                    color: Theme.of(context).primaryColor,
+                                                                    borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
+                                                                  ),
+                                                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                                                    InkWell(
+                                                                      onTap: cartController.isLoading
+                                                                          ? null
+                                                                          : () {
+                                                                              int cartIndex = cartController.cartList.indexWhere((element) => element.item!.id == product.id);
+                                                                              // print('cart index $cartIndex');
+
+                                                                              if (cartController.cartList[cartIndex].quantity! > 1) {
+                                                                                cartController.currentItemId = product.id ?? -1;
+
+                                                                                cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! - 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null);
+                                                                                // cartController.setQuantity(
+                                                                                //   false,
+                                                                                //   cartIndex,
+                                                                                //   cartController.cartList[cartIndex].stock,
+                                                                                //   cartController.cartList[cartIndex].item!
+                                                                                //       .quantityLimit,
+                                                                                // );
+                                                                              } else {
+                                                                                cartController.removeCartItemOnline(cartIndex);
+                                                                              }
+                                                                            },
+                                                                      child: Container(
+                                                                        decoration: BoxDecoration(
+                                                                          color: Theme.of(context).cardColor,
+                                                                          shape: BoxShape.circle,
+                                                                          border: Border.all(color: Theme.of(context).primaryColor),
+                                                                        ),
+                                                                        padding: const EdgeInsets.all(
+                                                                          Dimensions.paddingSizeExtraSmall,
+                                                                        ),
+                                                                        child: Icon(
+                                                                          Icons.remove,
+                                                                          size: fromItemDetail ? null : 16,
+                                                                          color: Theme.of(context).primaryColor,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    cartController.isLoading && cartController.currentItemId == product.id
+                                                                        ? SizedBox(height: 10, width: 10, child: CircularProgressIndicator(color: Theme.of(context).cardColor))
+                                                                        : Padding(
+                                                                            padding: EdgeInsets.all(fromItemDetail ? 0 : 2.0),
+                                                                            child: Text(
+                                                                              cartQty.toString(),
+                                                                              style: robotoMedium.copyWith(fontSize: fromItemDetail ? Dimensions.fontSizeLarge : Dimensions.fontSizeSmall, color: Theme.of(context).cardColor),
+                                                                            ),
+                                                                          ),
+                                                                    InkWell(
+                                                                      onTap: cartController.isLoading
+                                                                          ? null
+                                                                          : () {
+                                                                              cartController.currentItemId = product.id ?? -1;
+
+                                                                              int cartIndex = cartController.cartList.indexWhere((element) => element.item!.id == product.id);
+                                                                              cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! + 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null);
+                                                                            },
+                                                                      child: Container(
+                                                                        decoration: BoxDecoration(
+                                                                          color: Theme.of(context).cardColor,
+                                                                          shape: BoxShape.circle,
+                                                                          border: Border.all(color: Theme.of(context).primaryColor),
+                                                                        ),
+                                                                        padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                                                                        child: Icon(
+                                                                          Icons.add,
+                                                                          size: fromItemDetail ? null : 16,
+                                                                          color: Theme.of(context).primaryColor,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ]),
+                                                                ),
+                                                              )
+                                                            : cartController.addingToCart && cartController.currentItemId == product.id
+                                                                ? Text(
+                                                                    "Adding..",
+                                                                    style: TextStyle(
+                                                                      color: Theme.of(context).primaryColor,
+                                                                    ),
+                                                                  )
+                                                                : InkWell(
+                                                                    onTap: () async {
+                                                                      // print('going to next page...');
+                                                                      cartController.currentItemId = product.id ?? -1;
+
+                                                                      // product.variations != null && product.variations!.isNotEmpty
+                                                                      // ? Navigator.push(
+                                                                      //     context,
+                                                                      //     MaterialPageRoute(
+                                                                      //       builder: (_) => ItemDetailsScreen(
+                                                                      //         item: item,
+                                                                      //         inStorePage: false,
+                                                                      //       ),
+                                                                      //     ),
+                                                                      //   )
+                                                                      // :
+                                                                      Get.find<ItemController>().addToCart(productId: product.id!, quantity: 1);
+                                                                    },
+                                                                    child: Container(
+                                                                      height: fromItemDetail ? 40 : 25,
+                                                                      width: fromItemDetail ? 40 : 25,
+                                                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).cardColor, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)]),
+                                                                      child: Icon(Icons.add, size: fromItemDetail ? 24 : 20, color: Theme.of(context).primaryColor),
+                                                                    ),
+                                                                  );
+                                                      },
+                                                    )
+                                                  : const SizedBox(),
 
                                               // CartCountView(
                                               //   item: Item(

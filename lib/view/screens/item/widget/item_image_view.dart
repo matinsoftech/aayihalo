@@ -16,14 +16,15 @@ class ItemImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // List<String?> imageList = [];
-    // imageList.add(item!.image);
+    List<String?> imageList = [];
+    imageList.add(item!.image);
     // imageList.addAll(item!.images!);
 
     return GetBuilder<ItemController>(
       builder: (itemController) {
         String? baseUrl = item!.availableDateStarts == null ? Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl : Get.find<SplashController>().configModel!.baseUrls!.campaignImageUrl;
-        return Column(
+        return
+         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             InkWell(
@@ -37,13 +38,12 @@ class ItemImageView extends StatelessWidget {
                     height: ResponsiveHelper.isDesktop(context) ? 350 : MediaQuery.of(context).size.width * 0.7,
                     child: PageView.builder(
                       controller: _controller,
-                      itemCount: item?.images?.length,
+                      itemCount: imageList.length,
                       itemBuilder: (context, index) {
-                        var imageData = item?.images?[index];
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: CustomImage(
-                            image: '$baseUrl/$imageData',
+                            image: '$baseUrl/${imageList[index]}',
                             height: 200,
                             fit: BoxFit.contain,
                             width: MediaQuery.of(context).size.width,
@@ -54,24 +54,48 @@ class ItemImageView extends StatelessWidget {
                         itemController.setImageSliderIndex(index);
                       },
                     ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: _indicators(context, itemController, item?.images ?? []),
-                      ),
-                    ),
-                  ),
+                  )
+
+                  // SizedBox(
+                  //   height: ResponsiveHelper.isDesktop(context) ? 350 : MediaQuery.of(context).size.width * 0.7,
+                  //   child: PageView.builder(
+                  //     controller: _controller,
+                  //     itemCount: item?.images?.length,
+                  //     itemBuilder: (context, index) {
+                  //       var imageData = item?.images?[index];
+                  //       return ClipRRect(
+                  //         borderRadius: BorderRadius.circular(10),
+                  //         child: CustomImage(
+                  //           image: '$baseUrl/$imageData',
+                  //           height: 200,
+                  //           fit: BoxFit.contain,
+                  //           width: MediaQuery.of(context).size.width,
+                  //         ),
+                  //       );
+                  //     },
+                  //     onPageChanged: (index) {
+                  //       itemController.setImageSliderIndex(index);
+                  //     },
+                  //   ),
+                  // ),
+                  // Positioned(
+                  //   left: 0,
+                  //   right: 0,
+                  //   bottom: 0,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: _indicators(context, itemController, item?.images ?? []),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
           ],
         );
+      
       },
     );
   }
