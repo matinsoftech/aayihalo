@@ -15,7 +15,8 @@ class HomeScreenSections extends StatelessWidget {
   final bool isShop;
   final List<Product> products;
   final String title;
-  const HomeScreenSections({super.key, 
+  const HomeScreenSections({
+    super.key,
     required this.isFood,
     required this.isShop,
     required this.products,
@@ -28,41 +29,40 @@ class HomeScreenSections extends StatelessWidget {
       builder: (itemController) {
         List<Item>? discountedItemList = itemController.discountedItemList;
 
-        return discountedItemList != null
-            ? discountedItemList.isNotEmpty
-                ? Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault, left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault),
-                      child: TitleWidget(
-                        title: title.tr,
-                        // image: Images.discountOfferIcon,
-                        // onTap: () => Get.toNamed(RouteHelper.getPopularItemRoute(false, true)),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 285,
-                      width: Get.width,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
-                        itemCount: products.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
-                            child: ItemCardCollection(
-                              item: products[index],
-                              isPopularItem: false,
-                              isFood: isFood,
-                              isShop: isShop,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ])
-                : const SizedBox()
-            : const ItemShimmerView(isPopularItem: false);
+        return products.isNotEmpty
+            ? Column(children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault, left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault),
+                  child: TitleWidget(
+                    title: title.tr,
+                    // image: Images.discountOfferIcon,
+                    // onTap: () => Get.toNamed(RouteHelper.getPopularItemRoute(false, true)),
+                  ),
+                ),
+                SizedBox(
+                  height: 285,
+                  width: Get.width,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
+                        child: ItemCardCollection(
+                          item: products[index],
+                          isPopularItem: false,
+                          isFood: isFood,
+                          isShop: isShop,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ])
+            : const SizedBox();
+        // : const ItemShimmerView(isPopularItem: false);
       },
     );
   }

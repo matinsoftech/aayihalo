@@ -19,12 +19,12 @@ class CategoryViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController scrollController = ScrollController();
+    // ScrollController scrollController = ScrollController();
 
     return GetBuilder<SplashController>(
       builder: (splashController) {
-        bool isPharmacy = splashController.module != null && splashController.module!.moduleType.toString() == AppConstants.pharmacy;
-        bool isFood = splashController.module != null && splashController.module!.moduleType.toString() == AppConstants.food;
+        // bool isPharmacy = splashController.module != null && splashController.module!.moduleType.toString() == AppConstants.pharmacy;
+        // bool isFood = splashController.module != null && splashController.module!.moduleType.toString() == AppConstants.food;
 
         return GetBuilder<CategoryController>(
           builder: (categoryController) {
@@ -38,7 +38,9 @@ class CategoryViewWidget extends StatelessWidget {
                 // isFood
                 //     ?
 
-                Center(child: FoodCategoryView(categoryController: categoryController));
+                Center(
+                    child: FoodCategoryView(categoryController: categoryController),
+                  );
 
             // :
             //  Column(
