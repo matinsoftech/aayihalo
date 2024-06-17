@@ -25,7 +25,7 @@ import 'package:get/get.dart';
 class AuthController extends GetxController implements GetxService {
   final AuthRepo authRepo;
   AuthController({required this.authRepo}) {
-   _notification = authRepo.isNotificationActive();
+    _notification = authRepo.isNotificationActive();
   }
 
   bool _isLoading = false;
@@ -113,24 +113,24 @@ class AuthController extends GetxController implements GetxService {
     return responseModel;
   }
 
-  void showHidePass({bool isUpdate = true}){
-    _showPassView = ! _showPassView;
-    if(isUpdate) {
+  void showHidePass({bool isUpdate = true}) {
+    _showPassView = !_showPassView;
+    if (isUpdate) {
       update();
     }
   }
 
-  void minTimeChange(String time){
+  void minTimeChange(String time) {
     _storeMinTime = time;
     update();
   }
 
-  void maxTimeChange(String time){
+  void maxTimeChange(String time) {
     _storeMaxTime = time;
     update();
   }
 
-  void timeUnitChange(String unit){
+  void timeUnitChange(String unit) {
     _storeTimeUnit = unit;
     update();
   }
@@ -142,37 +142,36 @@ class AuthController extends GetxController implements GetxService {
     _lowercaseCheck = false;
     _spatialCheck = false;
 
-    if(pass.length > 7){
+    if (pass.length > 7) {
       _lengthCheck = true;
     }
-    if(pass.contains(RegExp(r'[a-z]'))) {
+    if (pass.contains(RegExp(r'[a-z]'))) {
       _lowercaseCheck = true;
     }
-    if(pass.contains(RegExp(r'[A-Z]'))){
+    if (pass.contains(RegExp(r'[A-Z]'))) {
       _uppercaseCheck = true;
     }
-    if(pass.contains(RegExp(r'[ .!@#$&*~^%]'))){
+    if (pass.contains(RegExp(r'[ .!@#$&*~^%]'))) {
       _spatialCheck = true;
     }
-    if(pass.contains(RegExp(r'[\d+]'))){
+    if (pass.contains(RegExp(r'[\d+]'))) {
       _numberCheck = true;
     }
-    if(isUpdate) {
+    if (isUpdate) {
       update();
     }
   }
 
-
-  void dmStatusChange(double value, {bool isUpdate = true}){
+  void dmStatusChange(double value, {bool isUpdate = true}) {
     _dmStatus = value;
-    if(isUpdate) {
+    if (isUpdate) {
       update();
     }
   }
 
-  void storeStatusChange(double value, {bool isUpdate = true}){
+  void storeStatusChange(double value, {bool isUpdate = true}) {
     _storeStatus = value;
-    if(isUpdate) {
+    if (isUpdate) {
       update();
     }
   }
@@ -185,7 +184,6 @@ class AuthController extends GetxController implements GetxService {
       _vehicleIds!.add(0);
       response.body.forEach((vehicle) => _vehicles!.add(DeliveryManVehicleModel.fromJson(vehicle)));
       response.body.forEach((vehicle) => _vehicleIds!.add(DeliveryManVehicleModel.fromJson(vehicle).id));
-
     } else {
       ApiChecker.checkApi(response);
     }
@@ -194,7 +192,7 @@ class AuthController extends GetxController implements GetxService {
 
   void setVehicleIndex(int? index, bool notify) {
     _vehicleIndex = index;
-    if(notify) {
+    if (notify) {
       update();
     }
   }
@@ -205,7 +203,7 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.registration(signUpBody);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
-      if(!Get.find<SplashController>().configModel!.customerVerification!) {
+      if (!Get.find<SplashController>().configModel!.customerVerification!) {
         authRepo.saveUserToken(response.body["token"]);
         await authRepo.updateToken();
         authRepo.clearGuestId();
@@ -226,9 +224,8 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.login(phone: phone, password: password);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
-      if(Get.find<SplashController>().configModel!.customerVerification! && response.body['is_phone_verified'] == 0) {
-
-      }else {
+      if (Get.find<SplashController>().configModel!.customerVerification! && response.body['is_phone_verified'] == 0) {
+      } else {
         authRepo.saveUserToken(response.body['token']);
         await authRepo.updateToken();
         authRepo.clearGuestId();
@@ -243,13 +240,12 @@ class AuthController extends GetxController implements GetxService {
     return responseModel;
   }
 
-   Future<ResponseModel> loginWithPhoneNumber(String phone) async {
+  Future<ResponseModel> loginWithPhoneNumber(String phone) async {
     _isLoading = true;
     update();
     Response response = await authRepo.loginWithPhoneNumber(phone: phone);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
-     
       responseModel = ResponseModel(true, response.body['message']);
     } else {
       responseModel = ResponseModel(false, response.statusText);
@@ -259,18 +255,17 @@ class AuthController extends GetxController implements GetxService {
     return responseModel;
   }
 
-  Future<ResponseModel> verifyOtp({required String phone,required String otp}) async {
+  Future<ResponseModel> verifyOtp({required String phone, required String otp}) async {
     _isLoading = true;
     update();
     Response response = await authRepo.verifyOTP(phone: phone, code: otp);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
-     
-        authRepo.saveUserToken(response.body['token']);
-        await authRepo.updateToken();
-        authRepo.clearGuestId();
-        Get.find<UserController>().getUserInfo();
-      
+      authRepo.saveUserToken(response.body['token']);
+      await authRepo.updateToken();
+      authRepo.clearGuestId();
+      Get.find<UserController>().getUserInfo();
+
       responseModel = ResponseModel(true, '${response.body['message']}${response.body['token']}');
     } else {
       responseModel = ResponseModel(false, response.statusText);
@@ -286,19 +281,19 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.loginWithSocialMedia(socialLogInBody, 60);
     if (response.statusCode == 200) {
       String? token = response.body['token'];
-      if(token != null && token.isNotEmpty) {
-        if(Get.find<SplashController>().configModel!.customerVerification! && response.body['is_phone_verified'] == 0) {
+      if (token != null && token.isNotEmpty) {
+        if (Get.find<SplashController>().configModel!.customerVerification! && response.body['is_phone_verified'] == 0) {
           Get.toNamed(RouteHelper.getVerificationRoute(response.body['phone'] ?? socialLogInBody.email, token, RouteHelper.signUp, ''));
-        }else {
+        } else {
           authRepo.saveUserToken(response.body['token']);
           await authRepo.updateToken();
           authRepo.clearGuestId();
           Get.find<LocationController>().navigateToLocationScreen('sign-in');
         }
-      }else {
+      } else {
         Get.toNamed(RouteHelper.getForgotPassRoute(true, socialLogInBody));
       }
-    }else if(response.statusCode == 403 && response.body['errors'][0]['code'] == 'email'){
+    } else if (response.statusCode == 403 && response.body['errors'][0]['code'] == 'email') {
       Get.toNamed(RouteHelper.getForgotPassRoute(true, socialLogInBody));
     } else {
       showCustomSnackBar(response.statusText);
@@ -313,9 +308,9 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.registerWithSocialMedia(socialLogInBody);
     if (response.statusCode == 200) {
       String? token = response.body['token'];
-      if(Get.find<SplashController>().configModel!.customerVerification! && response.body['is_phone_verified'] == 0) {
+      if (Get.find<SplashController>().configModel!.customerVerification! && response.body['is_phone_verified'] == 0) {
         Get.toNamed(RouteHelper.getVerificationRoute(socialLogInBody.phone, token, RouteHelper.signUp, ''));
-      }else {
+      } else {
         authRepo.saveUserToken(response.body['token']);
         await authRepo.updateToken();
         authRepo.clearGuestId();
@@ -449,7 +444,6 @@ class AuthController extends GetxController implements GetxService {
     update();
   }
 
-
   bool _isActiveRememberMe = false;
 
   bool get isActiveRememberMe => _isActiveRememberMe;
@@ -480,6 +474,7 @@ class AuthController extends GetxController implements GetxService {
     Get.find<SplashController>().setModule(null);
     return authRepo.clearSharedData();
   }
+
   Future<void> socialLogout() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     googleSignIn.disconnect();
@@ -514,7 +509,7 @@ class AuthController extends GetxController implements GetxService {
     return authRepo.getUserToken();
   }
 
-  void saveDmTipIndex(String i){
+  void saveDmTipIndex(String i) {
     authRepo.saveDmTipIndex(i);
   }
 
@@ -522,7 +517,7 @@ class AuthController extends GetxController implements GetxService {
     return authRepo.getDmTipIndex();
   }
 
-  void saveEarningPoint(String point){
+  void saveEarningPoint(String point) {
     authRepo.saveEarningPoint(point);
   }
 
@@ -538,10 +533,10 @@ class AuthController extends GetxController implements GetxService {
   }
 
   void pickImage(bool isLogo, bool isRemove) async {
-    if(isRemove) {
+    if (isRemove) {
       _pickedLogo = null;
       _pickedCover = null;
-    }else {
+    } else {
       if (isLogo) {
         _pickedLogo = await ImagePicker().pickImage(source: ImageSource.gallery);
       } else {
@@ -574,7 +569,7 @@ class AuthController extends GetxController implements GetxService {
 
   Future<void> setZoneIndex(int? index, {bool canUpdate = true}) async {
     _selectedZoneIndex = index;
-    if(canUpdate){
+    if (canUpdate) {
       await getModules(zoneList![selectedZoneIndex!].id);
       update();
     }
@@ -582,19 +577,21 @@ class AuthController extends GetxController implements GetxService {
 
   void setLocation(LatLng location) async {
     ZoneResponseModel response = await Get.find<LocationController>().getZone(
-      location.latitude.toString(), location.longitude.toString(), false,
+      location.latitude.toString(),
+      location.longitude.toString(),
+      false,
     );
     _storeAddress = await Get.find<LocationController>().getAddressFromGeocode(LatLng(location.latitude, location.longitude));
-    if(response.isSuccess && response.zoneIds.isNotEmpty) {
+    if (response.isSuccess && response.zoneIds.isNotEmpty) {
       _restaurantLocation = location;
       _zoneIds = response.zoneIds;
-      for(int index=0; index<_zoneList!.length; index++) {
-        if(_zoneIds!.contains(_zoneList![index].id)) {
+      for (int index = 0; index < _zoneList!.length; index++) {
+        if (_zoneIds!.contains(_zoneList![index].id)) {
           _selectedZoneIndex = index;
           break;
         }
       }
-    }else {
+    } else {
       _restaurantLocation = null;
       _zoneIds = null;
     }
@@ -605,21 +602,21 @@ class AuthController extends GetxController implements GetxService {
     _isLoading = true;
     update();
     Response response = await authRepo.registerStore(storeBody, _pickedLogo, _pickedCover);
-    if(response.statusCode == 200) {
-      if(ResponsiveHelper.isDesktop(Get.context)){
+    if (response.statusCode == 200) {
+      if (ResponsiveHelper.isDesktop(Get.context)) {
         Get.offAllNamed(RouteHelper.getInitialRoute());
-      }else {
+      } else {
         Get.back();
       }
       showCustomSnackBar('store_registration_successful'.tr, isError: false);
-    }else {
+    } else {
       ApiChecker.checkApi(response);
     }
     _isLoading = false;
     update();
   }
 
-  void resetStoreRegistration(){
+  void resetStoreRegistration() {
     _pickedLogo = null;
     _pickedCover = null;
     _selectedModuleIndex = -1;
@@ -630,7 +627,7 @@ class AuthController extends GetxController implements GetxService {
     update();
   }
 
-  void resetDeliveryRegistration(){
+  void resetDeliveryRegistration() {
     _identityTypeIndex = 0;
     _dmTypeIndex = 0;
     _selectedZoneIndex = -1;
@@ -672,36 +669,35 @@ class AuthController extends GetxController implements GetxService {
 
   void setIdentityTypeIndex(String? identityType, bool notify) {
     int index0 = 0;
-    for(int index=0; index<_identityTypeList.length; index++) {
-      if(_identityTypeList[index] == identityType) {
+    for (int index = 0; index < _identityTypeList.length; index++) {
+      if (_identityTypeList[index] == identityType) {
         index0 = index;
         break;
       }
     }
     _identityTypeIndex = index0;
-    if(notify) {
+    if (notify) {
       update();
     }
   }
 
   void setDMTypeIndex(int dmType, bool notify) {
     _dmTypeIndex = dmType;
-    if(notify) {
+    if (notify) {
       update();
     }
   }
 
-
   void pickDmImage(bool isLogo, bool isRemove) async {
-    if(isRemove) {
+    if (isRemove) {
       _pickedImage = null;
       _pickedIdentities = [];
-    }else {
+    } else {
       if (isLogo) {
         _pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
       } else {
         XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-        if(xFile != null) {
+        if (xFile != null) {
           _pickedIdentities.add(xFile);
         }
       }
@@ -709,7 +705,7 @@ class AuthController extends GetxController implements GetxService {
     }
   }
 
-  void removeDmImage(){
+  void removeDmImage() {
     _pickedImage = null;
     update();
   }
@@ -724,7 +720,7 @@ class AuthController extends GetxController implements GetxService {
     update();
     List<MultipartBody> multiParts = [];
     multiParts.add(MultipartBody('image', _pickedImage));
-    for(XFile file in _pickedIdentities) {
+    for (XFile file in _pickedIdentities) {
       multiParts.add(MultipartBody('identity_image[]', file));
     }
     Response response = await authRepo.registerDeliveryMan(deliveryManBody, multiParts);
@@ -740,7 +736,7 @@ class AuthController extends GetxController implements GetxService {
 
   void selectModuleIndex(int? index, {canUpdate = true}) {
     _selectedModuleIndex = index;
-    if(canUpdate) {
+    if (canUpdate) {
       update();
     }
   }

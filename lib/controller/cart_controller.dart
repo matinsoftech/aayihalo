@@ -555,14 +555,28 @@ class CartController extends GetxController implements GetxService {
   int getItemQuantity({required var item}) {
     for (CartDataModel data in _cartList) {
       if (data.item!.id == item.id) {
-        print('items is found in cart');
+        // print('items is found in cart');
         return data.quantity!;
       }
     }
-    print('items is not found in cart');
+    // print('items is not found in cart');
 
     return 0; // Return 0 if the item is not found
   }
+
+  //by nirajan
+  int newGetItemQuantity({required var itemId}) {
+    for (CartDataModel data in _cartList) {
+      if (data.item!.id == itemId) {
+        // print('items is found in cart');
+        return data.quantity!;
+      }
+    }
+    // print('items is not found in cart');
+
+    return 0; // Return 0 if the item is not found
+  }
+//
 
   Future<void> placeOrder({String? couponCode, required int deliveryAddressId}) async {
     try {

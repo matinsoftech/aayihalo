@@ -175,6 +175,8 @@ class BannerController extends GetxController implements GetxService {
   var isLoading = false;
   BannerWithStoreIdModel? bannerWithStoreIdModel;
   List<String> allBannerImages = [];
+  List<String> midBannerImages = [];
+  String? bottomImage;
   Future<void> getBannerWithStoreId(var storeId) async {
     try {
       isLoading = true;
@@ -185,9 +187,14 @@ class BannerController extends GetxController implements GetxService {
         bannerWithStoreIdModel = BannerWithStoreIdModel.fromJson(response.body);
         allBannerImages = [
           ...bannerWithStoreIdModel!.topBanners.map((bannerImage) => bannerImage.image.toString()),
-          ...bannerWithStoreIdModel!.midBanners.map((bannerImage) => bannerImage.image.toString()),
-          // if (bannerWithStoreIdModel!.moduleBottomBanner != null) bannerWithStoreIdModel!.moduleBottomBanner!.value.toString(),
         ];
+        midBannerImages = [
+          ...bannerWithStoreIdModel!.midBanners.map((bannerImage) => bannerImage.image.toString()),
+        ];
+        // bottomBannerImages = [
+        //   if (bannerWithStoreIdModel!.moduleBottomBanner != null) bannerWithStoreIdModel!.moduleBottomBanner!.value.toString(),
+        // ];
+        bottomImage = bannerWithStoreIdModel!.moduleBottomBanner!.value.toString();
         // print('$storeId is here to ');
       } else {
         debugPrint('Failed to load banners: ${response.statusCode}');

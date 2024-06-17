@@ -472,7 +472,7 @@ class CategoryProduct {
   int? isApproved;
   String? unitType;
   // List<Translation>? translations;
-  Unit? unit;
+  // Unit? unit;
 
   CategoryProduct({
     this.id,
@@ -516,7 +516,7 @@ class CategoryProduct {
     this.isApproved,
     this.unitType,
     // this.translations,
-    this.unit,
+    // this.unit,
   });
 
   CategoryProduct.fromJson(Map<String, dynamic> json) {
@@ -561,7 +561,7 @@ class CategoryProduct {
     isApproved = json['is_approved'];
     unitType = json['unit_type'];
     // translations = (json['translations'] as List).map((i) => Translation.fromJson(i)).toList();
-    unit = Unit.fromJson(json['unit']);
+    // unit = Unit.fromJson(json['unit']);
   }
 
   Map<String, dynamic> toJson() {
@@ -621,9 +621,9 @@ class CategoryProduct {
     // if (translations != null) {
     //   data['translations'] = translations!.map((v) => v.toJson()).toList();
     // }
-    if (unit != null) {
-      data['unit'] = unit!.toJson();
-    }
+    // if (unit != null) {
+    //   data['unit'] = unit!.toJson();
+    // }
     return data;
   }
 }

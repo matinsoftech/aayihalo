@@ -11,44 +11,34 @@ class ItemRepo extends GetxService {
     return await apiClient.getData('${AppConstants.popularItemUri}?type=$type');
   }
 
-  Future<Response> getHomeScreenData(
-      {required String latitude, required String longitude}) async {
-    final res = await apiClient.getData(
-        '${AppConstants.homeScreenDataUrl}?latitude=$latitude&longitude=$longitude'); 
-
-        print("Response of home screen $res"); 
+  Future<Response> getHomeScreenData({required String latitude, required String longitude}) async {
+    final res = await apiClient.getData('${AppConstants.homeScreenDataUrl}?latitude=$latitude&longitude=$longitude&api=true}');
 
     return res;
   }
 
   Future<Response> getReviewedItemList(String type) async {
-    return await apiClient
-        .getData('${AppConstants.reviewedItemUri}?type=$type');
+    return await apiClient.getData('${AppConstants.reviewedItemUri}?type=$type');
   }
 
   Future<Response> getFeaturedCategoriesItemList() async {
-    return await apiClient.getData(
-        '${AppConstants.featuredCategoriesItemsUri}?limit=30&offset=1');
+    return await apiClient.getData('${AppConstants.featuredCategoriesItemsUri}?limit=30&offset=1');
   }
 
   Future<Response> getRecommendedItemList(String type) async {
-    return await apiClient
-        .getData('${AppConstants.recommendedItemsUri}$type&limit=30');
+    return await apiClient.getData('${AppConstants.recommendedItemsUri}$type&limit=30');
   }
 
   Future<Response> getDiscountedItemList() async {
-    return await apiClient
-        .getData('${AppConstants.discountedItemsUri}?offset=1&limit=50');
+    return await apiClient.getData('${AppConstants.discountedItemsUri}?offset=1&limit=50');
   }
 
   Future<Response> submitReview(ReviewBody reviewBody) async {
-    return await apiClient.postData(
-        AppConstants.reviewUri, reviewBody.toJson());
+    return await apiClient.postData(AppConstants.reviewUri, reviewBody.toJson());
   }
 
   Future<Response> submitDeliveryManReview(ReviewBody reviewBody) async {
-    return await apiClient.postData(
-        AppConstants.deliveryManReviewUri, reviewBody.toJson());
+    return await apiClient.postData(AppConstants.deliveryManReviewUri, reviewBody.toJson());
   }
 
   Future<Response> getItemDetails(int? itemID) async {
@@ -56,8 +46,7 @@ class ItemRepo extends GetxService {
   }
 
   Future<Response> getBasicMedicine() async {
-    return apiClient
-        .getData('${AppConstants.basicMedicineUri}?offset=1&limit=50');
+    return apiClient.getData('${AppConstants.basicMedicineUri}?offset=1&limit=50');
   }
 
   Future<Response> getCommonConditions() async {
@@ -65,7 +54,6 @@ class ItemRepo extends GetxService {
   }
 
   Future<Response> getConditionsWiseItem(int id) async {
-    return apiClient
-        .getData('${AppConstants.conditionWiseItemUri}$id?limit=15&offset=1');
+    return apiClient.getData('${AppConstants.conditionWiseItemUri}$id?limit=15&offset=1');
   }
 }

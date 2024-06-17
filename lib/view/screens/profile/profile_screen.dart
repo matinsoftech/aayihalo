@@ -211,17 +211,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             );
                                           })
                                         : const SizedBox(),
-                                    SizedBox(height: isLoggedIn ? Dimensions.paddingSizeSmall : 0),
-                                    isLoggedIn
-                                        ? userController.userInfoModel!.socialId == null
-                                            ? ProfileButton(
-                                                icon: Icons.lock,
-                                                title: 'change_password'.tr,
-                                                onTap: () {
-                                                  Get.toNamed(RouteHelper.getResetPasswordRoute('', '', 'password-change'));
-                                                })
-                                            : const SizedBox()
-                                        : const SizedBox(),
+                                    // SizedBox(height: isLoggedIn ? Dimensions.paddingSizeSmall : 0),
+                                    // isLoggedIn
+                                    //     ? userController.userInfoModel!.socialId == null
+                                    //         ? ProfileButton(
+                                    //             icon: Icons.lock,
+                                    //             title: 'change_password'.tr,
+                                    //             onTap: () {
+                                    //               Get.toNamed(RouteHelper.getResetPasswordRoute('', '', 'password-change'));
+                                    //             })
+                                    //         : const SizedBox()
+                                    //     : const SizedBox(),
                                     SizedBox(
                                         height: isLoggedIn
                                             ? userController.userInfoModel!.socialId == null

@@ -13,13 +13,18 @@ class CartCountView extends StatelessWidget {
   final bool fromItemDetail;
 
   final Widget? child;
-  const CartCountView({key, required this.item, this.child, this.fromItemDetail = false}) : super(key: key);
+  const CartCountView({
+    key,
+    required this.item,
+    this.child,
+    this.fromItemDetail = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CartController>(builder: (cartController) {
       int cartQty = cartController.getItemQuantity(item: item);
-      print('card quantity ${cartQty != 0}');
+      // print('card quantity ${cartQty != 0}');
       return cartQty != 0
           ? Center(
               child: Container(
@@ -153,86 +158,88 @@ class CartScreenItemCountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CartController>(builder: (cartController) {
-      int cartQty = cartController.getItemQuantity(item: item);
+    return GetBuilder<CartController>(
+      builder: (cartController) {
+        int cartQty = cartController.getItemQuantity(item: item);
 
-      return cartQty != 0
-          ? Center(
-              child: Container(
-                width: fromItemDetail ? 100 : null,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
+        return cartQty != 0
+            ? Center(
+                child: Container(
+                  width: fromItemDetail ? 100 : null,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
+                  ),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    InkWell(
+                      onTap: cartController.isLoading
+                          ? null
+                          : () {
+                              if (cartController.cartList[cartIndex].quantity! > 1) {
+                                cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! - 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null, index: cartIndex);
+                              } else {
+                                cartController.removeCartItemOnline(cartIndex);
+                              }
+                            },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Theme.of(context).primaryColor),
+                        ),
+                        padding: const EdgeInsets.all(
+                          Dimensions.paddingSizeExtraSmall,
+                        ),
+                        child: Icon(
+                          Icons.remove,
+                          size: fromItemDetail ? null : 16,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(fromItemDetail ? 0 : 2.0),
+                      child: Text(
+                        cartQty.toString(),
+                        style: robotoMedium.copyWith(fontSize: fromItemDetail ? Dimensions.fontSizeLarge : Dimensions.fontSizeSmall, color: Theme.of(context).cardColor),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: cartController.isLoading
+                          ? null
+                          : () {
+                              cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! + 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null, index: cartIndex);
+                            },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Theme.of(context).primaryColor),
+                        ),
+                        padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                        child: Icon(
+                          Icons.add,
+                          size: fromItemDetail ? null : 16,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                  ]),
                 ),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  InkWell(
-                    onTap: cartController.isLoading
-                        ? null
-                        : () {
-                            if (cartController.cartList[cartIndex].quantity! > 1) {
-                              cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! - 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null, index: cartIndex);
-                            } else {
-                              cartController.removeCartItemOnline(cartIndex);
-                            }
-                          },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Theme.of(context).primaryColor),
-                      ),
-                      padding: const EdgeInsets.all(
-                        Dimensions.paddingSizeExtraSmall,
-                      ),
-                      child: Icon(
-                        Icons.remove,
-                        size: fromItemDetail ? null : 16,
-                        color: Theme.of(context).primaryColor,
-                      ),
+              )
+            : InkWell(
+                onTap: () async {
+                  Get.find<ItemController>().addToCart(productId: item.id!, quantity: 1);
+                },
+                child: child ??
+                    Container(
+                      height: fromItemDetail ? 40 : 25,
+                      width: fromItemDetail ? 40 : 25,
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).cardColor, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)]),
+                      child: Icon(Icons.add, size: fromItemDetail ? 24 : 20, color: Theme.of(context).primaryColor),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(fromItemDetail ? 0 : 2.0),
-                    child: Text(
-                      cartQty.toString(),
-                      style: robotoMedium.copyWith(fontSize: fromItemDetail ? Dimensions.fontSizeLarge : Dimensions.fontSizeSmall, color: Theme.of(context).cardColor),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: cartController.isLoading
-                        ? null
-                        : () {
-                            cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! + 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null, index: cartIndex);
-                          },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Theme.of(context).primaryColor),
-                      ),
-                      padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                      child: Icon(
-                        Icons.add,
-                        size: fromItemDetail ? null : 16,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
-            )
-          : InkWell(
-              onTap: () async {
-                Get.find<ItemController>().addToCart(productId: item.id!, quantity: 1);
-              },
-              child: child ??
-                  Container(
-                    height: fromItemDetail ? 40 : 25,
-                    width: fromItemDetail ? 40 : 25,
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).cardColor, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)]),
-                    child: Icon(Icons.add, size: fromItemDetail ? 24 : 20, color: Theme.of(context).primaryColor),
-                  ),
-            );
-    });
+              );
+      },
+    );
   }
 }

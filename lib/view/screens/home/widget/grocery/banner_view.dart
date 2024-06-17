@@ -13,7 +13,7 @@ class BannerView extends StatelessWidget {
   const BannerView({Key? key, required this.isFeatured}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    BannerController bannerController = Get.find<BannerController>();
+    // BannerController bannerController = Get.find<BannerController>();
 
     return GetBuilder<BannerController>(
       builder: (bannerController) {

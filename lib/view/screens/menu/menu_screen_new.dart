@@ -26,7 +26,7 @@ class MenuScreenNew extends StatefulWidget {
 class _MenuScreenNewState extends State<MenuScreenNew> {
   @override
   Widget build(BuildContext context) {
-    print(Get.find<UserController>().userInfoModel!.image);
+    // print(Get.find<UserController>().userInfoModel!.image);
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       body: GetBuilder<UserController>(

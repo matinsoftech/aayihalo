@@ -41,325 +41,341 @@ class ItemCardCollection extends StatelessWidget {
 
     return OnHover(
       isItem: true,
-      child: Stack(children: [
-        InkWell(
-          hoverColor: Colors.transparent,
-          onTap: () => Get.find<ItemController>().navigateToItemPage(
-              Item(
-                id: item.id,
-                name: item.name,
-                image: item.image,
-                description: item.description,
-                avgRating: double.parse(item.avgRating.toString()),
-                ratingCount: item.ratingCount,
-                discount: double.parse((item.discount ?? '0.0').toString()),
-                discountType: item.discountType.toString(),
-                unitType: item.unitType.toString(),
-                storeName: '',
-                stock: item.stock,
-                price: item.price,
-              ),
-              context),
-          child: Container(
-            width: 150,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-                color: Theme.of(context).cardColor,
-                border: Border.all(
-                  color: Theme.of(context).dividerColor,
-                  width: 0.5,
-                )),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(
-                flex: 6,
-                child: Stack(children: [
-                  Padding(
-                    padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                      child: CustomImage(
-                        placeholder: Images.placeholder,
-                        image: '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
-                            '/${item.image}',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    ),
-                  ),
-                  AddFavouriteView(
-                    item: Item(
-                      id: item.id,
-                      name: item.name,
-                      image: item.image,
-                      avgRating: double.parse(item.avgRating.toString()),
-                      ratingCount: item.ratingCount,
-                      discount: double.parse((item.discount ?? '0.0').toString()),
-                      discountType: item.discountType.toString(),
-                      unitType: item.unitType.toString(),
-                      storeName: '',
-                      stock: item.stock,
-                      price: item.price,
-                    ),
-                  ),
-                  DiscountTag(
-                    discount: discount,
-                    discountType: discountType,
-                    freeDelivery: false,
-                  ),
-                  OrganicTag(
-                      item: Item(
-                        id: item.id,
-                        name: item.name,
-                        image: item.image,
-                        avgRating: double.parse(item.avgRating.toString()),
-                        ratingCount: item.ratingCount,
-                        discount: double.parse((item.discount ?? '0.0').toString()),
-                        discountType: item.discountType.toString(),
-                        unitType: item.unitType.toString(),
-                        storeName: '',
-                        stock: item.stock,
-                        price: item.price,
-                      ),
-                      placeInImage: false),
-                  (item.stock != null && item.stock! < 0)
-                      ? Positioned(
-                          bottom: 10,
-                          left: 0,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor.withOpacity(0.5),
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(Dimensions.radiusLarge),
-                                bottomRight: Radius.circular(Dimensions.radiusLarge),
-                              ),
-                            ),
-                            child: Text('out_of_stock'.tr,
-                                style: robotoRegular.copyWith(
-                                  color: Theme.of(context).cardColor,
-                                  fontSize: Dimensions.fontSizeSmall,
-                                )),
-                          ),
-                        )
-                      : const SizedBox(),
-                  Get.find<ItemController>().isAvailable(Item(
-                    id: item.id,
-                    name: item.name,
-                    image: item.image,
-                    avgRating: double.parse(item.avgRating.toString()),
-                    ratingCount: item.ratingCount,
-                    discount: double.parse((item.discount ?? '0.0').toString()),
-                    discountType: item.discountType.toString(),
-                    unitType: item.unitType.toString(),
-                    storeName: '',
-                    stock: item.stock,
-                    price: item.price,
-                  ))
-                      ? const SizedBox()
-                      : NotAvailableWidget(radius: Dimensions.radiusLarge, isAllSideRound: isPopularItem),
-                ]),
-              ),
-              Expanded(
-                flex: 4,
-                child: Padding(
-                  padding: EdgeInsets.only(left: Dimensions.paddingSizeSmall, right: isShop ? 0 : Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeSmall, bottom: isShop ? 0 : Dimensions.paddingSizeSmall),
-                  child: Stack(clipBehavior: Clip.none, children: [
-                    Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      // (isFood || isShop)
-                      //     ? Text(item.storeName ?? '',
-                      //         style: robotoRegular.copyWith(
-                      //             color: Theme.of(context).disabledColor))
-                      //     :
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 120,
-                            child: Text(
-                              item.name!,
-                              style: robotoBold.copyWith(fontSize: 12),
-                              overflow: TextOverflow.visible,
+      child: Stack(
+        children: [
+          InkWell(
+            hoverColor: Colors.transparent,
+            onTap: () => Get.find<ItemController>().navigateToItemPage(
+                Item(
+                  id: item.id,
+                  name: item.name,
+                  image: item.image,
+                  description: item.description,
+                  avgRating: double.parse(item.avgRating.toString()),
+                  ratingCount: item.ratingCount,
+                  discount: double.parse((item.discount ?? '0.0').toString()),
+                  discountType: item.discountType.toString(),
+                  unitType: item.unitType.toString(),
+                  storeName: '',
+                  stock: item.stock,
+                  price: item.price!.toDouble(),
+                ),
+                context),
+            child: Container(
+              width: 150,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                  color: Theme.of(context).cardColor,
+                  border: Border.all(
+                    color: Theme.of(context).dividerColor,
+                    width: 0.5,
+                  )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    // flex: 6,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                            child: CustomImage(
+                              placeholder: Images.placeholder,
+                              image: '${Get.find<SplashController>().configModel!.baseUrls!.itemImageUrl}'
+                                  '/${item.image}',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
                             ),
                           ),
-                        ],
-                      ),
-
-                      (isFood || isShop)
-                          ? Flexible(
-                              child: Text(
-                                item.name!.length > 10 ? '${item.name!.substring(0, 10)}..' : item.name ?? '',
-                                style: robotoBold,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            )
-                          : Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
-                              // Icon(Icons.star,
-                              //     size: 14,
-                              //     color:
-                              //         Theme.of(context).primaryColor),
-
-                              // const SizedBox(
-                              //     width:
-                              //         Dimensions.paddingSizeExtraSmall),
-                              // Text(
-                              //     (item.description ?? ' ').substring(
-                              //         0,
-                              //         (item.description ?? '').length <
-                              //                 20
-                              //             ? (item.description ?? '')
-                              //                 .length
-                              //             : 20),
-                              //     style: robotoRegular.copyWith(
-                              //         fontSize:
-                              //             Dimensions.fontSizeSmall)),
-                              // const SizedBox(
-                              //     width:
-                              //         Dimensions.paddingSizeExtraSmall),
-                              // Text("(${item.ratingCount})",
-                              //     style: robotoRegular.copyWith(
-                              //         fontSize:
-                              //             Dimensions.fontSizeSmall,
-                              //         color: Theme.of(context)
-                              //             .disabledColor)),
-                            ]),
-
-                      (isFood || isShop)
-                          ? Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
-                              Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
-                              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                              Text(item.avgRating!.toStringAsFixed(1), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
-                              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                              Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
-                            ])
-                          :
-
-                          // (Get.find<SplashController>()
-                          //             .configModel!
-                          //             .moduleConfig!
-                          //             .module!
-                          //             .unit! &&
-                          //         item.unitType != null)
-                          //     ? Text(
-                          //         '(${item.unitType ?? ''})',
-                          //         style: robotoRegular.copyWith(
-                          //             fontSize:
-                          //                 Dimensions.fontSizeExtraSmall,
-                          //             color: Theme.of(context).hintColor),
-                          //       )
-                          //     :
-
-                          const SizedBox(),
-
-                      item.discount != null && item.discount! > 0
-                          ? Text(
-                              PriceConverter.convertPrice(Get.find<ItemController>().getStartingPrice(Item(
-                                id: item.id,
-                                name: item.name,
-                                image: item.image,
-                                avgRating: double.parse(item.avgRating.toString()),
-                                ratingCount: item.ratingCount,
-                                discount: double.parse((item.discount ?? '0.0').toString()),
-                                discountType: item.discountType.toString(),
-                                unitType: item.unitType.toString(),
-                                storeName: '',
-                                stock: item.stock,
-                                price: item.price,
-                              ))),
-                              style: robotoMedium.copyWith(
-                                fontSize: Dimensions.fontSizeExtraSmall,
-                                color: Theme.of(context).disabledColor,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                              textDirection: TextDirection.ltr,
-                            )
-                          : const SizedBox(),
-                      // SizedBox(height: item.discount != null && item.discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            PriceConverter.convertPrice(
-                              Get.find<ItemController>().getStartingPrice(Item(
-                                id: item.id,
-                                name: item.name,
-                                image: item.image,
-                                avgRating: double.parse(item.avgRating.toString()),
-                                ratingCount: item.ratingCount,
-                                discount: double.parse((item.discount ?? '0.0').toString()),
-                                discountType: item.discountType.toString(),
-                                unitType: item.unitType.toString(),
-                                storeName: '',
-                                stock: item.stock,
-                                price: item.price,
-                              )),
+                        ),
+                        AddFavouriteView(
+                          item: Item(
+                            id: item.id,
+                            name: item.name,
+                            image: item.image,
+                            avgRating: double.parse(item.avgRating.toString()),
+                            ratingCount: item.ratingCount,
+                            discount: double.parse((item.discount ?? '0.0').toString()),
+                            discountType: item.discountType.toString(),
+                            unitType: item.unitType.toString(),
+                            storeName: '',
+                            stock: item.stock,
+                            price: item.price!.toDouble(),
+                          ),
+                        ),
+                        DiscountTag(
+                          discount: discount,
+                          discountType: discountType,
+                          freeDelivery: false,
+                        ),
+                        OrganicTag(
+                            item: Item(
+                              id: item.id,
+                              name: item.name,
+                              image: item.image,
+                              avgRating: double.parse(item.avgRating.toString()),
+                              ratingCount: item.ratingCount,
                               discount: double.parse((item.discount ?? '0.0').toString()),
                               discountType: item.discountType.toString(),
+                              unitType: item.unitType.toString(),
+                              storeName: '',
+                              stock: item.stock,
+                              price: item.price!.toDouble(),
                             ),
-                            textDirection: TextDirection.ltr,
-                            style: robotoMedium,
+                            placeInImage: false),
+                        (item.stock != null && item.stock! < 0)
+                            ? Positioned(
+                                bottom: 10,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor.withOpacity(0.5),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(Dimensions.radiusLarge),
+                                      bottomRight: Radius.circular(Dimensions.radiusLarge),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'out_of_stock'.tr,
+                                    style: robotoRegular.copyWith(
+                                      color: Theme.of(context).cardColor,
+                                      fontSize: Dimensions.fontSizeSmall,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                        Get.find<ItemController>().isAvailable(
+                          Item(
+                            id: item.id,
+                            name: item.name,
+                            image: item.image,
+                            avgRating: double.parse(item.avgRating.toString()),
+                            ratingCount: item.ratingCount,
+                            discount: double.parse((item.discount ?? '0.0').toString()),
+                            discountType: item.discountType.toString(),
+                            unitType: item.unitType.toString(),
+                            storeName: '',
+                            stock: item.stock,
+                            price: item.price!.toDouble(),
                           ),
-                          // delivery in
+                        )
+                            ? const SizedBox()
+                            : NotAvailableWidget(radius: Dimensions.radiusLarge, isAllSideRound: isPopularItem),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    // flex: 4,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: Dimensions.paddingSizeSmall, right: isShop ? 0 : Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeSmall, bottom: isShop ? 0 : Dimensions.paddingSizeSmall),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                            // (isFood || isShop)
+                            //     ? Text(item.storeName ?? '',
+                            //         style: robotoRegular.copyWith(
+                            //             color: Theme.of(context).disabledColor))
+                            //     :
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 120,
+                                  child: Text(
+                                    item.name!,
+                                    style: robotoBold.copyWith(fontSize: 12),
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                ),
+                              ],
+                            ),
 
-                          CartCountView(
-                              fromItemDetail: false,
-                              item: Item(
-                                id: item.id,
-                                name: item.name,
-                                image: item.image,
-                                avgRating: double.parse(item.avgRating.toString()),
-                                ratingCount: item.ratingCount,
-                                discount: double.parse((item.discount ?? '0.0').toString()),
-                                discountType: item.discountType.toString(),
-                                unitType: item.unitType.toString(),
-                                storeName: '',
-                                stock: item.stock,
-                                price: item.price,
-                              ))
+                            (isFood || isShop)
+                                ? Flexible(
+                                    child: Text(
+                                      item.name!.length > 10 ? '${item.name!.substring(0, 10)}..' : item.name ?? '',
+                                      style: robotoBold,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  )
+                                : Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
+                                    // Icon(Icons.star,
+                                    //     size: 14,
+                                    //     color:
+                                    //         Theme.of(context).primaryColor),
+
+                                    // const SizedBox(
+                                    //     width:
+                                    //         Dimensions.paddingSizeExtraSmall),
+                                    // Text(
+                                    //     (item.description ?? ' ').substring(
+                                    //         0,
+                                    //         (item.description ?? '').length <
+                                    //                 20
+                                    //             ? (item.description ?? '')
+                                    //                 .length
+                                    //             : 20),
+                                    //     style: robotoRegular.copyWith(
+                                    //         fontSize:
+                                    //             Dimensions.fontSizeSmall)),
+                                    // const SizedBox(
+                                    //     width:
+                                    //         Dimensions.paddingSizeExtraSmall),
+                                    // Text("(${item.ratingCount})",
+                                    //     style: robotoRegular.copyWith(
+                                    //         fontSize:
+                                    //             Dimensions.fontSizeSmall,
+                                    //         color: Theme.of(context)
+                                    //             .disabledColor)),
+                                  ]),
+
+                            (isFood || isShop)
+                                ? Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
+                                    Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
+                                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                    Text(item.avgRating!.toStringAsFixed(1), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                    Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
+                                  ])
+                                : (Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && item.unitType != null)
+                                    ? Row(
+                                        children: [
+                                          Text(
+                                            '${item.unitValue ?? ''}',
+                                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            item.unitType ?? '',
+                                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
+                                          ),
+                                        ],
+                                      )
+                                    : const SizedBox(),
+
+                            item.discount != null && item.discount! > 0
+                                ? Text(
+                                    PriceConverter.convertPrice(
+                                      Get.find<ItemController>().getStartingPrice(
+                                        Item(
+                                          id: item.id,
+                                          name: item.name,
+                                          image: item.image,
+                                          avgRating: double.parse(item.avgRating.toString()),
+                                          ratingCount: item.ratingCount,
+                                          discount: double.parse((item.discount ?? '0.0').toString()),
+                                          discountType: item.discountType.toString(),
+                                          unitType: item.unitType.toString(),
+                                          storeName: '',
+                                          stock: item.stock,
+                                          price: item.price!.toDouble(),
+                                        ),
+                                      ),
+                                    ),
+                                    style: robotoMedium.copyWith(
+                                      fontSize: Dimensions.fontSizeExtraSmall,
+                                      color: Theme.of(context).disabledColor,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                    textDirection: TextDirection.ltr,
+                                  )
+                                : const SizedBox(),
+                            // SizedBox(height: item.discount != null && item.discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  PriceConverter.convertPrice(
+                                    Get.find<ItemController>().getStartingPrice(Item(
+                                      id: item.id,
+                                      name: item.name,
+                                      image: item.image,
+                                      avgRating: double.parse(item.avgRating.toString()),
+                                      ratingCount: item.ratingCount,
+                                      discount: double.parse((item.discount ?? '0.0').toString()),
+                                      discountType: item.discountType.toString(),
+                                      unitType: item.unitType.toString(),
+                                      storeName: '',
+                                      stock: item.stock,
+                                      price: item.price!.toDouble(),
+                                    )),
+                                    discount: double.parse((item.discount ?? '0.0').toString()),
+                                    discountType: item.discountType.toString(),
+                                  ),
+                                  textDirection: TextDirection.ltr,
+                                  style: robotoMedium,
+                                ),
+                                // delivery in
+
+                                CartCountView(
+                                  fromItemDetail: false,
+                                  item: Item(
+                                    id: item.id,
+                                    name: item.name,
+                                    image: item.image,
+                                    avgRating: double.parse(item.avgRating.toString()),
+                                    ratingCount: item.ratingCount,
+                                    discount: double.parse((item.discount ?? '0.0').toString()),
+                                    discountType: item.discountType.toString(),
+                                    unitType: item.unitType.toString(),
+                                    storeName: '',
+                                    stock: item.stock,
+                                    price: item.price!.toDouble(),
+                                  ),
+                                )
+                              ],
+                            ),
+
+                            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                          ]),
+                          // isShop
+                          //     ? Positioned(
+                          //         bottom: 0,
+                          //         right: 0,
+                          //         child:
+
+                          //          CartCountView(
+                          //           item: item,
+                          //           child: Container(
+                          //             height: 35,
+                          //             width: 38,
+                          //             decoration: BoxDecoration(
+                          //               color: Theme.of(context).primaryColor,
+                          //               borderRadius: const BorderRadius.only(
+                          //                 topLeft:
+                          //                     Radius.circular(Dimensions.radiusLarge),
+                          //                 bottomRight:
+                          //                     Radius.circular(Dimensions.radiusLarge),
+                          //               ),
+                          //             ),
+                          //             child: Icon(
+                          //                 isPopularItemCart
+                          //                     ? Icons.add_shopping_cart
+                          //                     : Icons.add,
+                          //                 color: Theme.of(context).cardColor,
+                          //                 size: 20),
+                          //           ),
+                          //         ),
+                          //       )
+                          //     : const SizedBox(),
                         ],
                       ),
-
-                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                    ]),
-                    // isShop
-                    //     ? Positioned(
-                    //         bottom: 0,
-                    //         right: 0,
-                    //         child:
-
-                    //          CartCountView(
-                    //           item: item,
-                    //           child: Container(
-                    //             height: 35,
-                    //             width: 38,
-                    //             decoration: BoxDecoration(
-                    //               color: Theme.of(context).primaryColor,
-                    //               borderRadius: const BorderRadius.only(
-                    //                 topLeft:
-                    //                     Radius.circular(Dimensions.radiusLarge),
-                    //                 bottomRight:
-                    //                     Radius.circular(Dimensions.radiusLarge),
-                    //               ),
-                    //             ),
-                    //             child: Icon(
-                    //                 isPopularItemCart
-                    //                     ? Icons.add_shopping_cart
-                    //                     : Icons.add,
-                    //                 color: Theme.of(context).cardColor,
-                    //                 size: 20),
-                    //           ),
-                    //         ),
-                    //       )
-                    //     : const SizedBox(),
-                  ]),
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ]),
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
@@ -402,7 +418,7 @@ class ItemCard extends StatelessWidget {
               //   unitType: item.unitType.toString(),
               //   storeName: '',
               //   stock: item.stock,
-              //   price: item.price,
+              // price: item.price!.toDouble(),
               //   categoryProducts: item.categoryProducts,
               // );
 
@@ -532,24 +548,21 @@ class ItemCard extends StatelessWidget {
                       padding: EdgeInsets.only(left: Dimensions.paddingSizeSmall, right: isShop ? 0 : Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeSmall, bottom: isShop ? 0 : Dimensions.paddingSizeSmall),
                       child: Stack(clipBehavior: Clip.none, children: [
                         Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          // (isFood || isShop)
-                          //     ? Text(item.storeName ?? '',
-                          //         style: robotoRegular.copyWith(
-                          //             color: Theme.of(context).disabledColor))
-                          //     :
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 120,
-                                child: Text(
-                                  item.name!,
-                                  style: robotoBold.copyWith(fontSize: 12),
-                                  overflow: TextOverflow.visible,
+                          (isFood || isShop)
+                              ? Text(item.storeName ?? '', style: robotoRegular.copyWith(color: Theme.of(context).disabledColor))
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: 120,
+                                      child: Text(
+                                        item.name!,
+                                        style: robotoBold.copyWith(fontSize: 12),
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
 
                           (isFood || isShop)
                               ? Flexible(
@@ -592,47 +605,46 @@ class ItemCard extends StatelessWidget {
                                 ]),
 
                           (isFood || isShop)
-                              ? Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
-                                  Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
-                                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                                  Text(item.avgRating!.toStringAsFixed(1), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
-                                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                                  Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
-                                ])
-                              :
-
-                              // (Get.find<SplashController>()
-                              //             .configModel!
-                              //             .moduleConfig!
-                              //             .module!
-                              //             .unit! &&
-                              //         item.unitType != null)
-                              //     ? Text(
-                              //         '(${item.unitType ?? ''})',
-                              //         style: robotoRegular.copyWith(
-                              //             fontSize:
-                              //                 Dimensions.fontSizeExtraSmall,
-                              //             color: Theme.of(context).hintColor),
-                              //       )
-                              //     :
-
-                              const SizedBox(),
+                              ? Row(
+                                  mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
+                                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                    Text(item.avgRating!.toStringAsFixed(1), style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                    Text("(${item.ratingCount})", style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
+                                  ],
+                                )
+                              : (Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && item.unitType != null)
+                                  ? Row(
+                                      children: [
+                                        Text(
+                                          item.unitType ?? '',
+                                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox(),
 
                           item.discount != null && item.discount! > 0
                               ? Text(
-                                  PriceConverter.convertPrice(Get.find<ItemController>().getStartingPrice(Item(
-                                    id: item.id,
-                                    name: item.name,
-                                    image: item.image,
-                                    avgRating: double.parse(item.avgRating.toString()),
-                                    ratingCount: item.ratingCount,
-                                    discount: double.parse((item.discount ?? '0.0').toString()),
-                                    discountType: item.discountType.toString(),
-                                    unitType: item.unitType.toString(),
-                                    storeName: '',
-                                    stock: item.stock,
-                                    price: item.price,
-                                  ))),
+                                  PriceConverter.convertPrice(
+                                    Get.find<ItemController>().getStartingPrice(
+                                      Item(
+                                        id: item.id,
+                                        name: item.name,
+                                        image: item.image,
+                                        avgRating: double.parse(item.avgRating.toString()),
+                                        ratingCount: item.ratingCount,
+                                        discount: double.parse((item.discount ?? '0.0').toString()),
+                                        discountType: item.discountType.toString(),
+                                        unitType: item.unitType.toString(),
+                                        storeName: '',
+                                        stock: item.stock,
+                                        price: item.price,
+                                      ),
+                                    ),
+                                  ),
                                   style: robotoMedium.copyWith(
                                     fontSize: Dimensions.fontSizeExtraSmall,
                                     color: Theme.of(context).disabledColor,
@@ -648,19 +660,21 @@ class ItemCard extends StatelessWidget {
                             children: [
                               Text(
                                 PriceConverter.convertPrice(
-                                  Get.find<ItemController>().getStartingPrice(Item(
-                                    id: item.id,
-                                    name: item.name,
-                                    image: item.image,
-                                    avgRating: double.parse(item.avgRating.toString()),
-                                    ratingCount: item.ratingCount,
-                                    discount: double.parse((item.discount ?? '0.0').toString()),
-                                    discountType: item.discountType.toString(),
-                                    unitType: item.unitType.toString(),
-                                    storeName: '',
-                                    stock: item.stock,
-                                    price: item.price,
-                                  )),
+                                  Get.find<ItemController>().getStartingPrice(
+                                    Item(
+                                      id: item.id,
+                                      name: item.name,
+                                      image: item.image,
+                                      avgRating: double.parse(item.avgRating.toString()),
+                                      ratingCount: item.ratingCount,
+                                      discount: double.parse((item.discount ?? '0.0').toString()),
+                                      discountType: item.discountType.toString(),
+                                      unitType: item.unitType.toString(),
+                                      storeName: '',
+                                      stock: item.stock,
+                                      price: item.price,
+                                    ),
+                                  ),
                                   discount: double.parse((item.discount ?? '0.0').toString()),
                                   discountType: item.discountType.toString(),
                                 ),
@@ -668,7 +682,7 @@ class ItemCard extends StatelessWidget {
                                 style: robotoMedium,
                               ),
                               // delivery in
-                              item.variations == null && item.variations!.isEmpty
+                              item.variations!.isEmpty
                                   ? CartCountView(
                                       item: Item(
                                         id: item.id,

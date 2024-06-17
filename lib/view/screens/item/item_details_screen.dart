@@ -25,7 +25,11 @@ import 'package:sixam_mart/view/screens/item/widget/item_title_view.dart';
 class ItemDetailsScreen extends StatefulWidget {
   final Item? item;
   final bool inStorePage;
-  const ItemDetailsScreen({key, required this.item, required this.inStorePage}) : super(key: key);
+  const ItemDetailsScreen({
+    key,
+    required this.item,
+    required this.inStorePage,
+  }) : super(key: key);
 
   @override
   State<ItemDetailsScreen> createState() => _ItemDetailsScreenState();
@@ -618,7 +622,7 @@ class VariationAddWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemIsInCart = cartController.isExistInCart(widget.item!.id!, widget.item!.variations![index].type!, false, index);
 
-    print("item4 $itemIsInCart");
+    // print("item4 $itemIsInCart");
     return itemIsInCart != -1
         ? SizedBox(width: 80, child: CartCountView(item: widget.item!))
         : InkWell(
