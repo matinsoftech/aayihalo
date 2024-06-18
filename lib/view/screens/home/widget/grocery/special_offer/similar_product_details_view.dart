@@ -223,7 +223,7 @@ class _ItemDetailsScreenState extends State<SimilarProductDetailsScreen> {
 
                                   widget.variations.isEmpty
                                       ? Text(
-                                          "Nrs. ${widget.productPrice}",
+                                          "Rs. ${widget.productPrice}",
                                           style: robotoMedium.copyWith(fontSize: 16, fontWeight: FontWeight.bold),
                                         )
                                       : Column(

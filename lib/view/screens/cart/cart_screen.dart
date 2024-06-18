@@ -42,14 +42,23 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final ScrollController scrollController = ScrollController();
-  final TextEditingController guestContactPersonNameController =
-      TextEditingController();
-  final TextEditingController guestContactPersonNumberController =
-      TextEditingController();
+  final TextEditingController guestContactPersonNameController = TextEditingController();
+  final TextEditingController guestContactPersonNumberController = TextEditingController();
   final TextEditingController guestEmailController = TextEditingController();
   final FocusNode guestNumberNode = FocusNode();
   final FocusNode guestEmailNode = FocusNode();
   final _coupounCodeController = TextEditingController();
+  String? _selectedPaymentMethod;
+  List<Map<String, String>> paymentMethods = [
+    {
+      'value': 'COD',
+      'title': 'Cash on Delivery',
+    },
+    {
+      'value': 'Online',
+      'title': 'Online Payment',
+    },
+  ];
   @override
   void initState() {
     super.initState();
@@ -63,21 +72,14 @@ class _CartScreenState extends State<CartScreen> {
     }
     if (Get.find<CartController>().cartList.isNotEmpty) {
       if (kDebugMode) {
-        print(
-            '----cart item : ${Get.find<CartController>().cartList[0].toJson()}');
+        print('----cart item : ${Get.find<CartController>().cartList[0].toJson()}');
       }
       if (Get.find<CartController>().addCutlery) {
         Get.find<CartController>().updateCutlery(isUpdate: false);
       }
       Get.find<CartController>().setAvailableIndex(-1, isUpdate: false);
-      Get.find<StoreController>().getCartStoreSuggestedItemList(
-          Get.find<CartController>().cartList[0].item!.storeId);
-      Get.find<StoreController>().getStoreDetails(
-          Store(
-              id: Get.find<CartController>().cartList[0].item!.storeId,
-              name: null),
-          false,
-          fromCart: true);
+      Get.find<StoreController>().getCartStoreSuggestedItemList(Get.find<CartController>().cartList[0].item!.storeId);
+      Get.find<StoreController>().getStoreDetails(Store(id: Get.find<CartController>().cartList[0].item!.storeId, name: null), false, fromCart: true);
       // Get.find<CartController>().calculationCart();
     }
   }
@@ -85,9 +87,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-          title: 'my_cart'.tr,
-          backButton: (ResponsiveHelper.isDesktop(context) || !widget.fromNav)),
+      appBar: CustomAppBar(title: 'my_cart'.tr, backButton: (ResponsiveHelper.isDesktop(context) || !widget.fromNav)),
       endDrawer: const MenuDrawer(),
       endDrawerEnableOpenDragGesture: false,
       body: GetBuilder<CartController>(
@@ -118,728 +118,617 @@ class _CartScreenState extends State<CartScreen> {
                                         ? const WebCardItemsWidget(cartList: [])
                                         : Expanded(
                                             flex: 7,
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  // Product
-                                                  WebConstrainedBox(
-                                                    dataLength: cartController
-                                                        .cartList.length,
-                                                    minLength: 5,
-                                                    minHeight: 0.6,
-                                                    child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          ...List.generate(
-                                                              cartController
-                                                                  .cartList
-                                                                  .length,
-                                                              (index) {
-                                                            final data =
-                                                                cartController
-                                                                        .cartList[
-                                                                    index];
-                                                            final item =
-                                                                data.item!;
-                                                            return Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      bottom:
-                                                                          8.0),
-                                                              child: ListTile(
-                                                                leading:
-                                                                    Container(
-                                                                  height: 56,
-                                                                  width: 56,
-                                                                  decoration: BoxDecoration(
-                                                                      image: DecorationImage(
-                                                                          image: NetworkImage(
-                                                                              '${AppConstants.baseUrl}/storage/app/public/product/${item.image}'),
-                                                                          fit: BoxFit
-                                                                              .cover),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              8)),
-                                                                ),
-                                                                title: Text(
-                                                                    "${item.name.toString()}${cartController.cartList[index].variation != null ? ' (${cartController.cartList[index].variation})' : ''}"),
-                                                                subtitle: Row(
-                                                                  children: [
-                                                                    const Spacer(),
-                                                                    IconButton(
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .delete,
-                                                                        color: Colors
-                                                                            .red,
-                                                                      ),
-                                                                      onPressed:
-                                                                          () {
-                                                                        cartController
-                                                                            .removeCartItemOnline(index);
-                                                                      },
-                                                                    ),
-                                                                    CartScreenItemCountView(
-                                                                        cartIndex:
-                                                                            index,
-                                                                        item:
-                                                                            item),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            );
-                                                          }),
-
-                                                          // apply coupon
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Card(
-                                                              elevation: 5,
-                                                              child: SizedBox(
-                                                                child: SizedBox(
-                                                                    height: 250,
-                                                                    width: double
-                                                                        .infinity,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          16),
-                                                                      child: Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            const SizedBox(height: 10),
-                                                                            const Text(
-                                                                              'Coupon Code',
-                                                                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                                            ),
-                                                                            const SizedBox(height: 16),
-                                                                            Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: TextFormField(
-                                                                                controller: _coupounCodeController,
-                                                                                decoration: InputDecoration(
-                                                                                  hintText: 'Enter Coupon Code',
-                                                                                  hintStyle: const TextStyle(
-                                                                                    fontSize: 16,
-                                                                                  ),
-                                                                                  border: OutlineInputBorder(
-                                                                                    borderRadius: BorderRadius.circular(10),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            GetBuilder<CouponController>(
-                                                                              builder: (controller) => Column(
-                                                                                children: [
-                                                                                  Padding(
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: CustomButton(
-                                                                                        buttonText: controller.isLoading ? 'Please wait..' : 'Apply Coupon',
-                                                                                        onPressed: controller.isLoading
-                                                                                            ? () {}
-                                                                                            : () {
-                                                                                                if (_coupounCodeController.text == null || _coupounCodeController.text == '') {
-                                                                                                  showCustomSnackBar('Please enter the coupon code');
-                                                                                                } else {
-                                                                                                  print("couponcode" + _coupounCodeController.text);
-                                                                                                  print("subtotal" + cartController.subTotal.toString());
-                                                                                                  print("storeid" + cartController.cartList[0].item!.storeId.toString());
-
-                                                                                                  final discount = controller.applyCoupon(_coupounCodeController.text, cartController.subTotal, 0.0, cartController.cartList[0].item!.storeId);
-                                                                                                  print("discountprovided" + discount.toString());
-                                                                                                  if (discount == 0.0) {
-                                                                                                    showCustomSnackBar('Invalid Coupon Code');
-                                                                                                  } else {
-                                                                                                    showCustomSnackBar('Coupon Applied', isError: false);
-                                                                                                    cartController.setAppliedCoupon(_coupounCodeController.text);
-                                                                                                  }
-                                                                                                }
-                                                                                              }),
-                                                                                  ),
-                                                                                  Text(
-                                                                                    'Discount applied : ${controller.discount}',
-                                                                                    style: const TextStyle(
-                                                                                      fontSize: 11,
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                          ]),
-                                                                    )),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 10,
-                                                          ),
-
-                                                          // billing info
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Card(
-                                                              elevation: 5,
-                                                              child: SizedBox(
-                                                                child: SizedBox(
-                                                                    height: 180,
-                                                                    width: double
-                                                                        .infinity,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          16),
-                                                                      child: GetBuilder<
-                                                                              CouponController>(
-                                                                          builder:
-                                                                              (controller) {
-                                                                        return Column(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              const SizedBox(height: 10),
-                                                                              const Text(
-                                                                                'Billing Details',
-                                                                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                                              ),
-                                                                              const SizedBox(height: 32),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                  children: [
-                                                                                    const Text(
-                                                                                      'Subtotal',
-                                                                                      style: TextStyle(
-                                                                                        fontSize: 16,
-                                                                                      ),
-                                                                                    ),
-                                                                                    Text(
-                                                                                      'Re. ${cartController.subTotal - double.parse(controller.discount.toString())}',
-                                                                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                  children: [
-                                                                                    const Text(
-                                                                                      'Discount',
-                                                                                      style: TextStyle(
-                                                                                        fontSize: 16,
-                                                                                      ),
-                                                                                    ),
-                                                                                    Text(
-                                                                                      // 'Re. ${cartController.itemDiscountPrice}',
-                                                                                      'Re. ${cartController.itemDiscountPrice + double.parse(controller.discount.toString())}',
-                                                                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                            ]);
-                                                                      }),
-                                                                    )),
-                                                              ),
-                                                            ),
-                                                          ),
-
-                                                          // cancellation policy
-
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Card(
-                                                              elevation: 5,
-                                                              child: SizedBox(
-                                                                child: Container(
-                                                                    height: 180,
-                                                                    width: double.infinity,
-                                                                    child: const Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              16),
-                                                                      child: Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            SizedBox(height: 10),
-                                                                            Text(
-                                                                              'Cancellation Policy',
-                                                                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                                            ),
-                                                                            SizedBox(height: 32),
-                                                                            Padding(
-                                                                                padding: EdgeInsets.all(8.0),
-                                                                                child: Text(
-                                                                                  'You cannot cancel your order once it is packed and dispatched by our partners”. However you can always request for a refund if applicable.',
-                                                                                  style: TextStyle(color: Colors.grey),
-                                                                                )),
-                                                                          ]),
-                                                                    )),
-                                                              ),
-                                                            ),
-                                                          ),
-
-                                                          // Padding(
-                                                          //   padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtraSmall),
-                                                          //   child: TextButton.icon(
-                                                          //     onPressed: (){
-                                                          //       cartController.forcefullySetModule(cartController.cartList[0].item!.moduleId!);
-                                                          //       //print('----current_route___ ${Get.routeTree.routes}');
-                                                          //       Get.toNamed(
-                                                          //         RouteHelper.getStoreRoute(id: cartController.cartList[0].item!.storeId, page: 'item'),
-                                                          //         arguments: StoreScreen(store: Store(id: cartController.cartList[0].item!.storeId), fromModule: false),
-                                                          //       );
-                                                          //     },
-                                                          //     icon: Icon(Icons.add_circle_outline_sharp, color: Theme.of(context).primaryColor),
-                                                          //     label: Text('add_more_items'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault)),
-                                                          //   ),
-                                                          // ),
-                                                          // !ResponsiveHelper.isDesktop(context) ? suggestedItemView(cartController.cartList) : const SizedBox(),
-                                                        ]),
-                                                  ),
-                                                  const SizedBox(
-                                                      height: Dimensions
-                                                          .paddingSizeSmall),
-
-                                                  // !ResponsiveHelper.isDesktop(context) ? pricingView(cartController, cartController.cartList[0].item!) : const SizedBox(),
-
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Theme.of(context)
-                                                          .cardColor,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor
-                                                                .withOpacity(
-                                                                    0.05),
-                                                            blurRadius: 10)
-                                                      ],
-                                                    ),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: Dimensions
-                                                            .paddingSizeLarge,
-                                                        vertical: Dimensions
-                                                            .paddingSizeSmall),
-                                                    width: double.infinity,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text("Delivering to",
-                                                            style:
-                                                                robotoMedium),
-                                                        const SizedBox(
-                                                            height: Dimensions
-                                                                .paddingSizeSmall),
-
-                                                        Row(
+                                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                              // Product
+                                              WebConstrainedBox(
+                                                dataLength: cartController.cartList.length,
+                                                minLength: 5,
+                                                minHeight: 0.6,
+                                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                                  ...List.generate(cartController.cartList.length, (index) {
+                                                    final data = cartController.cartList[index];
+                                                    final item = data.item!;
+                                                    return Padding(
+                                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                                      child: ListTile(
+                                                        leading: Container(
+                                                          height: 56,
+                                                          width: 56,
+                                                          decoration: BoxDecoration(image: DecorationImage(image: NetworkImage('${AppConstants.baseUrl}/storage/app/public/product/${item.image}'), fit: BoxFit.cover), borderRadius: BorderRadius.circular(8)),
+                                                        ),
+                                                        title: Text("${item.name.toString()}${cartController.cartList[index].variation != null ? ' (${cartController.cartList[index].variation})' : ''}"),
+                                                        subtitle: Row(
                                                           children: [
-                                                            SizedBox(
-                                                              width: 300,
-                                                              child: Text(
-                                                                Get.find<
-                                                                        LocationController>()
-                                                                    .userAddressModel!
-                                                                    .address!,
+                                                            const Spacer(),
+                                                            IconButton(
+                                                              icon: const Icon(
+                                                                Icons.delete,
+                                                                color: Colors.red,
                                                               ),
+                                                              onPressed: () {
+                                                                cartController.removeCartItemOnline(index);
+                                                              },
                                                             ),
-                                                            // Get.find<LocationController>().saveUserAddress(address);
-                                                            // Get.find<CartController>().deliveryAddressId = address.id??-1;
-                                                            InkWell(
-                                                                onTap: () {
-                                                                  Get.bottomSheet(
-                                                                      const AddressBottomSheet(
-                                                                        isCheckOut:
-                                                                            true,
-                                                                      ),
-                                                                      isScrollControlled: true);
-                                                                  // showDialog(
-                                                                  //     context:
-                                                                  //         context,
-                                                                  //     builder:
-                                                                  //         (_) =>
-                                                                  //             Container(
-                                                                  //               height: 400,
-                                                                  //               child: GetBuilder<LocationController>(
-                                                                  //                 builder: (controller) =>
-                                                                  //                  Column(
-                                                                  //                   children: [
-                                                                  //                     ...List.generate(controller.addressList!.length, (index) {
-
-                                                                  //                       final adress = controller.addressList![index];
-                                                                  //                       return ListTile(
-                                                                  //                         title: Text(adress.address??''),
-                                                                  //                         leading: Text(adress.addressType??''),
-
-                                                                  //                     );
-                                                                  //                     })
-                                                                  //                   ],
-                                                                  //                 ),
-                                                                  //               )
-
-                                                                  //             ));
-                                                                },
-                                                                child:
-                                                                    const Icon(
-                                                                  Icons.edit,
-                                                                  color: Colors
-                                                                      .green,
-                                                                  size: 20,
-                                                                )),
+                                                            CartScreenItemCountView(cartIndex: index, item: item),
                                                           ],
                                                         ),
+                                                      ),
+                                                    );
+                                                  }),
 
-                                                        //  DeliveryOptionButton(
-                                                        //   value: 'delivery', title: 'home_delivery'.tr, charge: charge,
-                                                        //   isFree: storeController.store!.freeDelivery, fromWeb: true, total: total,
-                                                        // ) :
-
-                                                        // SingleChildScrollView(
-                                                        //   scrollDirection:
-                                                        //       Axis.horizontal,
-                                                        //   child: Row(children: [
-                                                        //     Get.find<SplashController>()
-                                                        //                 .configModel!
-                                                        //                 .homeDeliveryStatus ==
-                                                        //             1
-                                                        //         ? DeliveryOptionButton(
-                                                        //             value:
-                                                        //                 'delivery',
-                                                        //             title:
-                                                        //                 'home_delivery'
-                                                        //                     .tr,
-                                                        //             charge: 0.0,
-                                                        //             isFree:
-                                                        //                 false,
-                                                        //             fromWeb:
-                                                        //                 true,
-                                                        //             total: 120,
-                                                        //           )
-                                                        //         : const SizedBox(),
-                                                        //     const SizedBox(
-                                                        //         width: Dimensions
-                                                        //             .paddingSizeDefault),
-                                                        //     Get.find<SplashController>()
-                                                        //                 .configModel!
-                                                        //                 .takeawayStatus ==
-                                                        //             1
-                                                        //         ? DeliveryOptionButton(
-                                                        //             value:
-                                                        //                 'take_away',
-                                                        //             title:
-                                                        //                 'take_away'
-                                                        //                     .tr,
-                                                        //             charge: 0.0,
-                                                        //             isFree:
-                                                        //                 true,
-                                                        //             fromWeb:
-                                                        //                 true,
-                                                        //             total: 120,
-                                                        //           )
-                                                        //         : const SizedBox(),
-                                                        //   ]),
-                                                        // ),
-
-                                                        const SizedBox(
-                                                            height: Dimensions
-                                                                .paddingSizeDefault),
-
-                                                        ///Delivery_fee
-                                                        Center(
-                                                            child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                              Text(
-                                                                  '${'delivery_charge'.tr}: '),
-                                                              Text(
-                                                                  // storeController.store!.freeDelivery! ?
-                                                                  'free'.tr
-                                                                  // : orderController.distance != -1 ? PriceConverter.convertPrice(charge) : 'calculating'.tr,
-
+                                                  // apply coupon
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Card(
+                                                      elevation: 5,
+                                                      child: SizedBox(
+                                                        child: SizedBox(
+                                                            height: 250,
+                                                            width: double.infinity,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.all(16),
+                                                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                                                const SizedBox(height: 10),
+                                                                const Text(
+                                                                  'Coupon Code',
+                                                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                                ),
+                                                                const SizedBox(height: 16),
+                                                                Padding(
+                                                                  padding: const EdgeInsets.all(8.0),
+                                                                  child: TextFormField(
+                                                                    controller: _coupounCodeController,
+                                                                    decoration: InputDecoration(
+                                                                      hintText: 'Enter Coupon Code',
+                                                                      hintStyle: const TextStyle(
+                                                                        fontSize: 16,
+                                                                      ),
+                                                                      border: OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.circular(10),
+                                                                      ),
+                                                                    ),
                                                                   ),
-                                                            ])),
-                                                        // SizedBox(height: !takeAway && !isGuestLoggedIn ? Dimensions.paddingSizeLarge : 0),
+                                                                ),
+                                                                GetBuilder<CouponController>(
+                                                                  builder: (controller) => Column(
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding: const EdgeInsets.all(8.0),
+                                                                        child: CustomButton(
+                                                                            buttonText: controller.isLoading ? 'Please wait..' : 'Apply Coupon',
+                                                                            onPressed: controller.isLoading
+                                                                                ? () {}
+                                                                                : () {
+                                                                                    if (_coupounCodeController.text == null || _coupounCodeController.text == '') {
+                                                                                      showCustomSnackBar('Please enter the coupon code');
+                                                                                    } else {
+                                                                                      print("couponcode" + _coupounCodeController.text);
+                                                                                      print("subtotal" + cartController.subTotal.toString());
+                                                                                      print("storeid" + cartController.cartList[0].item!.storeId.toString());
 
-                                                        // // /delivery section
-                                                        // DeliverySection(
-                                                        //   orderController: Get.find<
-                                                        //       OrderController>(),
-                                                        //   storeController: Get.find<
-                                                        //       StoreController>(),
-                                                        //   address: Get.find<
-                                                        //           LocationController>()
-                                                        //       .addressList!,
-                                                        //   addressList: CheckoutHelper
-                                                        //       .getDropdownAddressList(
-                                                        //           context:
-                                                        //               context,
-                                                        //           addressList: Get
-                                                        //                   .find<
-                                                        //                       LocationController>()
-                                                        //               .addressList!,
-                                                        //           store: null),
-                                                        //   guestNameTextEditingController:
-                                                        //       guestContactPersonNameController,
-                                                        //   guestNumberTextEditingController:
-                                                        //       guestContactPersonNumberController,
-                                                        //   guestNumberNode:
-                                                        //       guestNumberNode,
-                                                        //   guestEmailController:
-                                                        //       guestEmailController,
-                                                        //   guestEmailNode:
-                                                        //       guestEmailNode,
-                                                        // ),
-                                                      ],
+                                                                                      final discount = controller.applyCoupon(_coupounCodeController.text, cartController.subTotal, 0.0, cartController.cartList[0].item!.storeId);
+                                                                                      print("discountprovided" + discount.toString());
+                                                                                      if (discount == 0.0) {
+                                                                                        showCustomSnackBar('Invalid Coupon Code');
+                                                                                      } else {
+                                                                                        showCustomSnackBar('Coupon Applied', isError: false);
+                                                                                        cartController.setAppliedCoupon(_coupounCodeController.text);
+                                                                                      }
+                                                                                    }
+                                                                                  }),
+                                                                      ),
+                                                                      Text(
+                                                                        'Discount applied : ${controller.discount}',
+                                                                        style: const TextStyle(
+                                                                          fontSize: 11,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ]),
+                                                            )),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+
+                                                  // billing info
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Card(
+                                                      elevation: 5,
+                                                      child: SizedBox(
+                                                        child: SizedBox(
+                                                            height: 180,
+                                                            width: double.infinity,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.all(16),
+                                                              child: GetBuilder<CouponController>(builder: (controller) {
+                                                                return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                                                  const SizedBox(height: 10),
+                                                                  const Text(
+                                                                    'Billing Details',
+                                                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                                  ),
+                                                                  const SizedBox(height: 32),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: Row(
+                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                      children: [
+                                                                        const Text(
+                                                                          'Subtotal',
+                                                                          style: TextStyle(
+                                                                            fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          'Rs. ${cartController.subTotal - double.parse(controller.discount.toString())}',
+                                                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: Row(
+                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                      children: [
+                                                                        const Text(
+                                                                          'Discount',
+                                                                          style: TextStyle(
+                                                                            fontSize: 16,
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          // 'Re. ${cartController.itemDiscountPrice}',
+                                                                          'Rs. ${cartController.itemDiscountPrice + double.parse(controller.discount.toString())}',
+                                                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ]);
+                                                              }),
+                                                            )),
+                                                      ),
                                                     ),
                                                   ),
 
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Theme.of(context)
-                                                          .cardColor,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor
-                                                                .withOpacity(
-                                                                    0.05),
-                                                            blurRadius: 10)
-                                                      ],
-                                                    ),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: Dimensions
-                                                            .paddingSizeLarge,
-                                                        vertical: Dimensions
-                                                            .paddingSizeSmall),
-                                                    width: double.infinity,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text("Payment Method",
-                                                            style:
-                                                                robotoMedium),
-                                                        const SizedBox(
-                                                            height: Dimensions
-                                                                .paddingSizeSmall),
+                                                  // cancellation policy
 
-                                                        RadioListTile(
-                                                            value: 'COD',
-                                                            groupValue: 'COD',
-                                                            title: const Text(
-                                                                "Cash on Delivery"),
-                                                            onChanged:
-                                                                (value) {}),
-                                                        RadioListTile(
-                                                            value: 'Online',
-                                                            groupValue: 'COD',
-                                                            title: const Text(
-                                                                "Online Payment"),
-                                                            onChanged: (value) {
-                                                              Get.snackbar(
-                                                                "Not available",
-                                                                "This method is either disabled or not available.",
-                                                                snackPosition:
-                                                                    SnackPosition
-                                                                        .BOTTOM,
-                                                                backgroundColor:
-                                                                    Colors.red,
-                                                              );
-                                                            }),
-
-                                                        // Row(
-                                                        //   children: [
-                                                        //     SizedBox(
-                                                        //       width: 300,
-                                                        //       child: Text(
-                                                        //        Get.find<LocationController>().userAddressModel!.address!,
-                                                        //       ),
-                                                        //     ),
-                                                        //      // Get.find<LocationController>().saveUserAddress(address);
-                                                        //                             // Get.find<CartController>().deliveryAddressId = address.id??-1;
-                                                        //     InkWell(
-                                                        //         onTap: () {
-
-                                                        //           Get.bottomSheet(
-                                                        //               AddressBottomSheet(
-                                                        //                 isCheckOut: true,
-
-                                                        //                   ),
-                                                        //               isScrollControlled: true
-                                                        //           );
-                                                        //           // showDialog(
-                                                        //           //     context:
-                                                        //           //         context,
-                                                        //           //     builder:
-                                                        //           //         (_) =>
-                                                        //           //             Container(
-                                                        //           //               height: 400,
-                                                        //           //               child: GetBuilder<LocationController>(
-                                                        //           //                 builder: (controller) =>
-                                                        //           //                  Column(
-                                                        //           //                   children: [
-                                                        //           //                     ...List.generate(controller.addressList!.length, (index) {
-
-                                                        //           //                       final adress = controller.addressList![index];
-                                                        //           //                       return ListTile(
-                                                        //           //                         title: Text(adress.address??''),
-                                                        //           //                         leading: Text(adress.addressType??''),
-
-                                                        //           //                     );
-                                                        //           //                     })
-                                                        //           //                   ],
-                                                        //           //                 ),
-                                                        //           //               )
-
-                                                        //           //             ));
-                                                        //         },
-                                                        //         child:
-                                                        //             const Icon(
-                                                        //           Icons.edit,
-                                                        //           color: Colors
-                                                        //               .green,
-                                                        //           size: 20,
-                                                        //         )),
-                                                        //   ],
-                                                        // ),
-
-                                                        //  DeliveryOptionButton(
-                                                        //   value: 'delivery', title: 'home_delivery'.tr, charge: charge,
-                                                        //   isFree: storeController.store!.freeDelivery, fromWeb: true, total: total,
-                                                        // ) :
-
-                                                        // SingleChildScrollView(
-                                                        //   scrollDirection:
-                                                        //       Axis.horizontal,
-                                                        //   child: Row(children: [
-                                                        //     Get.find<SplashController>()
-                                                        //                 .configModel!
-                                                        //                 .homeDeliveryStatus ==
-                                                        //             1
-                                                        //         ? DeliveryOptionButton(
-                                                        //             value:
-                                                        //                 'delivery',
-                                                        //             title:
-                                                        //                 'home_delivery'
-                                                        //                     .tr,
-                                                        //             charge: 0.0,
-                                                        //             isFree:
-                                                        //                 false,
-                                                        //             fromWeb:
-                                                        //                 true,
-                                                        //             total: 120,
-                                                        //           )
-                                                        //         : const SizedBox(),
-                                                        //     const SizedBox(
-                                                        //         width: Dimensions
-                                                        //             .paddingSizeDefault),
-                                                        //     Get.find<SplashController>()
-                                                        //                 .configModel!
-                                                        //                 .takeawayStatus ==
-                                                        //             1
-                                                        //         ? DeliveryOptionButton(
-                                                        //             value:
-                                                        //                 'take_away',
-                                                        //             title:
-                                                        //                 'take_away'
-                                                        //                     .tr,
-                                                        //             charge: 0.0,
-                                                        //             isFree:
-                                                        //                 true,
-                                                        //             fromWeb:
-                                                        //                 true,
-                                                        //             total: 120,
-                                                        //           )
-                                                        //         : const SizedBox(),
-                                                        //   ]),
-                                                        // ),
-
-                                                        const SizedBox(
-                                                            height: Dimensions
-                                                                .paddingSizeDefault),
-
-                                                        ///Delivery_fee
-                                                        // Center(
-                                                        //     child: Row(
-                                                        //         mainAxisAlignment:
-                                                        //             MainAxisAlignment
-                                                        //                 .center,
-                                                        //         children: [
-                                                        //       Text(
-                                                        //           '${'delivery_charge'.tr}: '),
-                                                        //       Text(
-                                                        //           // storeController.store!.freeDelivery! ?
-                                                        //           'free'.tr
-                                                        //           // : orderController.distance != -1 ? PriceConverter.convertPrice(charge) : 'calculating'.tr,
-
-                                                        //           ),
-                                                        //     ])),
-                                                        // SizedBox(height: !takeAway && !isGuestLoggedIn ? Dimensions.paddingSizeLarge : 0),
-
-                                                        // // /delivery section
-                                                        // DeliverySection(
-                                                        //   orderController: Get.find<
-                                                        //       OrderController>(),
-                                                        //   storeController: Get.find<
-                                                        //       StoreController>(),
-                                                        //   address: Get.find<
-                                                        //           LocationController>()
-                                                        //       .addressList!,
-                                                        //   addressList: CheckoutHelper
-                                                        //       .getDropdownAddressList(
-                                                        //           context:
-                                                        //               context,
-                                                        //           addressList: Get
-                                                        //                   .find<
-                                                        //                       LocationController>()
-                                                        //               .addressList!,
-                                                        //           store: null),
-                                                        //   guestNameTextEditingController:
-                                                        //       guestContactPersonNameController,
-                                                        //   guestNumberTextEditingController:
-                                                        //       guestContactPersonNumberController,
-                                                        //   guestNumberNode:
-                                                        //       guestNumberNode,
-                                                        //   guestEmailController:
-                                                        //       guestEmailController,
-                                                        //   guestEmailNode:
-                                                        //       guestEmailNode,
-                                                        // ),
-                                                      ],
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Card(
+                                                      elevation: 5,
+                                                      child: SizedBox(
+                                                        child: Container(
+                                                            height: 180,
+                                                            width: double.infinity,
+                                                            child: const Padding(
+                                                              padding: EdgeInsets.all(16),
+                                                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                                                SizedBox(height: 10),
+                                                                Text(
+                                                                  'Cancellation Policy',
+                                                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                                ),
+                                                                SizedBox(height: 32),
+                                                                Padding(
+                                                                    padding: EdgeInsets.all(8.0),
+                                                                    child: Text(
+                                                                      'You cannot cancel your order once it is packed and dispatched by our partners”. However you can always request for a refund if applicable.',
+                                                                      style: TextStyle(color: Colors.grey),
+                                                                    )),
+                                                              ]),
+                                                            )),
+                                                      ),
                                                     ),
                                                   ),
+
+                                                  // Padding(
+                                                  //   padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtraSmall),
+                                                  //   child: TextButton.icon(
+                                                  //     onPressed: (){
+                                                  //       cartController.forcefullySetModule(cartController.cartList[0].item!.moduleId!);
+                                                  //       //print('----current_route___ ${Get.routeTree.routes}');
+                                                  //       Get.toNamed(
+                                                  //         RouteHelper.getStoreRoute(id: cartController.cartList[0].item!.storeId, page: 'item'),
+                                                  //         arguments: StoreScreen(store: Store(id: cartController.cartList[0].item!.storeId), fromModule: false),
+                                                  //       );
+                                                  //     },
+                                                  //     icon: Icon(Icons.add_circle_outline_sharp, color: Theme.of(context).primaryColor),
+                                                  //     label: Text('add_more_items'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeDefault)),
+                                                  //   ),
+                                                  // ),
+                                                  // !ResponsiveHelper.isDesktop(context) ? suggestedItemView(cartController.cartList) : const SizedBox(),
                                                 ]),
+                                              ),
+                                              const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                                              // !ResponsiveHelper.isDesktop(context) ? pricingView(cartController, cartController.cartList[0].item!) : const SizedBox(),
+
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context).cardColor,
+                                                  boxShadow: [BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.05), blurRadius: 10)],
+                                                ),
+                                                padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
+                                                width: double.infinity,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text("Delivering to", style: robotoMedium),
+                                                    const SizedBox(height: Dimensions.paddingSizeSmall),
+
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 300,
+                                                          child: Text(
+                                                            Get.find<LocationController>().userAddressModel!.address!,
+                                                          ),
+                                                        ),
+                                                        // Get.find<LocationController>().saveUserAddress(address);
+                                                        // Get.find<CartController>().deliveryAddressId = address.id??-1;
+                                                        InkWell(
+                                                            onTap: () {
+                                                              Get.bottomSheet(
+                                                                  const AddressBottomSheet(
+                                                                    isCheckOut: true,
+                                                                  ),
+                                                                  isScrollControlled: true);
+                                                              // showDialog(
+                                                              //     context:
+                                                              //         context,
+                                                              //     builder:
+                                                              //         (_) =>
+                                                              //             Container(
+                                                              //               height: 400,
+                                                              //               child: GetBuilder<LocationController>(
+                                                              //                 builder: (controller) =>
+                                                              //                  Column(
+                                                              //                   children: [
+                                                              //                     ...List.generate(controller.addressList!.length, (index) {
+
+                                                              //                       final adress = controller.addressList![index];
+                                                              //                       return ListTile(
+                                                              //                         title: Text(adress.address??''),
+                                                              //                         leading: Text(adress.addressType??''),
+
+                                                              //                     );
+                                                              //                     })
+                                                              //                   ],
+                                                              //                 ),
+                                                              //               )
+
+                                                              //             ));
+                                                            },
+                                                            child: const Icon(
+                                                              Icons.edit,
+                                                              color: Colors.green,
+                                                              size: 20,
+                                                            )),
+                                                      ],
+                                                    ),
+
+                                                    //  DeliveryOptionButton(
+                                                    //   value: 'delivery', title: 'home_delivery'.tr, charge: charge,
+                                                    //   isFree: storeController.store!.freeDelivery, fromWeb: true, total: total,
+                                                    // ) :
+
+                                                    // SingleChildScrollView(
+                                                    //   scrollDirection:
+                                                    //       Axis.horizontal,
+                                                    //   child: Row(children: [
+                                                    //     Get.find<SplashController>()
+                                                    //                 .configModel!
+                                                    //                 .homeDeliveryStatus ==
+                                                    //             1
+                                                    //         ? DeliveryOptionButton(
+                                                    //             value:
+                                                    //                 'delivery',
+                                                    //             title:
+                                                    //                 'home_delivery'
+                                                    //                     .tr,
+                                                    //             charge: 0.0,
+                                                    //             isFree:
+                                                    //                 false,
+                                                    //             fromWeb:
+                                                    //                 true,
+                                                    //             total: 120,
+                                                    //           )
+                                                    //         : const SizedBox(),
+                                                    //     const SizedBox(
+                                                    //         width: Dimensions
+                                                    //             .paddingSizeDefault),
+                                                    //     Get.find<SplashController>()
+                                                    //                 .configModel!
+                                                    //                 .takeawayStatus ==
+                                                    //             1
+                                                    //         ? DeliveryOptionButton(
+                                                    //             value:
+                                                    //                 'take_away',
+                                                    //             title:
+                                                    //                 'take_away'
+                                                    //                     .tr,
+                                                    //             charge: 0.0,
+                                                    //             isFree:
+                                                    //                 true,
+                                                    //             fromWeb:
+                                                    //                 true,
+                                                    //             total: 120,
+                                                    //           )
+                                                    //         : const SizedBox(),
+                                                    //   ]),
+                                                    // ),
+
+                                                    const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                                                    ///Delivery_fee
+                                                    Center(
+                                                        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                      Text('${'delivery_charge'.tr}: '),
+                                                      Text(
+                                                          // storeController.store!.freeDelivery! ?
+                                                          'free'.tr
+                                                          // : orderController.distance != -1 ? PriceConverter.convertPrice(charge) : 'calculating'.tr,
+
+                                                          ),
+                                                    ])),
+                                                    // SizedBox(height: !takeAway && !isGuestLoggedIn ? Dimensions.paddingSizeLarge : 0),
+
+                                                    // // /delivery section
+                                                    // DeliverySection(
+                                                    //   orderController: Get.find<
+                                                    //       OrderController>(),
+                                                    //   storeController: Get.find<
+                                                    //       StoreController>(),
+                                                    //   address: Get.find<
+                                                    //           LocationController>()
+                                                    //       .addressList!,
+                                                    //   addressList: CheckoutHelper
+                                                    //       .getDropdownAddressList(
+                                                    //           context:
+                                                    //               context,
+                                                    //           addressList: Get
+                                                    //                   .find<
+                                                    //                       LocationController>()
+                                                    //               .addressList!,
+                                                    //           store: null),
+                                                    //   guestNameTextEditingController:
+                                                    //       guestContactPersonNameController,
+                                                    //   guestNumberTextEditingController:
+                                                    //       guestContactPersonNumberController,
+                                                    //   guestNumberNode:
+                                                    //       guestNumberNode,
+                                                    //   guestEmailController:
+                                                    //       guestEmailController,
+                                                    //   guestEmailNode:
+                                                    //       guestEmailNode,
+                                                    // ),
+                                                  ],
+                                                ),
+                                              ),
+
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context).cardColor,
+                                                  boxShadow: [BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.05), blurRadius: 10)],
+                                                ),
+                                                padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
+                                                width: double.infinity,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text("Payment Method", style: robotoMedium),
+                                                    const SizedBox(height: Dimensions.paddingSizeSmall),
+                                                    ListView.builder(
+                                                      itemCount: paymentMethods.length,
+                                                      shrinkWrap: true,
+                                                      physics: const NeverScrollableScrollPhysics(),
+                                                      itemBuilder: (BuildContext context, int index) {
+                                                        return RadioListTile<String>(
+                                                          value: paymentMethods[index]['value']!,
+                                                          groupValue: _selectedPaymentMethod,
+                                                          title: Text(paymentMethods[index]['title']!),
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              _selectedPaymentMethod = value;
+                                                            });
+
+                                                            // if (value == 'Online') {
+
+                                                            // }
+                                                          },
+                                                        );
+                                                      },
+                                                    ),
+                                                    // RadioListTile(
+                                                    //   value: 'COD',
+                                                    //   groupValue: 'COD',
+                                                    //   title: const Text("Cash on Delivery"),
+                                                    //   onChanged: (value) {},
+                                                    // ),
+                                                    // RadioListTile(
+                                                    //   value: 'Online',
+                                                    //   groupValue: 'COD',
+                                                    //   title: const Text("Online Payment"),
+                                                    //   onChanged: (value) {
+                                                    //     Get.snackbar(
+                                                    //       "Not available",
+                                                    //       "This method is either disabled or not available.",
+                                                    //       snackPosition: SnackPosition.BOTTOM,
+                                                    //       backgroundColor: Colors.red,
+                                                    //     );
+                                                    //   },
+                                                    // ),
+
+                                                    // Row(
+                                                    //   children: [
+                                                    //     SizedBox(
+                                                    //       width: 300,
+                                                    //       child: Text(
+                                                    //        Get.find<LocationController>().userAddressModel!.address!,
+                                                    //       ),
+                                                    //     ),
+                                                    //      // Get.find<LocationController>().saveUserAddress(address);
+                                                    //                             // Get.find<CartController>().deliveryAddressId = address.id??-1;
+                                                    //     InkWell(
+                                                    //         onTap: () {
+
+                                                    //           Get.bottomSheet(
+                                                    //               AddressBottomSheet(
+                                                    //                 isCheckOut: true,
+
+                                                    //                   ),
+                                                    //               isScrollControlled: true
+                                                    //           );
+                                                    //           // showDialog(
+                                                    //           //     context:
+                                                    //           //         context,
+                                                    //           //     builder:
+                                                    //           //         (_) =>
+                                                    //           //             Container(
+                                                    //           //               height: 400,
+                                                    //           //               child: GetBuilder<LocationController>(
+                                                    //           //                 builder: (controller) =>
+                                                    //           //                  Column(
+                                                    //           //                   children: [
+                                                    //           //                     ...List.generate(controller.addressList!.length, (index) {
+
+                                                    //           //                       final adress = controller.addressList![index];
+                                                    //           //                       return ListTile(
+                                                    //           //                         title: Text(adress.address??''),
+                                                    //           //                         leading: Text(adress.addressType??''),
+
+                                                    //           //                     );
+                                                    //           //                     })
+                                                    //           //                   ],
+                                                    //           //                 ),
+                                                    //           //               )
+
+                                                    //           //             ));
+                                                    //         },
+                                                    //         child:
+                                                    //             const Icon(
+                                                    //           Icons.edit,
+                                                    //           color: Colors
+                                                    //               .green,
+                                                    //           size: 20,
+                                                    //         )),
+                                                    //   ],
+                                                    // ),
+
+                                                    //  DeliveryOptionButton(
+                                                    //   value: 'delivery', title: 'home_delivery'.tr, charge: charge,
+                                                    //   isFree: storeController.store!.freeDelivery, fromWeb: true, total: total,
+                                                    // ) :
+
+                                                    // SingleChildScrollView(
+                                                    //   scrollDirection:
+                                                    //       Axis.horizontal,
+                                                    //   child: Row(children: [
+                                                    //     Get.find<SplashController>()
+                                                    //                 .configModel!
+                                                    //                 .homeDeliveryStatus ==
+                                                    //             1
+                                                    //         ? DeliveryOptionButton(
+                                                    //             value:
+                                                    //                 'delivery',
+                                                    //             title:
+                                                    //                 'home_delivery'
+                                                    //                     .tr,
+                                                    //             charge: 0.0,
+                                                    //             isFree:
+                                                    //                 false,
+                                                    //             fromWeb:
+                                                    //                 true,
+                                                    //             total: 120,
+                                                    //           )
+                                                    //         : const SizedBox(),
+                                                    //     const SizedBox(
+                                                    //         width: Dimensions
+                                                    //             .paddingSizeDefault),
+                                                    //     Get.find<SplashController>()
+                                                    //                 .configModel!
+                                                    //                 .takeawayStatus ==
+                                                    //             1
+                                                    //         ? DeliveryOptionButton(
+                                                    //             value:
+                                                    //                 'take_away',
+                                                    //             title:
+                                                    //                 'take_away'
+                                                    //                     .tr,
+                                                    //             charge: 0.0,
+                                                    //             isFree:
+                                                    //                 true,
+                                                    //             fromWeb:
+                                                    //                 true,
+                                                    //             total: 120,
+                                                    //           )
+                                                    //         : const SizedBox(),
+                                                    //   ]),
+                                                    // ),
+
+                                                    const SizedBox(height: Dimensions.paddingSizeDefault),
+
+                                                    ///Delivery_fee
+                                                    // Center(
+                                                    //     child: Row(
+                                                    //         mainAxisAlignment:
+                                                    //             MainAxisAlignment
+                                                    //                 .center,
+                                                    //         children: [
+                                                    //       Text(
+                                                    //           '${'delivery_charge'.tr}: '),
+                                                    //       Text(
+                                                    //           // storeController.store!.freeDelivery! ?
+                                                    //           'free'.tr
+                                                    //           // : orderController.distance != -1 ? PriceConverter.convertPrice(charge) : 'calculating'.tr,
+
+                                                    //           ),
+                                                    //     ])),
+                                                    // SizedBox(height: !takeAway && !isGuestLoggedIn ? Dimensions.paddingSizeLarge : 0),
+
+                                                    // // /delivery section
+                                                    // DeliverySection(
+                                                    //   orderController: Get.find<
+                                                    //       OrderController>(),
+                                                    //   storeController: Get.find<
+                                                    //       StoreController>(),
+                                                    //   address: Get.find<
+                                                    //           LocationController>()
+                                                    //       .addressList!,
+                                                    //   addressList: CheckoutHelper
+                                                    //       .getDropdownAddressList(
+                                                    //           context:
+                                                    //               context,
+                                                    //           addressList: Get
+                                                    //                   .find<
+                                                    //                       LocationController>()
+                                                    //               .addressList!,
+                                                    //           store: null),
+                                                    //   guestNameTextEditingController:
+                                                    //       guestContactPersonNameController,
+                                                    //   guestNumberTextEditingController:
+                                                    //       guestContactPersonNumberController,
+                                                    //   guestNumberNode:
+                                                    //       guestNumberNode,
+                                                    //   guestEmailController:
+                                                    //       guestEmailController,
+                                                    //   guestEmailNode:
+                                                    //       guestEmailNode,
+                                                    // ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ]),
                                           ),
-                                    ResponsiveHelper.isDesktop(context)
-                                        ? const SizedBox(
-                                            width: Dimensions.paddingSizeSmall)
-                                        : const SizedBox(),
+                                    ResponsiveHelper.isDesktop(context) ? const SizedBox(width: Dimensions.paddingSizeSmall) : const SizedBox(),
 
                                     // ResponsiveHelper.isDesktop(context) ? Expanded(flex: 4, child: pricingView(cartController, cartController.cartList[0].item!)) : const SizedBox(),
                                   ],
@@ -852,12 +741,14 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                     ),
-                    ResponsiveHelper.isDesktop(context)
-                        ? const SizedBox.shrink()
-                        : CheckoutButton(
-                            cartController: cartController,
-                            couponCode: _coupounCodeController.text,
-                            availableList: cartController.availableList),
+                    // ResponsiveHelper.isDesktop(context) ? const SizedBox.shrink() :
+
+                    CheckoutButton(
+                      cartController: cartController,
+                      couponCode: _coupounCodeController.text,
+                      availableList: cartController.availableList,
+                      selectedIndex: _selectedPaymentMethod.toString(),
+                    ),
                   ],
                 )
               : const NoDataScreen(isCart: true, text: '', showFooter: true);
@@ -870,70 +761,44 @@ class _CartScreenState extends State<CartScreen> {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(ResponsiveHelper.isDesktop(context)
-            ? Dimensions.radiusDefault
-            : Dimensions.radiusSmall),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)
-        ],
+        borderRadius: BorderRadius.circular(ResponsiveHelper.isDesktop(context) ? Dimensions.radiusDefault : Dimensions.radiusSmall),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)],
       ),
       child: GetBuilder<StoreController>(builder: (storeController) {
         return Column(children: [
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Dimensions.paddingSizeDefault,
-                  vertical: Dimensions.paddingSizeSmall),
-              child: Text('order_summary'.tr,
-                  style:
-                      robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
+              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall),
+              child: Text('order_summary'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
             ),
           ),
 
-          !ResponsiveHelper.isDesktop(context) &&
-                  Get.find<SplashController>()
-                      .getModuleConfig('grocery')
-                      .newVariation! &&
-                  (storeController.store != null &&
-                      storeController.store!.cutlery!)
+          !ResponsiveHelper.isDesktop(context) && Get.find<SplashController>().getModuleConfig('grocery').newVariation! && (storeController.store != null && storeController.store!.cutlery!)
               ? Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.paddingSizeDefault,
-                      vertical: Dimensions.paddingSizeSmall),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(Images.cutlery, height: 18, width: 18),
-                        const SizedBox(width: Dimensions.paddingSizeDefault),
-                        Expanded(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('add_cutlery'.tr,
-                                    style: robotoMedium.copyWith(
-                                        color: Theme.of(context).primaryColor)),
-                                const SizedBox(
-                                    height: Dimensions.paddingSizeExtraSmall),
-                                Text('do_not_have_cutlery'.tr,
-                                    style: robotoRegular.copyWith(
-                                        color: Theme.of(context).disabledColor,
-                                        fontSize: Dimensions.fontSizeSmall)),
-                              ]),
-                        ),
-                        Transform.scale(
-                          scale: 0.7,
-                          child: CupertinoSwitch(
-                            value: cartController.addCutlery,
-                            activeColor: Theme.of(context).primaryColor,
-                            onChanged: (bool? value) {
-                              cartController.updateCutlery();
-                            },
-                            trackColor:
-                                Theme.of(context).primaryColor.withOpacity(0.5),
-                          ),
-                        )
+                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall),
+                  child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                    Image.asset(Images.cutlery, height: 18, width: 18),
+                    const SizedBox(width: Dimensions.paddingSizeDefault),
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text('add_cutlery'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
+                        const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                        Text('do_not_have_cutlery'.tr, style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall)),
                       ]),
+                    ),
+                    Transform.scale(
+                      scale: 0.7,
+                      child: CupertinoSwitch(
+                        value: cartController.addCutlery,
+                        activeColor: Theme.of(context).primaryColor,
+                        onChanged: (bool? value) {
+                          cartController.updateCutlery();
+                        },
+                        trackColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                      ),
+                    )
+                  ]),
                 )
               : const SizedBox(),
 
@@ -942,23 +807,17 @@ class _CartScreenState extends State<CartScreen> {
               : Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
-                    border: Border.all(
-                        color: Theme.of(context).primaryColor, width: 0.5),
+                    border: Border.all(color: Theme.of(context).primaryColor, width: 0.5),
                   ),
                   padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
-                  margin: ResponsiveHelper.isDesktop(context)
-                      ? const EdgeInsets.symmetric(
-                          horizontal: Dimensions.paddingSizeDefault,
-                          vertical: Dimensions.paddingSizeSmall)
-                      : EdgeInsets.zero,
+                  margin: ResponsiveHelper.isDesktop(context) ? const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall) : EdgeInsets.zero,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       InkWell(
                         onTap: () {
                           if (ResponsiveHelper.isDesktop(context)) {
-                            Get.dialog(
-                                const Dialog(child: NotAvailableBottomSheet()));
+                            Get.dialog(const Dialog(child: NotAvailableBottomSheet()));
                           } else {
                             showModalBottomSheet(
                               context: context,
@@ -969,27 +828,15 @@ class _CartScreenState extends State<CartScreen> {
                           }
                         },
                         child: Row(children: [
-                          Expanded(
-                              child: Text('if_any_product_is_not_available'.tr,
-                                  style: robotoMedium,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis)),
+                          Expanded(child: Text('if_any_product_is_not_available'.tr, style: robotoMedium, maxLines: 2, overflow: TextOverflow.ellipsis)),
                           const Icon(Icons.arrow_forward_ios_sharp, size: 18),
                         ]),
                       ),
                       cartController.notAvailableIndex != -1
                           ? Row(children: [
-                              Text(
-                                  cartController
-                                      .notAvailableList[
-                                          cartController.notAvailableIndex]
-                                      .tr,
-                                  style: robotoMedium.copyWith(
-                                      fontSize: Dimensions.fontSizeSmall,
-                                      color: Theme.of(context).primaryColor)),
+                              Text(cartController.notAvailableList[cartController.notAvailableIndex].tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)),
                               IconButton(
-                                onPressed: () =>
-                                    cartController.setAvailableIndex(-1),
+                                onPressed: () => cartController.setAvailableIndex(-1),
                                 icon: const Icon(Icons.clear, size: 18),
                               )
                             ])
@@ -997,20 +844,15 @@ class _CartScreenState extends State<CartScreen> {
                     ],
                   ),
                 ),
-          ResponsiveHelper.isDesktop(context)
-              ? const SizedBox()
-              : const SizedBox(height: Dimensions.paddingSizeSmall),
+          ResponsiveHelper.isDesktop(context) ? const SizedBox() : const SizedBox(height: Dimensions.paddingSizeSmall),
 
           // Total
           Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimensions.paddingSizeDefault,
-                vertical: Dimensions.paddingSizeSmall),
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall),
             child: Column(children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text('item_price'.tr, style: robotoRegular),
-                PriceConverter.convertAnimationPrice(cartController.itemPrice,
-                    textStyle: robotoRegular),
+                PriceConverter.convertAnimationPrice(cartController.itemPrice, textStyle: robotoRegular),
                 // Text(PriceConverter.convertPrice(cartController.itemPrice), style: robotoRegular, textDirection: TextDirection.ltr),
               ]),
               const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -1020,55 +862,30 @@ class _CartScreenState extends State<CartScreen> {
                 storeController.store != null
                     ? Row(children: [
                         Text('(-)', style: robotoRegular),
-                        PriceConverter.convertAnimationPrice(
-                            cartController.itemDiscountPrice,
-                            textStyle: robotoRegular),
+                        PriceConverter.convertAnimationPrice(cartController.itemDiscountPrice, textStyle: robotoRegular),
                       ])
                     : Text('calculating'.tr, style: robotoRegular),
                 // Text('(-) ${PriceConverter.convertPrice(cartController.itemDiscountPrice)}', style: robotoRegular, textDirection: TextDirection.ltr),
               ]),
-              SizedBox(
-                  height: cartController.variationPrice > 0
-                      ? Dimensions.paddingSizeSmall
-                      : 0),
+              SizedBox(height: cartController.variationPrice > 0 ? Dimensions.paddingSizeSmall : 0),
 
-              Get.find<SplashController>()
-                          .getModuleConfig("grocery")
-                          .newVariation! &&
-                      cartController.variationPrice > 0
+              Get.find<SplashController>().getModuleConfig("grocery").newVariation! && cartController.variationPrice > 0
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('variations'.tr, style: robotoRegular),
-                        Text(
-                            '(+) ${PriceConverter.convertPrice(cartController.variationPrice)}',
-                            style: robotoRegular,
-                            textDirection: TextDirection.ltr),
+                        Text('(+) ${PriceConverter.convertPrice(cartController.variationPrice)}', style: robotoRegular, textDirection: TextDirection.ltr),
                       ],
                     )
                   : const SizedBox(),
-              SizedBox(
-                  height: Get.find<SplashController>()
-                          .configModel!
-                          .moduleConfig!
-                          .module!
-                          .addOn!
-                      ? 10
-                      : 0),
+              SizedBox(height: Get.find<SplashController>().configModel!.moduleConfig!.module!.addOn! ? 10 : 0),
 
-              Get.find<SplashController>()
-                      .configModel!
-                      .moduleConfig!
-                      .module!
-                      .addOn!
+              Get.find<SplashController>().configModel!.moduleConfig!.module!.addOn!
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('addons'.tr, style: robotoRegular),
-                        Text(
-                            '(+) ${PriceConverter.convertPrice(cartController.addOns)}',
-                            style: robotoRegular,
-                            textDirection: TextDirection.ltr),
+                        Text('(+) ${PriceConverter.convertPrice(cartController.addOns)}', style: robotoRegular, textDirection: TextDirection.ltr),
                       ],
                     )
                   : const SizedBox(),
@@ -1080,13 +897,15 @@ class _CartScreenState extends State<CartScreen> {
             ]),
           ),
 
-          ResponsiveHelper.isDesktop(context)
-              ? CheckoutButton(
-                  couponCode: _coupounCodeController.text,
-                  cartController: cartController,
-                  availableList: cartController.availableList,
-                )
-              : const SizedBox.shrink(),
+          // ResponsiveHelper.isDesktop(context)
+          //     ?
+          CheckoutButton(
+            couponCode: _coupounCodeController.text,
+            cartController: cartController,
+            availableList: cartController.availableList,
+            selectedIndex: _selectedPaymentMethod.toString(),
+          )
+          // : const SizedBox.shrink(),
         ]);
       }),
     );
@@ -1173,98 +992,59 @@ class CheckoutButton extends StatelessWidget {
   final CartController cartController;
   final String? couponCode;
   final List<bool> availableList;
-  const CheckoutButton(
-      {key,
-      required this.cartController,
-      required this.availableList,
-      this.couponCode})
-      : super(key: key);
+  final String selectedIndex;
+  const CheckoutButton({
+    key,
+    required this.cartController,
+    required this.availableList,
+    this.couponCode,
+    required this.selectedIndex,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double percentage = 0;
-
     return Container(
       width: Dimensions.webMaxWidth,
       padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-      decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(
-              ResponsiveHelper.isDesktop(context)
-                  ? Dimensions.radiusDefault
-                  : 0),
-          boxShadow: ResponsiveHelper.isDesktop(context)
-              ? null
-              : [
-                  BoxShadow(
-                      color: Theme.of(context).primaryColor.withOpacity(0.2),
-                      blurRadius: 10)
-                ]),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(ResponsiveHelper.isDesktop(context) ? Dimensions.radiusDefault : 0), boxShadow: ResponsiveHelper.isDesktop(context) ? null : [BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.2), blurRadius: 10)]),
       child: GetBuilder<StoreController>(builder: (storeController) {
-        if (Get.find<StoreController>().store != null &&
-            !Get.find<StoreController>().store!.freeDelivery! &&
-            Get.find<SplashController>().configModel!.freeDeliveryOver !=
-                null) {
-          percentage = cartController.subTotal /
-              Get.find<SplashController>().configModel!.freeDeliveryOver!;
+        if (Get.find<StoreController>().store != null && !Get.find<StoreController>().store!.freeDelivery! && Get.find<SplashController>().configModel!.freeDeliveryOver != null) {
+          percentage = cartController.subTotal / Get.find<SplashController>().configModel!.freeDeliveryOver!;
         }
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            (storeController.store != null &&
-                    !storeController.store!.freeDelivery! &&
-                    Get.find<SplashController>()
-                            .configModel!
-                            .freeDeliveryOver !=
-                        null &&
-                    percentage < 1)
+            (storeController.store != null && !storeController.store!.freeDelivery! && Get.find<SplashController>().configModel!.freeDeliveryOver != null && percentage < 1)
                 ? Column(children: [
                     Row(children: [
                       Image.asset(Images.percentTag, height: 20, width: 20),
                       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                       Text(
-                        PriceConverter.convertPrice(Get.find<SplashController>()
-                                .configModel!
-                                .freeDeliveryOver! -
-                            cartController.subTotal),
-                        style: robotoMedium.copyWith(
-                            color: Theme.of(context).primaryColor),
+                        PriceConverter.convertPrice(Get.find<SplashController>().configModel!.freeDeliveryOver! - cartController.subTotal),
+                        style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),
                         textDirection: TextDirection.ltr,
                       ),
                       const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                      Text('more_for_free_delivery'.tr,
-                          style: robotoMedium.copyWith(
-                              color: Theme.of(context).disabledColor)),
+                      Text('more_for_free_delivery'.tr, style: robotoMedium.copyWith(color: Theme.of(context).disabledColor)),
                     ]),
                     const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                     LinearProgressIndicator(
-                      backgroundColor:
-                          Theme.of(context).primaryColor.withOpacity(0.2),
+                      backgroundColor: Theme.of(context).primaryColor.withOpacity(0.2),
                       value: percentage,
                     ),
                   ])
                 : const SizedBox(),
-            ResponsiveHelper.isDesktop(context)
-                ? const Divider(height: 1)
-                : const SizedBox(),
+            ResponsiveHelper.isDesktop(context) ? const Divider(height: 1) : const SizedBox(),
             const SizedBox(height: Dimensions.paddingSizeExtraSmall),
             Padding(
-              padding:
-                  const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
+              padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
               child: GetBuilder<CouponController>(builder: (controller) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('subtotal'.tr,
-                        style: robotoMedium.copyWith(
-                            color: ResponsiveHelper.isDesktop(context)
-                                ? Theme.of(context).textTheme.bodyLarge!.color
-                                : Theme.of(context).primaryColor)),
-                    PriceConverter.convertAnimationPrice(
-                        cartController.subTotal -
-                            double.parse(controller.discount.toString()),
-                        textStyle: robotoRegular.copyWith(
-                            color: Theme.of(context).primaryColor)),
+                    Text('subtotal'.tr, style: robotoMedium.copyWith(color: ResponsiveHelper.isDesktop(context) ? Theme.of(context).textTheme.bodyLarge!.color : Theme.of(context).primaryColor)),
+                    PriceConverter.convertAnimationPrice(cartController.subTotal - double.parse(controller.discount.toString()), textStyle: robotoRegular.copyWith(color: Theme.of(context).primaryColor)),
                     // Text(
                     //   PriceConverter.convertPrice(cartController.subTotal),
                     //   style: robotoMedium.copyWith(color: ResponsiveHelper.isDesktop(context) ? Theme.of(context).textTheme.bodyLarge!.color : Theme.of(context).primaryColor), textDirection: TextDirection.ltr,
@@ -1273,68 +1053,40 @@ class CheckoutButton extends StatelessWidget {
                 );
               }),
             ),
-            ResponsiveHelper.isDesktop(context) &&
-                    Get.find<SplashController>()
-                        .getModuleConfig('grocery')
-                        .newVariation! &&
-                    (storeController.store != null &&
-                        storeController.store!.cutlery!)
+            ResponsiveHelper.isDesktop(context) && Get.find<SplashController>().getModuleConfig('grocery').newVariation! && (storeController.store != null && storeController.store!.cutlery!)
                 ? Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(Images.cutlery, height: 18, width: 18),
-                          const SizedBox(width: Dimensions.paddingSizeDefault),
-                          Expanded(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('add_cutlery'.tr,
-                                      style: robotoMedium.copyWith(
-                                          color:
-                                              Theme.of(context).primaryColor)),
-                                  const SizedBox(
-                                      height: Dimensions.paddingSizeExtraSmall),
-                                  Text('do_not_have_cutlery'.tr,
-                                      style: robotoRegular.copyWith(
-                                          color:
-                                              Theme.of(context).disabledColor,
-                                          fontSize: Dimensions.fontSizeSmall)),
-                                ]),
-                          ),
-                          Transform.scale(
-                            scale: 0.7,
-                            child: CupertinoSwitch(
-                              value: cartController.addCutlery,
-                              activeColor: Theme.of(context).primaryColor,
-                              onChanged: (bool? value) {
-                                cartController.updateCutlery();
-                              },
-                              trackColor: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.5),
-                            ),
-                          )
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                      Image.asset(Images.cutlery, height: 18, width: 18),
+                      const SizedBox(width: Dimensions.paddingSizeDefault),
+                      Expanded(
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Text('add_cutlery'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
+                          const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                          Text('do_not_have_cutlery'.tr, style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall)),
                         ]),
+                      ),
+                      Transform.scale(
+                        scale: 0.7,
+                        child: CupertinoSwitch(
+                          value: cartController.addCutlery,
+                          activeColor: Theme.of(context).primaryColor,
+                          onChanged: (bool? value) {
+                            cartController.updateCutlery();
+                          },
+                          trackColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                        ),
+                      )
+                    ]),
                   )
                 : const SizedBox(),
-            ResponsiveHelper.isDesktop(context)
-                ? const SizedBox(height: Dimensions.paddingSizeSmall)
-                : const SizedBox(),
+            ResponsiveHelper.isDesktop(context) ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
             !ResponsiveHelper.isDesktop(context)
                 ? const SizedBox()
                 : Container(
                     width: Dimensions.webMaxWidth,
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusSmall),
-                        color: Theme.of(context).cardColor,
-                        border: Border.all(
-                            color: Theme.of(context).primaryColor, width: 0.5)),
-                    padding:
-                        const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Theme.of(context).cardColor, border: Border.all(color: Theme.of(context).primaryColor, width: 0.5)),
+                    padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     //margin: ResponsiveHelper.isDesktop(context) ? const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault, vertical: Dimensions.paddingSizeSmall) : EdgeInsets.zero,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -1342,41 +1094,26 @@ class CheckoutButton extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             if (ResponsiveHelper.isDesktop(context)) {
-                              Get.dialog(const Dialog(
-                                  child: NotAvailableBottomSheet()));
+                              Get.dialog(const Dialog(child: NotAvailableBottomSheet()));
                             } else {
                               showModalBottomSheet(
                                 context: context,
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
-                                builder: (con) =>
-                                    const NotAvailableBottomSheet(),
+                                builder: (con) => const NotAvailableBottomSheet(),
                               );
                             }
                           },
                           child: Row(children: [
-                            Expanded(
-                                child: Text(
-                                    'if_any_product_is_not_available'.tr,
-                                    style: robotoMedium,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis)),
+                            Expanded(child: Text('if_any_product_is_not_available'.tr, style: robotoMedium, maxLines: 2, overflow: TextOverflow.ellipsis)),
                             const Icon(Icons.keyboard_arrow_down, size: 18),
                           ]),
                         ),
                         cartController.notAvailableIndex != -1
                             ? Row(children: [
-                                Text(
-                                    cartController
-                                        .notAvailableList[
-                                            cartController.notAvailableIndex]
-                                        .tr,
-                                    style: robotoMedium.copyWith(
-                                        fontSize: Dimensions.fontSizeSmall,
-                                        color: Theme.of(context).primaryColor)),
+                                Text(cartController.notAvailableList[cartController.notAvailableIndex].tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)),
                                 IconButton(
-                                  onPressed: () =>
-                                      cartController.setAvailableIndex(-1),
+                                  onPressed: () => cartController.setAvailableIndex(-1),
                                   icon: const Icon(Icons.clear, size: 18),
                                 )
                               ])
@@ -1384,45 +1121,47 @@ class CheckoutButton extends StatelessWidget {
                       ],
                     ),
                   ),
-            ResponsiveHelper.isDesktop(context)
-                ? const SizedBox(height: Dimensions.paddingSizeSmall)
-                : const SizedBox(),
+            ResponsiveHelper.isDesktop(context) ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
             SafeArea(
               child: GetBuilder<LocationController>(
                 builder: (locationController) => CustomButton(
-                    buttonText: "Proceed to Pay".tr,
-                    fontSize: ResponsiveHelper.isDesktop(context)
-                        ? Dimensions.fontSizeSmall
-                        : Dimensions.fontSizeLarge,
+                    buttonText: selectedIndex == 'COD' ? "Place Order" : "Proceed to Pay",
+                    fontSize: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeSmall : Dimensions.fontSizeLarge,
                     isBold: ResponsiveHelper.isDesktop(context) ? false : true,
-                    radius: ResponsiveHelper.isDesktop(context)
-                        ? Dimensions.radiusSmall
-                        : Dimensions.radiusDefault,
+                    radius: ResponsiveHelper.isDesktop(context) ? Dimensions.radiusSmall : Dimensions.radiusDefault,
                     onPressed: () {
-                      final deliveryAddress = locationController.addressList!;
+                      if (selectedIndex == 'COD') {
+                        final deliveryAddress = locationController.addressList!;
 
-                      int id = -1;
-                      if (deliveryAddress.isEmpty) {
-                        // showCustomSnackBar("Please add delivery address", isError: false);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddAddressScreen(
-                              newaddress: true,
-                              fromCheckout: false,
-                              fromRide: false,
-                              zoneId: 0,
-                              addressid: id,
-                              couponCode: couponCode,
+                        int id = -1;
+                        if (deliveryAddress.isEmpty) {
+                          // showCustomSnackBar("Please add delivery address", isError: false);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddAddressScreen(
+                                newaddress: true,
+                                fromCheckout: false,
+                                fromRide: false,
+                                zoneId: 0,
+                                addressid: id,
+                                couponCode: couponCode,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          id = deliveryAddress[0].id!;
+                          cartController.placeOrder(deliveryAddressId: id, couponCode: couponCode);
+                        }
+                        // print(couponCode);
                       } else {
-                        id = deliveryAddress[0].id!;
-                        cartController.placeOrder(
-                            deliveryAddressId: id, couponCode: couponCode);
+                        Get.snackbar(
+                          "Not available",
+                          "This method is either disabled or not available.",
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.red,
+                        );
                       }
-                      print(couponCode);
 
                       // if(!cartController.cartList.first.item!.scheduleOrder! && availableList.contains(false)) {
                       //   showCustomSnackBar('one_or_more_product_unavailable'.tr);

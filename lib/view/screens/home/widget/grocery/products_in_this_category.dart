@@ -19,6 +19,7 @@ import 'package:sixam_mart/view/base/cart_count_view.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/discount_tag.dart';
+import 'package:sixam_mart/view/base/not_available_widget.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/special_offer/similar_product_details_view.dart';
 
@@ -179,21 +180,21 @@ class ProductsInThisCategory extends StatelessWidget {
                                               )
                                             : const SizedBox(),
 
-                                        // Get.find<ItemController>().isAvailable(Item(
-                                        //   id: item.id,
-                                        //   name: item.name,
-                                        //   image: item.image,
-                                        //   avgRating: double.parse(item.avgRating.toString()),
-                                        //   ratingCount: item.ratingCount,
-                                        //   discount: double.parse((item.discount ?? '0.0').toString()),
-                                        //   discountType: item.discountType.toString(),
-                                        //   unitType: item.unitType.toString(),
-                                        //   storeName: '',
-                                        //   stock: item.stock,
-                                        //   price: item.price,
-                                        // ))
-                                        //     ? const SizedBox()
-                                        //     : NotAvailableWidget(radius: Dimensions.radiusLarge, isAllSideRound: isPopularItem),
+                                        Get.find<ItemController>().isAvailable(Item(
+                                          id: product.id,
+                                          name: product.name,
+                                          image: product.image,
+                                          avgRating: double.parse(product.avgRating.toString()),
+                                          ratingCount: product.ratingCount,
+                                          discount: double.parse((product.discount ?? '0.0').toString()),
+                                          discountType: product.discountType.toString(),
+                                          unitType: product.unitType.toString(),
+                                          storeName: '',
+                                          stock: product.stock,
+                                          price: product.price,
+                                        ))
+                                            ? const SizedBox()
+                                            : NotAvailableWidget(radius: Dimensions.radiusLarge, isAllSideRound: isPopularItem),
                                       ],
                                     ),
                                   ),
@@ -234,9 +235,9 @@ class ProductsInThisCategory extends StatelessWidget {
                                                 )
                                               : Row(
                                                   mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start,
-                                                  children: [
-                                                    Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
-                                                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                                  children: const [
+                                                    // Icon(Icons.star, size: 14, color: Theme.of(context).primaryColor),
+                                                    // const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                                                     // Text(
                                                     //   (product.description ?? ' ').substring(
                                                     //     0,
@@ -247,13 +248,13 @@ class ProductsInThisCategory extends StatelessWidget {
                                                     //   ),
                                                     // ),
                                                     // const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                                                    Text(
-                                                      "(${product.ratingCount})",
-                                                      style: robotoRegular.copyWith(
-                                                        fontSize: Dimensions.fontSizeSmall,
-                                                        color: Theme.of(context).disabledColor,
-                                                      ),
-                                                    ),
+                                                    // Text(
+                                                    //   "(${product.ratingCount})",
+                                                    //   style: robotoRegular.copyWith(
+                                                    //     fontSize: Dimensions.fontSizeSmall,
+                                                    //     color: Theme.of(context).disabledColor,
+                                                    //   ),
+                                                    // ),
                                                   ],
                                                 ),
 
@@ -281,7 +282,7 @@ class ProductsInThisCategory extends StatelessWidget {
                                                 )
                                               : (Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && product.unitType != null)
                                                   ? Text(
-                                                      '(${product.unitType ?? ''})',
+                                                      '${product.unitValue ?? ''} (${product.unitType ?? ''})',
                                                       style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
                                                     )
                                                   : const SizedBox(),
@@ -342,148 +343,150 @@ class ProductsInThisCategory extends StatelessWidget {
                                               ),
                                               //?
                                               // delivery in
-                                              product.variations!.isEmpty
-                                                  ? GetBuilder<CartController>(
-                                                      builder: (cartController) {
-                                                        int cartQty = cartController.newGetItemQuantity(itemId: product.id);
-                                                        // print('card quantity  here is : ${cartQty != 0}');
-                                                        bool fromItemDetail = false;
+                                              // product.variations!.isEmpty
+                                              //     ? GetBuilder<CartController>(
+                                              //         builder: (cartController) {
+                                              //           int cartQty = cartController.newGetItemQuantity(itemId: product.id);
+                                              //           // print('card quantity  here is : ${cartQty != 0}');
+                                              //           bool fromItemDetail = false;
 
-                                                        return cartQty != 0
-                                                            ? Center(
-                                                                child: Container(
-                                                                  width: fromItemDetail ? 100 : null,
-                                                                  decoration: BoxDecoration(
-                                                                    color: Theme.of(context).primaryColor,
-                                                                    borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
-                                                                  ),
-                                                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                                                    InkWell(
-                                                                      onTap: cartController.isLoading
-                                                                          ? null
-                                                                          : () {
-                                                                              int cartIndex = cartController.cartList.indexWhere((element) => element.item!.id == product.id);
-                                                                              // print('cart index $cartIndex');
+                                              //           return cartQty != 0
+                                              //               ? Center(
+                                              //                   child: Container(
+                                              //                     width: fromItemDetail ? 100 : null,
+                                              //                     decoration: BoxDecoration(
+                                              //                       color: Theme.of(context).primaryColor,
+                                              //                       borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
+                                              //                     ),
+                                              //                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                              //                       InkWell(
+                                              //                         onTap: cartController.isLoading
+                                              //                             ? null
+                                              //                             : () {
+                                              //                                 int cartIndex = cartController.cartList.indexWhere((element) => element.item!.id == product.id);
+                                              //                                 // print('cart index $cartIndex');
 
-                                                                              if (cartController.cartList[cartIndex].quantity! > 1) {
-                                                                                cartController.currentItemId = product.id ?? -1;
+                                              //                                 if (cartController.cartList[cartIndex].quantity! > 1) {
+                                              //                                   cartController.currentItemId = product.id ?? -1;
 
-                                                                                cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! - 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null);
-                                                                                // cartController.setQuantity(
-                                                                                //   false,
-                                                                                //   cartIndex,
-                                                                                //   cartController.cartList[cartIndex].stock,
-                                                                                //   cartController.cartList[cartIndex].item!
-                                                                                //       .quantityLimit,
-                                                                                // );
-                                                                              } else {
-                                                                                cartController.removeCartItemOnline(cartIndex);
-                                                                              }
-                                                                            },
-                                                                      child: Container(
-                                                                        decoration: BoxDecoration(
-                                                                          color: Theme.of(context).cardColor,
-                                                                          shape: BoxShape.circle,
-                                                                          border: Border.all(color: Theme.of(context).primaryColor),
-                                                                        ),
-                                                                        padding: const EdgeInsets.all(
-                                                                          Dimensions.paddingSizeExtraSmall,
-                                                                        ),
-                                                                        child: Icon(
-                                                                          Icons.remove,
-                                                                          size: fromItemDetail ? null : 16,
-                                                                          color: Theme.of(context).primaryColor,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    cartController.isLoading && cartController.currentItemId == product.id
-                                                                        ? SizedBox(height: 10, width: 10, child: CircularProgressIndicator(color: Theme.of(context).cardColor))
-                                                                        : Padding(
-                                                                            padding: EdgeInsets.all(fromItemDetail ? 0 : 2.0),
-                                                                            child: Text(
-                                                                              cartQty.toString(),
-                                                                              style: robotoMedium.copyWith(fontSize: fromItemDetail ? Dimensions.fontSizeLarge : Dimensions.fontSizeSmall, color: Theme.of(context).cardColor),
-                                                                            ),
-                                                                          ),
-                                                                    InkWell(
-                                                                      onTap: cartController.isLoading
-                                                                          ? null
-                                                                          : () {
-                                                                              cartController.currentItemId = product.id ?? -1;
+                                              //                                   cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! - 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null);
+                                              //                                   // cartController.setQuantity(
+                                              //                                   //   false,
+                                              //                                   //   cartIndex,
+                                              //                                   //   cartController.cartList[cartIndex].stock,
+                                              //                                   //   cartController.cartList[cartIndex].item!
+                                              //                                   //       .quantityLimit,
+                                              //                                   // );
+                                              //                                 } else {
+                                              //                                   cartController.removeCartItemOnline(cartIndex);
+                                              //                                 }
+                                              //                               },
+                                              //                         child: Container(
+                                              //                           decoration: BoxDecoration(
+                                              //                             color: Theme.of(context).cardColor,
+                                              //                             shape: BoxShape.circle,
+                                              //                             border: Border.all(color: Theme.of(context).primaryColor),
+                                              //                           ),
+                                              //                           padding: const EdgeInsets.all(
+                                              //                             Dimensions.paddingSizeExtraSmall,
+                                              //                           ),
+                                              //                           child: Icon(
+                                              //                             Icons.remove,
+                                              //                             size: fromItemDetail ? null : 16,
+                                              //                             color: Theme.of(context).primaryColor,
+                                              //                           ),
+                                              //                         ),
+                                              //                       ),
+                                              //                       cartController.isLoading && cartController.currentItemId == product.id
+                                              //                           ? SizedBox(height: 10, width: 10, child: CircularProgressIndicator(color: Theme.of(context).cardColor))
+                                              //                           : Padding(
+                                              //                               padding: EdgeInsets.all(fromItemDetail ? 0 : 2.0),
+                                              //                               child: Text(
+                                              //                                 cartQty.toString(),
+                                              //                                 style: robotoMedium.copyWith(fontSize: fromItemDetail ? Dimensions.fontSizeLarge : Dimensions.fontSizeSmall, color: Theme.of(context).cardColor),
+                                              //                               ),
+                                              //                             ),
+                                              //                       InkWell(
+                                              //                         onTap: cartController.isLoading
+                                              //                             ? null
+                                              //                             : () {
+                                              //                                 cartController.currentItemId = product.id ?? -1;
 
-                                                                              int cartIndex = cartController.cartList.indexWhere((element) => element.item!.id == product.id);
-                                                                              cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! + 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null);
-                                                                            },
-                                                                      child: Container(
-                                                                        decoration: BoxDecoration(
-                                                                          color: Theme.of(context).cardColor,
-                                                                          shape: BoxShape.circle,
-                                                                          border: Border.all(color: Theme.of(context).primaryColor),
-                                                                        ),
-                                                                        padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                                                                        child: Icon(
-                                                                          Icons.add,
-                                                                          size: fromItemDetail ? null : 16,
-                                                                          color: Theme.of(context).primaryColor,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ]),
-                                                                ),
-                                                              )
-                                                            : cartController.addingToCart && cartController.currentItemId == product.id
-                                                                ? Text(
-                                                                    "Adding..",
-                                                                    style: TextStyle(
-                                                                      color: Theme.of(context).primaryColor,
-                                                                    ),
-                                                                  )
-                                                                : InkWell(
-                                                                    onTap: () async {
-                                                                      // print('going to next page...');
-                                                                      cartController.currentItemId = product.id ?? -1;
+                                              //                                 int cartIndex = cartController.cartList.indexWhere((element) => element.item!.id == product.id);
+                                              //                                 cartController.addToCart(quantity: cartController.cartList[cartIndex].quantity! + 1, productId: cartController.cartList[cartIndex].item!.id!, variantType: null);
+                                              //                               },
+                                              //                         child: Container(
+                                              //                           decoration: BoxDecoration(
+                                              //                             color: Theme.of(context).cardColor,
+                                              //                             shape: BoxShape.circle,
+                                              //                             border: Border.all(color: Theme.of(context).primaryColor),
+                                              //                           ),
+                                              //                           padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                                              //                           child: Icon(
+                                              //                             Icons.add,
+                                              //                             size: fromItemDetail ? null : 16,
+                                              //                             color: Theme.of(context).primaryColor,
+                                              //                           ),
+                                              //                         ),
+                                              //                       ),
+                                              //                     ]),
+                                              //                   ),
+                                              //                 )
+                                              //               : cartController.addingToCart && cartController.currentItemId == product.id
+                                              //                   ? Text(
+                                              //                       "Adding..",
+                                              //                       style: TextStyle(
+                                              //                         color: Theme.of(context).primaryColor,
+                                              //                       ),
+                                              //                     )
+                                              //                   : InkWell(
+                                              //                       onTap: () async {
+                                              //                         // print('going to next page...');
+                                              //                         cartController.currentItemId = product.id ?? -1;
 
-                                                                      // product.variations != null && product.variations!.isNotEmpty
-                                                                      // ? Navigator.push(
-                                                                      //     context,
-                                                                      //     MaterialPageRoute(
-                                                                      //       builder: (_) => ItemDetailsScreen(
-                                                                      //         item: item,
-                                                                      //         inStorePage: false,
-                                                                      //       ),
-                                                                      //     ),
-                                                                      //   )
-                                                                      // :
-                                                                      Get.find<ItemController>().addToCart(productId: product.id!, quantity: 1);
-                                                                    },
-                                                                    child: Container(
-                                                                      height: fromItemDetail ? 40 : 25,
-                                                                      width: fromItemDetail ? 40 : 25,
-                                                                      decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).cardColor, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)]),
-                                                                      child: Icon(Icons.add, size: fromItemDetail ? 24 : 20, color: Theme.of(context).primaryColor),
-                                                                    ),
-                                                                  );
-                                                      },
-                                                    )
-                                                  : const SizedBox(),
-
-                                              // CartCountView(
-                                              //   item: Item(
-                                              //     id: item.id,
-                                              //     name: item.name,
-                                              //     image: item.image,
-                                              //     variations: item.variations,
-                                              //     images: item.images,
-                                              //     avgRating: double.parse(item.avgRating.toString()),
-                                              //     ratingCount: item.ratingCount,
-                                              //     discount: double.parse((item.discount ?? '0.0').toString()),
-                                              //     discountType: item.discountType.toString(),
-                                              //     unitType: item.unitType.toString(),
-                                              //     storeName: '',
-                                              //     stock: item.stock,
-                                              //     price: item.price,
-                                              //   ),
-                                              // )
+                                              //                         // product.variations != null && product.variations!.isNotEmpty
+                                              //                         // ? Navigator.push(
+                                              //                         //     context,
+                                              //                         //     MaterialPageRoute(
+                                              //                         //       builder: (_) => ItemDetailsScreen(
+                                              //                         //         item: item,
+                                              //                         //         inStorePage: false,
+                                              //                         //       ),
+                                              //                         //     ),
+                                              //                         //   )
+                                              //                         // :
+                                              //                         Get.find<ItemController>().addToCart(productId: product.id!, quantity: 1);
+                                              //                       },
+                                              //                       child: Container(
+                                              //                         height: fromItemDetail ? 40 : 25,
+                                              //                         width: fromItemDetail ? 40 : 25,
+                                              //                         decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).cardColor, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)]),
+                                              //                         child: Icon(Icons.add, size: fromItemDetail ? 24 : 20, color: Theme.of(context).primaryColor),
+                                              //                       ),
+                                              //                     );
+                                              //         },
+                                              //       )
+                                              //     : const SizedBox(),
+                                              //reusing old code from rabin
+                                              CartCountView(
+                                                item: Item(
+                                                  id: product.id,
+                                                  name: product.name,
+                                                  image: product.image,
+                                                  variations: product.variations,
+                                                  images: product.images,
+                                                  avgRating: double.parse(product.avgRating.toString()),
+                                                  ratingCount: product.ratingCount,
+                                                  discount: double.parse((product.discount ?? '0.0').toString()),
+                                                  discountType: product.discountType.toString(),
+                                                  unitType: product.unitType.toString(),
+                                                  unitValue: product.unitValue,
+                                                  description: product.description.toString(),
+                                                  storeName: '',
+                                                  stock: product.stock,
+                                                  price: product.price,
+                                                ),
+                                              )
                                             ],
                                           ),
 

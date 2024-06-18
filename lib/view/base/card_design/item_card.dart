@@ -444,7 +444,7 @@ class ItemCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 6,
+                    flex: 5,
                     child: Stack(
                       children: [
                         Padding(
@@ -573,36 +573,39 @@ class ItemCard extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 )
-                              : Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
-                                  // Icon(Icons.star,
-                                  //     size: 14,
-                                  //     color:
-                                  //         Theme.of(context).primaryColor),
+                              : Row(
+                                  mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start,
+                                  children: const [
+                                    // Icon(Icons.star,
+                                    //     size: 14,
+                                    //     color:
+                                    //         Theme.of(context).primaryColor),
 
-                                  // const SizedBox(
-                                  //     width:
-                                  //         Dimensions.paddingSizeExtraSmall),
-                                  // Text(
-                                  //     (item.description ?? ' ').substring(
-                                  //         0,
-                                  //         (item.description ?? '').length <
-                                  //                 20
-                                  //             ? (item.description ?? '')
-                                  //                 .length
-                                  //             : 20),
-                                  //     style: robotoRegular.copyWith(
-                                  //         fontSize:
-                                  //             Dimensions.fontSizeSmall)),
-                                  // const SizedBox(
-                                  //     width:
-                                  //         Dimensions.paddingSizeExtraSmall),
-                                  // Text("(${item.ratingCount})",
-                                  //     style: robotoRegular.copyWith(
-                                  //         fontSize:
-                                  //             Dimensions.fontSizeSmall,
-                                  //         color: Theme.of(context)
-                                  //             .disabledColor)),
-                                ]),
+                                    // const SizedBox(
+                                    //     width:
+                                    //         Dimensions.paddingSizeExtraSmall),
+                                    // Text(
+                                    //     (item.description ?? ' ').substring(
+                                    //         0,
+                                    //         (item.description ?? '').length <
+                                    //                 20
+                                    //             ? (item.description ?? '')
+                                    //                 .length
+                                    //             : 20),
+                                    //     style: robotoRegular.copyWith(
+                                    //         fontSize:
+                                    //             Dimensions.fontSizeSmall)),
+                                    // const SizedBox(
+                                    //     width:
+                                    //         Dimensions.paddingSizeExtraSmall),
+                                    // Text("(${item.ratingCount})",
+                                    //     style: robotoRegular.copyWith(
+                                    //         fontSize:
+                                    //             Dimensions.fontSizeSmall,
+                                    //         color: Theme.of(context)
+                                    //             .disabledColor)),
+                                  ],
+                                ),
 
                           (isFood || isShop)
                               ? Row(
@@ -618,6 +621,11 @@ class ItemCard extends StatelessWidget {
                               : (Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && item.unitType != null)
                                   ? Row(
                                       children: [
+                                        Text(
+                                          '${item.unitValue}',
+                                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
+                                        ),
+                                        const SizedBox(width: 2),
                                         Text(
                                           item.unitType ?? '',
                                           style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).hintColor),
@@ -682,25 +690,24 @@ class ItemCard extends StatelessWidget {
                                 style: robotoMedium,
                               ),
                               // delivery in
-                              item.variations!.isEmpty
-                                  ? CartCountView(
-                                      item: Item(
-                                        id: item.id,
-                                        name: item.name,
-                                        image: item.image,
-                                        variations: item.variations,
-                                        images: item.images,
-                                        avgRating: double.parse(item.avgRating.toString()),
-                                        ratingCount: item.ratingCount,
-                                        discount: double.parse((item.discount ?? '0.0').toString()),
-                                        discountType: item.discountType.toString(),
-                                        unitType: item.unitType.toString(),
-                                        storeName: '',
-                                        stock: item.stock,
-                                        price: item.price,
-                                      ),
-                                    )
-                                  : const SizedBox(),
+                              CartCountView(
+                                item: Item(
+                                    id: item.id,
+                                    name: item.name,
+                                    image: item.image,
+                                    variations: item.variations,
+                                    images: item.images,
+                                    avgRating: double.parse(item.avgRating.toString()),
+                                    ratingCount: item.ratingCount,
+                                    discount: double.parse((item.discount ?? '0.0').toString()),
+                                    discountType: item.discountType.toString(),
+                                    unitType: item.unitType.toString(),
+                                    description: item.description.toString(),
+                                    storeName: '',
+                                    stock: item.stock,
+                                    price: item.price,
+                                    categoryProducts: item.categoryProducts),
+                              ),
                             ],
                           ),
 

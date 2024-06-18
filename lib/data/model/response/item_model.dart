@@ -73,6 +73,8 @@ class Item {
   String? image;
   List<String>? images;
   int? categoryId;
+  int? costPrice;
+  int? unitValue;
   List<CategoryIds>? categoryIds;
   List<Variation>? variations;
   List<FoodVariation>? foodVariations;
@@ -109,6 +111,8 @@ class Item {
     this.image,
     this.images,
     this.categoryId,
+    this.costPrice,
+    this.unitValue,
     this.categoryIds,
     this.variations,
     this.foodVariations,
@@ -145,6 +149,8 @@ class Item {
     image = json['image'];
     images = json['images'] != null ? json['images'].cast<String>() : [];
     categoryId = json['category_id'];
+    unitValue = json['unit_value'];
+    costPrice = json['cost_price'];
     if (json['variations'] != null) {
       variations = [];
       var variationsJson = json['variations'];
@@ -242,6 +248,8 @@ class Item {
     data['image'] = image;
     data['images'] = images;
     data['category_id'] = categoryId;
+    data['unit_value'] = unitValue;
+    data['cost_price'] = costPrice;
     if (categoryIds != null) {
       data['category_ids'] = categoryIds!.map((v) => v.toJson()).toList();
     }
@@ -463,6 +471,7 @@ class CategoryProduct {
   int? moduleId;
   int? stock;
   int? unitId;
+  int? unitValue;
   List<String>? images;
   List<FoodVariation>? foodVariations;
   String? slug;
@@ -507,6 +516,7 @@ class CategoryProduct {
     this.moduleId,
     this.stock,
     this.unitId,
+    this.unitValue,
     this.images,
     this.foodVariations,
     this.slug,
@@ -552,6 +562,7 @@ class CategoryProduct {
     moduleId = json['module_id'];
     stock = json['stock'];
     unitId = json['unit_id'];
+    unitValue = json['unit_value'];
     images = json['images']?.cast<String>() ?? [];
     foodVariations = (jsonDecode(json['food_variations']) as List).map((i) => FoodVariation.fromJson(i)).toList();
     slug = json['slug'];
@@ -608,6 +619,7 @@ class CategoryProduct {
     data['module_id'] = moduleId;
     data['stock'] = stock;
     data['unit_id'] = unitId;
+    data['unit_value'] = unitValue;
     data['images'] = images;
     if (foodVariations != null) {
       data['food_variations'] = jsonEncode(foodVariations!.map((v) => v.toJson()).toList());
