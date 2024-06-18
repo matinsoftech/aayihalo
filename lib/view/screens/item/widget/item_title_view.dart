@@ -186,16 +186,17 @@ class ItemTitleView extends StatelessWidget {
                   children: [
                     Row(children: [
                       Expanded(
-                          child: Text(
-                        item!.name ?? '',
-                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      )),
+                        child: Text(
+                          item!.name ?? '',
+                          style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                       item!.availableTimeStarts != null
                           ? const SizedBox()
                           : GetBuilder<WishListController>(builder: (wishController) {
-                              return Row(
+                              return const Row(
                                 children: [
                                   // Text(
                                   //   wishController.localWishes.contains(item.id) ? (item.wishlistCount+1).toString() : wishController.localRemovedWishes

@@ -16,7 +16,6 @@ import 'package:sixam_mart/view/base/custom_app_bar.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/base/menu_drawer.dart';
 import 'package:sixam_mart/view/screens/dashboard/widget/cart_detail_floating_button.dart';
-import 'package:sixam_mart/view/screens/home/widget/grocery/brands_in_this_category.dart';
 import 'package:sixam_mart/view/screens/home/widget/grocery/products_in_this_category.dart';
 import 'package:sixam_mart/view/screens/item/widget/details_app_bar.dart';
 import 'package:sixam_mart/view/screens/item/widget/item_image_view.dart';
@@ -310,7 +309,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
                                   widget.item?.variations == null || widget.item!.variations!.isEmpty
                                       ? Text(
-                                          "Nrs. ${widget.item!.price!}",
+                                          "Rs. ${widget.item!.price!}",
                                           style: robotoMedium.copyWith(fontSize: 16, fontWeight: FontWeight.bold),
                                         )
                                       : Column(
@@ -350,7 +349,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                                             height: 4,
                                                           ),
                                                           Text(
-                                                            'NRs. ${widget.item!.variations![index].price!}',
+                                                            'Rs. ${widget.item!.variations![index].price!}',
                                                             style: robotoRegular.copyWith(fontSize: 12, fontWeight: FontWeight.w400),
                                                           ),
                                                           const SizedBox(height: 8),

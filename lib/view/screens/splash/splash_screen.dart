@@ -101,11 +101,12 @@ class SplashScreenState extends State<SplashScreen> {
                 }
               } else {
                 if (Get.find<SplashController>().showIntro()!) {
-                  if (AppConstants.languages.length > 1) {
-                    Get.offNamed(RouteHelper.getLanguageRoute('splash'));
-                  } else {
-                    Get.offNamed(RouteHelper.getOnBoardingRoute());
-                  }
+                  // if (AppConstants.languages.length > 1) {
+                  //   Get.offNamed(RouteHelper.getLanguageRoute('splash'));
+                  // } else {
+                  //   Get.offNamed(RouteHelper.getOnBoardingRoute());
+                  // }
+                  Get.offNamed(RouteHelper.getOnBoardingRoute());
                 } else {
                   if (Get.find<AuthController>().isGuestLoggedIn()) {
                     if (Get.find<LocationController>().getUserAddress() != null) {

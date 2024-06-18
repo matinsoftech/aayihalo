@@ -195,7 +195,7 @@ class ApiClient extends GetxService {
       response0 = Response(statusCode: 0, statusText: noInternetMessage);
     }
     if (kDebugMode) {
-      print('====> API Response: [${response0.statusCode}] $uri');
+      // print('====> API Response: [${response0.statusCode}] $uri');
       if (!ResponsiveHelper.isWeb() || response.statusCode != 500) {
         print('${response0.body}');
       }

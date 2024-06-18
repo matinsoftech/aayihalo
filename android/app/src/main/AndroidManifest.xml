@@ -25,7 +25,7 @@
     </queries>
 
     <application
-        android:label="AIYHALYO"
+        android:label="Aiyhalyo"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">

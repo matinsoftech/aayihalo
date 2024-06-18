@@ -34,7 +34,14 @@ class OrderDetailsScreen extends StatefulWidget {
   final bool fromNotification;
   final bool fromOfflinePayment;
   final String? contactNumber;
-  const OrderDetailsScreen({Key? key, required this.orderModel, required this.orderId, this.fromNotification = false, this.fromOfflinePayment = false, this.contactNumber}) : super(key: key);
+  const OrderDetailsScreen({
+    Key? key,
+    required this.orderModel,
+    required this.orderId,
+    this.fromNotification = false,
+    this.fromOfflinePayment = false,
+    this.contactNumber,
+  }) : super(key: key);
 
   @override
   OrderDetailsScreenState createState() => OrderDetailsScreenState();
@@ -49,7 +56,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
   void _loadData(BuildContext context, bool reload) async {
     await Get.find<OrderController>().trackOrder(widget.orderId.toString(), reload ? null : widget.orderModel, false, contactNumber: widget.contactNumber).then((value) {
       if (widget.fromOfflinePayment) {
-        Future.delayed(const Duration(seconds: 2), () => showAnimatedDialog(context, OfflineSuccessDialog(orderId: widget.orderId)));
+        Future.delayed(const Duration(seconds: 10), () => showAnimatedDialog(context, OfflineSuccessDialog(orderId: widget.orderId)));
       }
     });
     Get.find<OrderController>().timerTrackOrder(widget.orderId.toString(), contactNumber: widget.contactNumber);
@@ -104,158 +111,171 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
         endDrawer: const MenuDrawer(),
         endDrawerEnableOpenDragGesture: false,
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: SafeArea(child: GetBuilder<OrderController>(builder: (orderController) {
-          double deliveryCharge = 0;
-          double itemsPrice = 0;
-          double discount = 0;
-          double couponDiscount = 0;
-          double tax = 0;
-          double addOns = 0;
-          double dmTips = 0;
-          double additionalCharge = 0;
-          OrderModel? order = orderController.trackModel;
-          bool parcel = false;
-          bool prescriptionOrder = false;
-          bool taxIncluded = false;
-          bool ongoing = false;
-          if (orderController.orderDetails != null && order != null) {
-            parcel = order.orderType == 'parcel';
-            prescriptionOrder = order.prescriptionOrder!;
-            deliveryCharge = order.deliveryCharge!;
-            couponDiscount = order.couponDiscountAmount!;
-            discount = order.storeDiscountAmount! + order.flashAdminDiscountAmount! + order.flashStoreDiscountAmount!;
-            tax = order.totalTaxAmount!;
-            dmTips = order.dmTips!;
-            taxIncluded = order.taxStatus!;
-            additionalCharge = order.additionalCharge!;
-            if (prescriptionOrder) {
-              double orderAmount = order.orderAmount ?? 0;
-              itemsPrice = (orderAmount + discount) - ((taxIncluded ? 0 : tax) + deliveryCharge) - dmTips - additionalCharge;
-            } else {
-              for (OrderDetailsModel orderDetails in orderController.orderDetails!) {
-                for (AddOn addOn in orderDetails.addOns!) {
-                  addOns = addOns + (addOn.price! * addOn.quantity!);
-                }
-                itemsPrice = itemsPrice + (orderDetails.price! * orderDetails.quantity!);
-              }
-            }
-
-            if (!parcel && order.store != null) {
-              for (ZoneData zData in Get.find<LocationController>().getUserAddress()!.zoneData!) {
-                if (zData.id == order.store!.zoneId) {
-                  _isCashOnDeliveryActive = zData.cashOnDelivery;
-                }
-                for (Modules m in zData.modules!) {
-                  if (m.id == order.store!.moduleId) {
-                    _maxCodOrderAmount = m.pivot!.maximumCodOrderAmount;
-                    break;
+        body: SafeArea(
+          child: GetBuilder<OrderController>(
+            builder: (orderController) {
+              double deliveryCharge = 0;
+              double itemsPrice = 0;
+              double discount = 0;
+              double couponDiscount = 0;
+              double tax = 0;
+              double addOns = 0;
+              double dmTips = 0;
+              double additionalCharge = 0;
+              OrderModel? order = orderController.trackModel;
+              bool parcel = false;
+              bool prescriptionOrder = false;
+              bool taxIncluded = false;
+              bool ongoing = false;
+              if (orderController.orderDetails != null && order != null) {
+                parcel = order.orderType == 'parcel';
+                prescriptionOrder = order.prescriptionOrder!;
+                deliveryCharge = order.deliveryCharge!;
+                couponDiscount = order.couponDiscountAmount!;
+                discount = order.storeDiscountAmount! + order.flashAdminDiscountAmount! + order.flashStoreDiscountAmount!;
+                tax = order.totalTaxAmount!;
+                dmTips = order.dmTips!;
+                taxIncluded = order.taxStatus!;
+                additionalCharge = order.additionalCharge!;
+                if (prescriptionOrder) {
+                  double orderAmount = order.orderAmount ?? 0;
+                  itemsPrice = (orderAmount + discount) - ((taxIncluded ? 0 : tax) + deliveryCharge) - dmTips - additionalCharge;
+                } else {
+                  for (OrderDetailsModel orderDetails in orderController.orderDetails!) {
+                    for (AddOn addOn in orderDetails.addOns!) {
+                      addOns = addOns + (addOn.price! * addOn.quantity!);
+                    }
+                    itemsPrice = itemsPrice + (orderDetails.price! * orderDetails.quantity!);
                   }
                 }
+
+                if (!parcel && order.store != null) {
+                  for (ZoneData zData in Get.find<LocationController>().getUserAddress()!.zoneData!) {
+                    if (zData.id == order.store!.zoneId) {
+                      _isCashOnDeliveryActive = zData.cashOnDelivery;
+                    }
+                    for (Modules m in zData.modules!) {
+                      if (m.id == order.store!.moduleId) {
+                        _maxCodOrderAmount = m.pivot!.maximumCodOrderAmount;
+                        break;
+                      }
+                    }
+                  }
+                }
+
+                ongoing = (order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refund_requested' && order.orderStatus != 'refunded' && order.orderStatus != 'refund_request_canceled');
               }
-            }
+              double subTotal = itemsPrice + addOns;
+              double total = itemsPrice + addOns - discount + (taxIncluded ? 0 : tax) + deliveryCharge - couponDiscount + dmTips + additionalCharge;
 
-            ongoing = (order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refund_requested' && order.orderStatus != 'refunded' && order.orderStatus != 'refund_request_canceled');
-          }
-          double subTotal = itemsPrice + addOns;
-          double total = itemsPrice + addOns - discount + (taxIncluded ? 0 : tax) + deliveryCharge - couponDiscount + dmTips + additionalCharge;
-
-          print('-----check order details : ${orderController.orderDetails != null} && ${order != null}');
-          return orderController.orderDetails != null && order != null
-              ? Column(children: [
-                  ResponsiveHelper.isDesktop(context)
-                      ? Container(
-                          height: 64,
-                          color: Theme.of(context).primaryColor.withOpacity(0.10),
-                          child: Center(child: Text('order_details'.tr, style: robotoMedium)),
-                        )
-                      : const SizedBox(),
-                  Expanded(
-                      child: Scrollbar(
-                          controller: scrollController,
-                          child: SingleChildScrollView(
+              print('-----check order details : ${orderController.orderDetails != null} && ${order != null}');
+              return orderController.orderDetails != null && order != null
+                  ? Column(
+                      children: [
+                        ResponsiveHelper.isDesktop(context)
+                            ? Container(
+                                height: 64,
+                                color: Theme.of(context).primaryColor.withOpacity(0.10),
+                                child: Center(child: Text('order_details'.tr, style: robotoMedium)),
+                              )
+                            : const SizedBox(),
+                        Expanded(
+                          child: Scrollbar(
                             controller: scrollController,
-                            physics: const BouncingScrollPhysics(),
-                            child: FooterView(
+                            child: SingleChildScrollView(
+                              controller: scrollController,
+                              physics: const BouncingScrollPhysics(),
+                              child: FooterView(
                                 child: SizedBox(
-                                    width: Dimensions.webMaxWidth,
-                                    child: Column(
-                                      children: [
-                                        ResponsiveHelper.isDesktop(context)
-                                            ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                                Expanded(
-                                                  flex: 6,
-                                                  child: OrderInfoWidget(
-                                                    order: order,
-                                                    ongoing: ongoing,
-                                                    parcel: parcel,
-                                                    prescriptionOrder: prescriptionOrder,
-                                                    timerCancel: () => _timer?.cancel(),
-                                                    startApiCall: () => _startApiCall(),
-                                                    orderController: orderController,
-                                                  ),
-                                                ),
-                                                const SizedBox(width: Dimensions.paddingSizeLarge),
-                                                Expanded(
-                                                  flex: 4,
-                                                  child: OrderCalculationWidget(
-                                                    orderController: orderController,
-                                                    order: order,
-                                                    ongoing: ongoing,
-                                                    parcel: parcel,
-                                                    prescriptionOrder: prescriptionOrder,
-                                                    deliveryCharge: deliveryCharge,
-                                                    itemsPrice: itemsPrice,
-                                                    discount: discount,
-                                                    couponDiscount: couponDiscount,
-                                                    tax: tax,
-                                                    addOns: addOns,
-                                                    dmTips: dmTips,
-                                                    taxIncluded: taxIncluded,
-                                                    subTotal: subTotal,
-                                                    total: total,
-                                                    bottomView: _bottomView(orderController, order, parcel, total),
-                                                  ),
-                                                ),
-                                              ])
-                                            : const SizedBox(),
-                                        ResponsiveHelper.isDesktop(context)
-                                            ? const SizedBox()
-                                            : OrderInfoWidget(
-                                                order: order,
-                                                ongoing: ongoing,
-                                                parcel: parcel,
-                                                prescriptionOrder: prescriptionOrder,
-                                                timerCancel: () => _timer?.cancel(),
-                                                startApiCall: () => _startApiCall(),
-                                                orderController: orderController,
-                                              ),
-                                        ResponsiveHelper.isDesktop(context)
-                                            ? const SizedBox()
-                                            : OrderCalculationWidget(
-                                                orderController: orderController,
-                                                order: order,
-                                                ongoing: ongoing,
-                                                parcel: parcel,
-                                                prescriptionOrder: prescriptionOrder,
-                                                deliveryCharge: deliveryCharge,
-                                                itemsPrice: itemsPrice,
-                                                discount: discount,
-                                                couponDiscount: couponDiscount,
-                                                tax: tax,
-                                                addOns: addOns,
-                                                dmTips: dmTips,
-                                                taxIncluded: taxIncluded,
-                                                subTotal: subTotal,
-                                                total: total,
-                                                bottomView: _bottomView(orderController, order, parcel, total),
-                                              ),
-                                      ],
-                                    ))),
-                          ))),
-                  ResponsiveHelper.isDesktop(context) ? const SizedBox() : _bottomView(orderController, order, parcel, total),
-                ])
-              : const Center(child: CircularProgressIndicator());
-        })),
+                                  width: Dimensions.webMaxWidth,
+                                  child: Column(
+                                    children: [
+                                      // ResponsiveHelper.isDesktop(context)
+                                      //     ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                      //         Expanded(
+                                      //           flex: 6,
+                                      //           child: OrderInfoWidget(
+                                      //             order: order,
+                                      //             ongoing: ongoing,
+                                      //             parcel: parcel,
+                                      //             prescriptionOrder: prescriptionOrder,
+                                      //             timerCancel: () => _timer?.cancel(),
+                                      //             startApiCall: () => _startApiCall(),
+                                      //             orderController: orderController,
+                                      //           ),
+                                      //         ),
+                                      //         const SizedBox(width: Dimensions.paddingSizeLarge),
+                                      //         Expanded(
+                                      //           flex: 4,
+                                      //           child: OrderCalculationWidget(
+                                      //             orderController: orderController,
+                                      //             order: order,
+                                      //             ongoing: ongoing,
+                                      //             parcel: parcel,
+                                      //             prescriptionOrder: prescriptionOrder,
+                                      //             deliveryCharge: deliveryCharge,
+                                      //             itemsPrice: itemsPrice,
+                                      //             discount: discount,
+                                      //             couponDiscount: couponDiscount,
+                                      //             tax: tax,
+                                      //             addOns: addOns,
+                                      //             dmTips: dmTips,
+                                      //             taxIncluded: taxIncluded,
+                                      //             subTotal: subTotal,
+                                      //             total: total,
+                                      //             bottomView: _bottomView(orderController, order, parcel, total),
+                                      //           ),
+                                      //         ),
+                                      //       ])
+                                      //     : const SizedBox(),
+                                      // ResponsiveHelper.isDesktop(context)
+                                      //     ? const SizedBox()
+                                      // //     :
+                                      OrderInfoWidget(
+                                        order: order,
+                                        ongoing: ongoing,
+                                        parcel: parcel,
+                                        prescriptionOrder: prescriptionOrder,
+                                        timerCancel: () => _timer?.cancel(),
+                                        startApiCall: () => _startApiCall(),
+                                        orderController: orderController,
+                                      ),
+                                      // ResponsiveHelper.isDesktop(context)
+                                      //     ? const SizedBox()
+                                      //     :
+                                      OrderCalculationWidget(
+                                        orderController: orderController,
+                                        order: order,
+                                        ongoing: ongoing,
+                                        parcel: parcel,
+                                        prescriptionOrder: prescriptionOrder,
+                                        deliveryCharge: deliveryCharge,
+                                        itemsPrice: itemsPrice,
+                                        discount: discount,
+                                        couponDiscount: couponDiscount,
+                                        tax: tax,
+                                        addOns: addOns,
+                                        dmTips: dmTips,
+                                        taxIncluded: taxIncluded,
+                                        subTotal: subTotal,
+                                        total: total,
+                                        bottomView: _bottomView(orderController, order, parcel, total),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        // ResponsiveHelper.isDesktop(context) ? const SizedBox() :
+                        _bottomView(orderController, order, parcel, total),
+                      ],
+                    )
+                  : const Center(child: CircularProgressIndicator());
+            },
+          ),
+        ),
       ),
     );
   }
