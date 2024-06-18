@@ -1154,12 +1154,19 @@ class CheckoutButton extends StatelessWidget {
                           cartController.placeOrder(deliveryAddressId: id, couponCode: couponCode);
                         }
                         // print(couponCode);
-                      } else {
+                      } else if (selectedIndex == 'Online') {
                         Get.snackbar(
                           "Not available",
                           "This method is either disabled or not available.",
                           snackPosition: SnackPosition.BOTTOM,
                           backgroundColor: Colors.red,
+                        );
+                      } else {
+                        Get.snackbar(
+                          "Payment Method",
+                          "Select one of the payment method.",
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.yellow.shade400,
                         );
                       }
 
