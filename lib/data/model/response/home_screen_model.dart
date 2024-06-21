@@ -992,6 +992,8 @@ class HomeScreenDataModel {
     required this.topBanners,
     required this.midBanners,
     required this.bottomBanner,
+    required this.justForYouNextOffset,
+    required this.justForYouNextLimit,
   });
 
   final NearestStore? nearestStore;
@@ -1006,6 +1008,8 @@ class HomeScreenDataModel {
   final List<Banner> topBanners;
   final List<Banner> midBanners;
   final BottomBanner? bottomBanner;
+  final dynamic justForYouNextOffset;
+  final dynamic justForYouNextLimit;
 
   factory HomeScreenDataModel.fromJson(Map<String, dynamic> json) {
     return HomeScreenDataModel(
@@ -1021,6 +1025,8 @@ class HomeScreenDataModel {
       topBanners: json["top_banners"] == null ? [] : List<Banner>.from(json["top_banners"]!.map((x) => Banner.fromJson(x))),
       midBanners: json["mid_banners"] == null ? [] : List<Banner>.from(json["mid_banners"]!.map((x) => Banner.fromJson(x))),
       bottomBanner: json["bottom_banner"] == null ? null : BottomBanner.fromJson(json["bottom_banner"]),
+      justForYouNextOffset: json["just_for_you_next_offset"],
+      justForYouNextLimit: json["just_for_you_next_limit"],
     );
   }
 }

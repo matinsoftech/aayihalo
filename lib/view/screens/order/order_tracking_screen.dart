@@ -108,8 +108,10 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
         return track != null
             ? Center(
                 child: SizedBox(
-                    width: Dimensions.webMaxWidth,
-                    child: Stack(children: [
+                  width: Dimensions.webMaxWidth,
+                  child: Stack(
+                    children: [
+                      Text('This is order tracking page'),
                       // GoogleMap(
                       //   initialCameraPosition: CameraPosition(target: LatLng(
                       //     double.parse(track.deliveryAddress!.latitude!), double.parse(track.deliveryAddress!.longitude!),
@@ -161,30 +163,33 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
                       // _isLoading ? const Center(child: CircularProgressIndicator()) : const SizedBox(),
 
-                      Positioned(
-                        top: Dimensions.paddingSizeSmall,
-                        left: Dimensions.paddingSizeSmall,
-                        right: Dimensions.paddingSizeSmall,
-                        child: TrackingStepperWidget(status: track.orderStatus, takeAway: track.orderType == 'take_away'),
-                      ),
+                      // Positioned(
+                      //   top: Dimensions.paddingSizeSmall,
+                      //   left: Dimensions.paddingSizeSmall,
+                      //   right: Dimensions.paddingSizeSmall,
+                      //   child: TrackingStepperWidget(status: track.orderStatus, takeAway: track.orderType == 'take_away'),
+                      // ),
 
-                      Positioned(
-                        bottom: Dimensions.paddingSizeSmall,
-                        left: Dimensions.paddingSizeSmall,
-                        right: Dimensions.paddingSizeSmall,
-                        child: TrackDetailsView(
-                            status: track.orderStatus,
-                            track: track,
-                            callback: () async {
-                              _timer?.cancel();
-                              await Get.toNamed(RouteHelper.getChatRoute(
-                                notificationBody: NotificationBody(deliverymanId: track!.deliveryMan!.id, orderId: int.parse(widget.orderID!)),
-                                user: User(id: track.deliveryMan!.id, fName: track.deliveryMan!.fName, lName: track.deliveryMan!.lName, image: track.deliveryMan!.image),
-                              ));
-                              _startApiCall();
-                            }),
-                      ),
-                    ])))
+                      // Positioned(
+                      //   bottom: Dimensions.paddingSizeSmall,
+                      //   left: Dimensions.paddingSizeSmall,
+                      //   right: Dimensions.paddingSizeSmall,
+                      //   child: TrackDetailsView(
+                      //       status: track.orderStatus,
+                      //       track: track,
+                      //       callback: () async {
+                      //         _timer?.cancel();
+                      //         await Get.toNamed(RouteHelper.getChatRoute(
+                      //           notificationBody: NotificationBody(deliverymanId: track!.deliveryMan!.id, orderId: int.parse(widget.orderID!)),
+                      //           user: User(id: track.deliveryMan!.id, fName: track.deliveryMan!.fName, lName: track.deliveryMan!.lName, image: track.deliveryMan!.image),
+                      //         ));
+                      //         _startApiCall();
+                      //       }),
+                      // ),
+                    ],
+                  ),
+                ),
+              )
             : const Center(child: CircularProgressIndicator());
       }),
     );

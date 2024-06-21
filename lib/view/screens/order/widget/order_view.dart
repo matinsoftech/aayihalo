@@ -84,6 +84,7 @@ class OrderView extends StatelessWidget {
                                     // print('first data :${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${paginatedOrderModel.orders![index].store != null ? paginatedOrderModel.orders![index].store!.logo : ''}');
                                     // print('first data : ${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}'
                                     //     '/${paginatedOrderModel.orders![index].parcelCategory != null ? paginatedOrderModel.orders![index].parcelCategory!.image : ''}');
+                                    // get to order detail screen
                                     return InkWell(
                                       onTap: () {
                                         Get.toNamed(
@@ -207,11 +208,13 @@ class OrderView extends StatelessWidget {
                                                                 borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                                                                 color: Theme.of(context).primaryColor.withOpacity(0.1),
                                                               ),
-                                                              child: Text(paginatedOrderModel.orders![index].orderStatus!.tr,
-                                                                  style: robotoMedium.copyWith(
-                                                                    fontSize: Dimensions.fontSizeExtraSmall,
-                                                                    color: Theme.of(context).primaryColor,
-                                                                  )),
+                                                              child: Text(
+                                                                paginatedOrderModel.orders![index].orderStatus!.tr,
+                                                                style: robotoMedium.copyWith(
+                                                                  fontSize: Dimensions.fontSizeExtraSmall,
+                                                                  color: Theme.of(context).primaryColor,
+                                                                ),
+                                                              ),
                                                             ),
                                                           )
                                                         : const SizedBox(),
@@ -232,17 +235,22 @@ class OrderView extends StatelessWidget {
                                                               borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                                                               color: Theme.of(context).primaryColor.withOpacity(0.1),
                                                             ),
-                                                            child: Text(paginatedOrderModel.orders![index].orderStatus!.tr,
-                                                                style: robotoMedium.copyWith(
-                                                                  fontSize: Dimensions.fontSizeExtraSmall,
-                                                                  color: Theme.of(context).primaryColor,
-                                                                )),
+                                                            child: Text(
+                                                              paginatedOrderModel.orders![index].orderStatus!.tr,
+                                                              style: robotoMedium.copyWith(
+                                                                fontSize: Dimensions.fontSizeExtraSmall,
+                                                                color: Theme.of(context).primaryColor,
+                                                              ),
+                                                            ),
                                                           )
                                                         : const SizedBox(),
                                                     const SizedBox(height: Dimensions.paddingSizeSmall),
                                                     isRunning
                                                         ? InkWell(
-                                                            onTap: () => Get.toNamed(RouteHelper.getOrderTrackingRoute(paginatedOrderModel!.orders![index].id, null)),
+                                                            // get to order tracking page
+                                                            onTap: () => Get.toNamed(
+                                                              RouteHelper.getOrderTrackingRoute(paginatedOrderModel!.orders![index].id, null),
+                                                            ),
                                                             child: Container(
                                                               padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeSmall : Dimensions.paddingSizeExtraSmall),
                                                               decoration: ResponsiveHelper.isDesktop(context)

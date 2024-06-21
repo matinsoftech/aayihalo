@@ -409,6 +409,7 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // double? discount = item.discount;
     double? discount = double.parse(item.discount.toString());
     String? discountType = item.discountType.toString();
 
