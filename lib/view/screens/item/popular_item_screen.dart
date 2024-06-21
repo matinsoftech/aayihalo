@@ -13,23 +13,26 @@ import 'package:sixam_mart/view/base/web_page_title_widget.dart';
 class PopularItemScreen extends StatefulWidget {
   final bool isPopular;
   final bool isSpecial;
-  const PopularItemScreen({Key? key, required this.isPopular, required this.isSpecial}) : super(key: key);
+  const PopularItemScreen({
+    Key? key,
+    required this.isPopular,
+    required this.isSpecial,
+  }) : super(key: key);
 
   @override
   State<PopularItemScreen> createState() => _PopularItemScreenState();
 }
 
 class _PopularItemScreenState extends State<PopularItemScreen> {
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
 
-    if(widget.isPopular) {
+    if (widget.isPopular) {
       Get.find<ItemController>().getPopularItemList(true, Get.find<ItemController>().popularType, false);
-    }else if(widget.isSpecial){
+    } else if (widget.isSpecial) {
       Get.find<ItemController>().getDiscountedItemList(true, false);
     } else {
       Get.find<ItemController>().getReviewedItemList(true, Get.find<ItemController>().reviewType, false);
@@ -46,37 +49,58 @@ class _PopularItemScreenState extends State<PopularItemScreen> {
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: CustomAppBar(
             key: scaffoldKey,
-            title: widget.isPopular ? isShop ? 'most_popular_products'.tr : 'most_popular_items'.tr : widget.isSpecial ? 'special_offer'.tr : 'best_reviewed_item'.tr,
+            title: widget.isPopular
+                ? isShop
+                    ? 'most_popular_products'.tr
+                    : 'most_popular_items'.tr
+                : widget.isSpecial
+                    ? 'special_offer'.tr
+                    : 'best_reviewed_item'.tr,
             showCart: true,
             type: widget.isPopular ? itemController.popularType : itemController.reviewType,
             onVegFilterTap: (String type) {
-              if(widget.isPopular) {
+              if (widget.isPopular) {
                 itemController.getPopularItemList(true, type, true);
-              }else {
+              } else {
                 itemController.getReviewedItemList(true, type, true);
               }
             },
           ),
-          endDrawer: const MenuDrawer(),endDrawerEnableOpenDragGesture: false,
-          body: Scrollbar(child: SingleChildScrollView(child: FooterView(child: Column(
-            children: [
-              WebScreenTitleWidget(
-                title: widget.isPopular ? isShop ? 'most_popular_products'.tr : 'most_popular_items'.tr : widget.isSpecial ? 'special_offer'.tr : 'best_reviewed_item'.tr,
-              ),
-
-              SizedBox(
-                width: Dimensions.webMaxWidth,
-                child: ItemsView(
-                  isStore: false, stores: null,
-                  items: widget.isPopular ? itemController.popularItemList
-                      : widget.isSpecial ? itemController.discountedItemList
-                      : itemController.reviewedItemList,
+          endDrawer: const MenuDrawer(),
+          endDrawerEnableOpenDragGesture: false,
+          body: Scrollbar(
+            child: SingleChildScrollView(
+              child: FooterView(
+                child: Column(
+                  children: [
+                    WebScreenTitleWidget(
+                      title: widget.isPopular
+                          ? isShop
+                              ? 'most_popular_products'.tr
+                              : 'most_popular_items'.tr
+                          : widget.isSpecial
+                              ? 'special_offer'.tr
+                              : 'best_reviewed_item'.tr,
+                    ),
+                    SizedBox(
+                      width: Dimensions.webMaxWidth,
+                      child: ItemsView(
+                        isStore: false,
+                        stores: null,
+                        items: widget.isPopular
+                            ? itemController.popularItemList
+                            : widget.isSpecial
+                                ? itemController.discountedItemList
+                                : itemController.reviewedItemList,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          )))),
+            ),
+          ),
         );
-      }
+      },
     );
   }
 }

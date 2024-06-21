@@ -120,8 +120,8 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                               child: Column(
                                 children: [
                                   PortionWidget(icon: Images.profileIcon, title: 'profile'.tr, route: RouteHelper.getProfileRoute()),
-                                  PortionWidget(icon: Images.addressIcon, title: 'my_address'.tr, route: RouteHelper.getAddressRoute()),
-                                  PortionWidget(icon: Images.languageIcon, title: 'language'.tr, hideDivider: true, route: RouteHelper.getLanguageRoute('menu')),
+                                  PortionWidget(icon: Images.addressIcon, title: 'my_address'.tr, hideDivider: true, route: RouteHelper.getAddressRoute()),
+                                  // PortionWidget(icon: Images.languageIcon, title: 'language'.tr, h route: RouteHelper.getLanguageRoute('menu')),
                                 ],
                               ),
                             )

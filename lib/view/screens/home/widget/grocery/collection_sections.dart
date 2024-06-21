@@ -3,10 +3,14 @@ import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/data/model/response/home_screen_model.dart';
+import 'package:sixam_mart/helper/responsive_helper.dart';
+import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
+import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
 import 'package:sixam_mart/view/base/card_design/item_card.dart';
+import 'package:sixam_mart/view/screens/home/most_curated_exotic_infoucs/items_list.dart';
 
 class HomeScreenSections extends StatelessWidget {
   final bool isFood;
@@ -14,6 +18,13 @@ class HomeScreenSections extends StatelessWidget {
   final bool isJustForYou;
   final List<Product> products;
   final String title;
+  //new data
+  final bool isPopular;
+  final bool isSpecial;
+  final bool isMostCurated;
+  final bool isExotic;
+  final bool isInFocus;
+  final bool isTest;
   const HomeScreenSections({
     super.key,
     required this.isFood,
@@ -21,6 +32,13 @@ class HomeScreenSections extends StatelessWidget {
     this.isJustForYou = false,
     required this.products,
     required this.title,
+    //new data
+    required this.isPopular,
+    required this.isSpecial,
+    required this.isMostCurated,
+    required this.isExotic,
+    required this.isInFocus,
+    required this.isTest,
   });
 
   @override
@@ -32,12 +50,44 @@ class HomeScreenSections extends StatelessWidget {
         return products.isNotEmpty
             ? Column(children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault, left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault),
-                  child: TitleWidget(
-                    title: title.tr,
-                    // image: Images.discountOfferIcon,
-                    // onTap: () => Get.toNamed(RouteHelper.getPopularItemRoute(false, true)),
-                  ),
+                  padding: EdgeInsets.only(top: Dimensions.paddingSizeDefault, left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault),
+                  child: isJustForYou
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(title, style: robotoBold.copyWith(fontSize: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeLarge : Dimensions.fontSizeLarge)),
+                            const SizedBox(width: Dimensions.paddingSizeSmall),
+                            // image != null ? Image.asset(image!, height: 20, width: 20) : const SizedBox(),
+                            itemController.homeScreenDataModel!.justForYouNextLimit != null
+                                ? InkWell(
+                                    onTap: () {},
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+                                      child: Text(
+                                        'see more',
+                                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor, decoration: TextDecoration.underline),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ],
+                        )
+                      : TitleWidget(
+                          title: title.tr,
+                          // image: Images.discountOfferIcon,
+                          onTap: () => Get.to(
+                            () => ItemsListScreen(
+                              isPopular: isPopular,
+                              isSpecial: isSpecial,
+                              isMostCurated: isMostCurated,
+                              isExotic: isExotic,
+                              isInFocus: isInFocus,
+                              isJustForYou: isJustForYou,
+                              isTest: isTest,
+                              title: title,
+                            ),
+                          ),
+                        ),
                 ),
                 SizedBox(
                   height: isJustForYou ? 500 : 285,

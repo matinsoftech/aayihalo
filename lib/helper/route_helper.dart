@@ -530,11 +530,14 @@ class RouteHelper {
     //   )));
     // }),
     GetPage(
-        name: orderTracking,
-        page: () => getRoute(OrderTrackingScreen(
-              orderID: Get.parameters['id'],
-              contactNumber: Get.parameters['number'],
-            ))),
+      name: orderTracking,
+      page: () => getRoute(
+        OrderTrackingScreen(
+          orderID: Get.parameters['id'],
+          contactNumber: Get.parameters['number'],
+        ),
+      ),
+    ),
     GetPage(
         name: basicCampaign,
         page: () {
@@ -564,7 +567,15 @@ class RouteHelper {
           String data = utf8.decode(decode);
           return getRoute(CategoryItemScreen(categoryID: Get.parameters['id'], categoryName: data));
         }),
-    GetPage(name: popularItems, page: () => getRoute(PopularItemScreen(isPopular: Get.parameters['page'] == 'popular', isSpecial: Get.parameters['special'] == 'true'))),
+    GetPage(
+      name: popularItems,
+      page: () => getRoute(
+        PopularItemScreen(
+          isPopular: Get.parameters['page'] == 'popular',
+          isSpecial: Get.parameters['special'] == 'true',
+        ),
+      ),
+    ),
     GetPage(name: itemCampaign, page: () => getRoute(ItemCampaignScreen(isJustForYou: Get.parameters['just-for-you'] == 'true'))),
     GetPage(name: support, page: () => getRoute(const SupportScreen())),
     GetPage(name: update, page: () => UpdateScreen(isUpdate: Get.parameters['update'] == 'true')),
