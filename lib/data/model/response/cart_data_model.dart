@@ -247,7 +247,7 @@ class CartItem {
         categoryId: categoryId ?? this.categoryId,
         costPrice: costPrice ?? this.costPrice,
         sku: sku ?? this.sku,
-        variation: variations ?? this.variation,
+        variation: variations ?? variation,
         addOns: addOns ?? this.addOns,
         attributes: attributes ?? this.attributes,
         choiceOptions: choiceOptions ?? this.choiceOptions,

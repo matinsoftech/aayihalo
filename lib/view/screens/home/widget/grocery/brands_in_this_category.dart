@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
@@ -64,7 +63,7 @@ class BrandsInThisCategory extends StatelessWidget {
                                     ),
                                     Text(
                                       'Brand $index',
-                                      style: TextStyle(),
+                                      style: const TextStyle(),
                                     )
                                   ],
                                 )),

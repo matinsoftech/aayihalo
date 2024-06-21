@@ -656,16 +656,16 @@ class LocationController extends GetxController implements GetxService {
     }
     _loading = false;
     update();
-    final _address = AddressModel(
+    final address0 = AddressModel(
       latitude: _pickPosition.latitude.toString(),
       longitude: _pickPosition.longitude.toString(),
       addressType: 'others',
       address: _pickAddress,
     );
 
-    _userAddressModel = _address;
+    _userAddressModel = address0;
 
-    return _address;
+    return address0;
   }
 
   void disableButton() {

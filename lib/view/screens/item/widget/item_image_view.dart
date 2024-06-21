@@ -5,7 +5,6 @@ import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
 import 'package:sixam_mart/helper/route_helper.dart';
-import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
 
 class ItemImageView extends StatelessWidget {

@@ -144,7 +144,7 @@ class MenuDrawerState extends State<MenuDrawer> with SingleTickerProviderStateMi
       }else {
         Get.find<WishListController>().removeWishes();
         if(ResponsiveHelper.isDesktop(context)){
-          Get.dialog( SignInScreen());
+          Get.dialog( const SignInScreen());
         }else{
           Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
         }

@@ -29,12 +29,12 @@ class CartController extends GetxController implements GetxService {
   }
 
   double _subTotal = 0;
-  double _itemPrice = 0;
-  double _itemDiscountPrice = 0;
-  double _addOns = 0;
-  double _variationPrice = 0;
-  List<List<AddOns>> _addOnsList = [];
-  List<bool> _availableList = [];
+  final double _itemPrice = 0;
+  final double _itemDiscountPrice = 0;
+  final double _addOns = 0;
+  final double _variationPrice = 0;
+  final List<List<AddOns>> _addOnsList = [];
+  final List<bool> _availableList = [];
   String _variationType = '';
   String get variationType => _variationType;
 

@@ -39,13 +39,13 @@ class TrackingStepperWidget extends StatelessWidget {
           haveRightBar: true,
           rightActive: state > 0,
         ),
-        CustomStepper(
-          title: 'Acknowledged',
-          isActive: state > 0,
-          haveLeftBar: true,
-          haveRightBar: true,
-          rightActive: state > 1,
-        ),
+        // CustomStepper(
+        //   title: 'Acknowledged',
+        //   isActive: state > 0,
+        //   haveLeftBar: true,
+        //   haveRightBar: true,
+        //   rightActive: state > 1,
+        // ),
         CustomStepper(
           title: 'Processing',
           isActive: state > 1,
@@ -60,13 +60,13 @@ class TrackingStepperWidget extends StatelessWidget {
           haveRightBar: true,
           rightActive: state > 3,
         ),
-        CustomStepper(
-          title: 'Order Arrived',
-          isActive: state > 3,
-          haveLeftBar: true,
-          haveRightBar: true,
-          rightActive: state > 4,
-        ),
+        // CustomStepper(
+        //   title: 'Order Arrived',
+        //   isActive: state > 3,
+        //   haveLeftBar: true,
+        //   haveRightBar: true,
+        //   rightActive: state > 4,
+        // ),
         CustomStepper(
           title: 'delivered'.tr,
           isActive: state > 4,

@@ -15,7 +15,6 @@ import 'package:sixam_mart/view/base/menu_drawer.dart';
 import 'package:sixam_mart/view/screens/auth/widget/condition_check_box.dart';
 import 'package:sixam_mart/view/screens/auth/widget/guest_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 
@@ -311,7 +310,7 @@ class VerifyOTPScreen extends StatelessWidget {
             Get.find<LocationController>().navigateToLocationScreen('sign-in', offNamed: true);
           }
 
-          Get.to(SplashScreen(body: null));
+          Get.to(const SplashScreen(body: null));
         } else {
           showCustomSnackBar(status.message);
         }

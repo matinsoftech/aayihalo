@@ -131,7 +131,7 @@ class _NewPassScreenState extends State<NewPassScreen> {
                 Get.offAllNamed(RouteHelper.getSignInRoute(Get.currentRoute));
               }else{
                 Get.offAllNamed(RouteHelper.getInitialRoute(fromSplash: false))?.then((value) {
-                  Get.dialog( SignInScreen());
+                  Get.dialog( const SignInScreen());
                 });
               }
             });

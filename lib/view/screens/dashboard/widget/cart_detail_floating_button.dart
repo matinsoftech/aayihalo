@@ -33,7 +33,7 @@ class CartDetailFloatingButton extends StatelessWidget {
                       children: [
                          Text(
                           "${controller.cartList.length} item(s)",
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
                           ),
@@ -46,7 +46,7 @@ class CartDetailFloatingButton extends StatelessWidget {
                         ),
                         Text(
                           "NRs. ${controller.subTotal}",
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.w400),

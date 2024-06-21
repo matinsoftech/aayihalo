@@ -198,9 +198,9 @@ class Item {
       }
       // Ensure it's now a list
       if (choiceOptionsJson is List) {
-        choiceOptionsJson.forEach((v) {
+        for (var v in choiceOptionsJson) {
           choiceOptions!.add(ChoiceOptions.fromJson(v));
-        });
+        }
       } else {
         // Handle unexpected type or log an error
         print('Unexpected type for choice_options: ${choiceOptionsJson.runtimeType}');

@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sixam_mart/controller/banner_controller.dart';
+import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
-import 'package:sixam_mart/data/model/response/basic_campaign_model.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +10,21 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 
 class BannerView extends StatelessWidget {
   final bool isFeatured;
-  const BannerView({Key? key, required this.isFeatured}) : super(key: key);
+  final bool isMidBanner;
+  
+  const BannerView({
+    Key? key,
+    required this.isFeatured,
+    this.isMidBanner = false,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // BannerController bannerController = Get.find<BannerController>();
 
-    return GetBuilder<BannerController>(
+    return GetBuilder<ItemController>(
       builder: (bannerController) {
         String? baseUrl = Get.find<SplashController>().configModel!.baseUrls!.bannerImageUrl;
+        List items = isMidBanner ? bannerController.homeScreenDataModel!.midBanners : bannerController.homeScreenDataModel!.topBanners;
         if (bannerController.isLoading) {
           return Shimmer(
             duration: const Duration(seconds: 2),
@@ -31,13 +38,45 @@ class BannerView extends StatelessWidget {
               ),
             ),
           );
-        } else if (bannerController.allBannerImages.isEmpty) {
+        } else if (bannerController.homeScreenDataModel!.topBanners.isEmpty) {
           return const Center(child: Text('No banners available'));
         } else {
-          return BannerCarousel(
-            images: bannerController.allBannerImages,
-            baseUrl: baseUrl,
-            bannerController: bannerController,
+          return Container(
+            width: MediaQuery.of(context).size.width,
+            height: GetPlatform.isDesktop ? 500 : 220,
+            padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
+            child: CarouselSlider(
+              options: CarouselOptions(
+                autoPlay: true,
+                enlargeCenterPage: false,
+                viewportFraction: 0.92,
+                autoPlayInterval: const Duration(seconds: 7),
+                onPageChanged: (index, reason) {
+                  bannerController.setCurrentIndex(index, true);
+                },
+              ),
+              items: items.map((image) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                        boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200]!, spreadRadius: 1, blurRadius: 5)],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                        child: CustomImage(
+                          image: '$baseUrl/${image.image}',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+            ),
           );
         }
         // List<String?>? bannerList = isFeatured ? bannerController.featuredBannerList : bannerController.allBannerImages;

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
@@ -24,11 +22,14 @@ class ItemCardCollection extends StatelessWidget {
   final bool isPopularItem;
   final bool isFood;
   final bool isShop;
+  final bool isJustForYou;
+
   final bool isPopularItemCart;
   const ItemCardCollection({
     super.key,
     required this.item,
     this.isPopularItem = false,
+    this.isJustForYou = false,
     required this.isFood,
     required this.isShop,
     this.isPopularItemCart = false,
@@ -62,19 +63,20 @@ class ItemCardCollection extends StatelessWidget {
                 ),
                 context),
             child: Container(
-              width: 150,
+              width: isJustForYou ? Get.size.width * 0.5 : 150,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-                  color: Theme.of(context).cardColor,
-                  border: Border.all(
-                    color: Theme.of(context).dividerColor,
-                    width: 0.5,
-                  )),
+                borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                color: Theme.of(context).cardColor,
+                border: Border.all(
+                  color: Theme.of(context).dividerColor,
+                  width: 0.5,
+                ),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    // flex: 6,
+                    flex: 5,
                     child: Stack(
                       children: [
                         Padding(
@@ -170,9 +172,18 @@ class ItemCardCollection extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    // flex: 4,
+                    flex: 4,
                     child: Padding(
-                      padding: EdgeInsets.only(left: Dimensions.paddingSizeSmall, right: isShop ? 0 : Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeSmall, bottom: isShop ? 0 : Dimensions.paddingSizeSmall),
+                      padding: EdgeInsets.only(
+                        left: Dimensions.paddingSSizeSmall,
+                        right: isShop ? 0 : Dimensions.paddingSizeSmall,
+                        top: Dimensions.paddingSizeSmall,
+                        // bottom: isShop
+                        //     ? 0
+                        //     : isJustForYou
+                        //         ? 0
+                        //         : Dimensions.paddingSizeSmall,
+                      ),
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
@@ -189,8 +200,9 @@ class ItemCardCollection extends StatelessWidget {
                                   width: 120,
                                   child: Text(
                                     item.name!,
+                                    maxLines: isJustForYou ? 1 : 2,
                                     style: robotoBold.copyWith(fontSize: 12),
-                                    overflow: TextOverflow.visible,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
@@ -205,7 +217,7 @@ class ItemCardCollection extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   )
-                                : Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: [
+                                : Row(mainAxisAlignment: isPopularItem ? MainAxisAlignment.center : MainAxisAlignment.start, children: const [
                                     // Icon(Icons.star,
                                     //     size: 14,
                                     //     color:

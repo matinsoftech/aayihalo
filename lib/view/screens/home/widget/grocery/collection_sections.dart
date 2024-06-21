@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/data/model/response/home_screen_model.dart';
-import 'package:sixam_mart/data/model/response/item_model.dart';
-import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/images.dart';
 import 'package:sixam_mart/view/base/title_widget.dart';
@@ -13,12 +11,14 @@ import 'package:sixam_mart/view/base/card_design/item_card.dart';
 class HomeScreenSections extends StatelessWidget {
   final bool isFood;
   final bool isShop;
+  final bool isJustForYou;
   final List<Product> products;
   final String title;
   const HomeScreenSections({
     super.key,
     required this.isFood,
     required this.isShop,
+    this.isJustForYou = false,
     required this.products,
     required this.title,
   });
@@ -27,7 +27,7 @@ class HomeScreenSections extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ItemController>(
       builder: (itemController) {
-        List<Item>? discountedItemList = itemController.discountedItemList;
+        // List<Item>? discountedItemList = itemController.discountedItemList;
 
         return products.isNotEmpty
             ? Column(children: [
@@ -40,25 +40,53 @@ class HomeScreenSections extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 285,
+                  height: isJustForYou ? 500 : 285,
                   width: Get.width,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
-                        child: ItemCardCollection(
-                          item: products[index],
-                          isPopularItem: false,
-                          isFood: isFood,
-                          isShop: isShop,
+                  child: isJustForYou
+                      ? GridView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 8.0, // Adjust this value to decrease the space between items
+                            mainAxisSpacing: 0.0, // Adjust this value to decrease the space between rows
+                            childAspectRatio: 1.1 / 0.74,
+                          ),
+                          itemCount: products.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                // bottom: Dimensions.paddingSizeDefault,
+                                left: Dimensions.paddingSizeDefault,
+                                top: Dimensions.paddingSizeDefault,
+                              ),
+                              child: ItemCardCollection(
+                                item: products[index],
+                                isPopularItem: false,
+                                isFood: isFood,
+                                isShop: isShop,
+                                isJustForYou: true,
+                              ),
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeDefault),
+                              child: ItemCardCollection(
+                                item: products[index],
+                                isPopularItem: false,
+                                isFood: isFood,
+                                isShop: isShop,
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
               ])
             : const SizedBox();
