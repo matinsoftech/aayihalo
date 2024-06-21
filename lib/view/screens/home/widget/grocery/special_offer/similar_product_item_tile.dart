@@ -1,6 +1,5 @@
 // ignore_for_file: dead_code
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/controller/auth_controller.dart';
@@ -8,15 +7,11 @@ import 'package:sixam_mart/controller/cart_controller.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/controller/wishlist_controller.dart';
-import 'package:sixam_mart/data/model/response/item_model.dart';
 import 'package:sixam_mart/helper/price_converter.dart';
 import 'package:sixam_mart/helper/responsive_helper.dart';
-import 'package:sixam_mart/helper/route_helper.dart';
 import 'package:sixam_mart/util/dimensions.dart';
 import 'package:sixam_mart/util/styles.dart';
-import 'package:sixam_mart/view/base/cart_count_view.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
-import 'package:sixam_mart/view/base/organic_tag.dart';
 
 class NewItemTitleView extends StatelessWidget {
   // final Item? item;
@@ -87,7 +82,7 @@ class NewItemTitleView extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                          ((Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && unitType != null) || (Get.find<SplashController>().configModel!.moduleConfig!.module!.vegNonVeg! && Get.find<SplashController>().configModel!.toggleVegNonVeg!))
+                          ((Get.find<SplashController>().configModel!.moduleConfig!.module!.unit!) || (Get.find<SplashController>().configModel!.moduleConfig!.module!.vegNonVeg! && Get.find<SplashController>().configModel!.toggleVegNonVeg!))
                               ? Text(
                                   Get.find<SplashController>().configModel!.moduleConfig!.module!.unit!
                                       ? '($unitType)'
@@ -431,7 +426,7 @@ class NewItemTitleView extends StatelessWidget {
                               ),
                         Column(
                           children: [
-                            ((Get.find<SplashController>().configModel!.moduleConfig!.module!.unit! && unitType != null) || (Get.find<SplashController>().configModel!.moduleConfig!.module!.vegNonVeg! && Get.find<SplashController>().configModel!.toggleVegNonVeg!))
+                            ((Get.find<SplashController>().configModel!.moduleConfig!.module!.unit!) || (Get.find<SplashController>().configModel!.moduleConfig!.module!.vegNonVeg! && Get.find<SplashController>().configModel!.toggleVegNonVeg!))
                                 ? Container(
                                     padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall, horizontal: Dimensions.paddingSizeSmall),
                                     decoration: BoxDecoration(

@@ -1,7 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 import 'package:sixam_mart/controller/auth_controller.dart';
-import 'package:sixam_mart/controller/localization_controller.dart';
 import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/controller/user_controller.dart';
@@ -100,7 +99,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
     } else {
       print("No nearest store found..");
     }
-    print("store_idtesting" + store_id.toString());
+    print("store_idtesting$store_id");
   }
 
   @override
@@ -1227,7 +1226,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
           } else if (_contactPersonNumberController.text.isEmpty) {
             showCustomSnackBar('please_enter_the_phone_number'.tr);
           } else {
-            print("addresstypeis" + addressType!);
+            print("addresstypeis${addressType!}");
             AddressModel addressModel = AddressModel(
               // id: widget.address != null ? widget.address!.id : null,
               storeid: store_id,

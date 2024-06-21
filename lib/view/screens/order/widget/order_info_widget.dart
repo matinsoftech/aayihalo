@@ -17,7 +17,6 @@ import 'package:sixam_mart/util/styles.dart';
 import 'package:sixam_mart/view/base/custom_image.dart';
 import 'package:sixam_mart/view/base/custom_snackbar.dart';
 import 'package:sixam_mart/view/screens/chat/widget/image_dialog.dart';
-import 'package:sixam_mart/view/screens/order/widget/delivery_details.dart';
 import 'package:sixam_mart/view/screens/order/widget/offline_info_edit_dialog.dart';
 import 'package:sixam_mart/view/screens/order/widget/order_banner_view.dart';
 import 'package:sixam_mart/view/screens/order/widget/order_item_widget.dart';
@@ -49,7 +48,7 @@ class OrderInfoWidget extends StatelessWidget {
     ExpansionTileController controller = ExpansionTileController();
     bool isDesktop = ResponsiveHelper.isDesktop(context);
     bool isGuestLoggedIn = Get.find<AuthController>().isGuestLoggedIn();
-    print('parcel $parcel');
+    // print('parcel $parcel');
     return Stack(children: [
       !isDesktop
           ? OrderBannerView(
@@ -90,18 +89,20 @@ class OrderInfoWidget extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeLarge),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
-              isDesktop
-                  ? OrderBannerView(
-                      order: order,
-                      orderController: orderController,
-                      ongoing: ongoing,
-                      parcel: parcel,
-                      prescriptionOrder: prescriptionOrder,
-                    )
-                  : const SizedBox(),
-              isDesktop ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
+              // isDesktop
+              //     ? OrderBannerView(
+              //         order: order,
+              //         orderController: orderController,
+              //         ongoing: ongoing,
+              //         parcel: parcel,
+              //         prescriptionOrder: prescriptionOrder,
+              //       )
+              //     : const SizedBox(),
+              // isDesktop ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
+              //? genera info secion
               Text('general_info'.tr, style: robotoMedium),
               const SizedBox(height: Dimensions.paddingSizeLarge),
+              //? order id
               Row(
                 children: [
                   Text(parcel ? 'delivery_id'.tr : 'order_id'.tr, style: robotoRegular),
@@ -110,6 +111,7 @@ class OrderInfoWidget extends StatelessWidget {
                 ],
               ),
               Divider(height: Dimensions.paddingSizeLarge, color: Theme.of(context).disabledColor.withOpacity(0.30)),
+              //order date
               Row(children: [
                 Text('order_date'.tr, style: robotoRegular),
                 const Expanded(child: SizedBox()),
@@ -118,6 +120,7 @@ class OrderInfoWidget extends StatelessWidget {
                   style: robotoRegular,
                 ),
               ]),
+              //? scheduled
               order.scheduled == 1 ? Divider(height: Dimensions.paddingSizeLarge, color: Theme.of(context).disabledColor.withOpacity(0.30)) : const SizedBox(),
               order.scheduled == 1
                   ? Row(children: [
@@ -126,50 +129,59 @@ class OrderInfoWidget extends StatelessWidget {
                       Text(DateConverter.dateTimeStringToDateTime(order.scheduleAt!), style: robotoMedium),
                     ])
                   : const SizedBox(),
+              //? delivery order verification
               Get.find<SplashController>().configModel!.orderDeliveryVerification! ? const Divider(height: Dimensions.paddingSizeLarge) : const SizedBox(),
               Get.find<SplashController>().configModel!.orderDeliveryVerification!
-                  ? Row(children: [
-                      Text('${'delivery_verification_code'.tr}:', style: robotoRegular),
-                      const Expanded(child: SizedBox()),
-                      Text(order.otp!, style: robotoMedium),
-                    ])
+                  ? Row(
+                      children: [
+                        Text('${'delivery_verification_code'.tr}:', style: robotoRegular),
+                        const Expanded(child: SizedBox()),
+                        Text(order.otp!, style: robotoMedium),
+                      ],
+                    )
                   : const SizedBox(),
               Divider(height: Dimensions.paddingSizeLarge, color: Theme.of(context).disabledColor.withOpacity(0.30)),
-              Row(children: [
-                Text(order.orderType!.tr, style: robotoMedium),
-                const Expanded(child: SizedBox()),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                  ),
-                  child: Text(
-                    order.paymentMethod == 'cash_on_delivery'
-                        ? 'cash_on_delivery'.tr
-                        : order.paymentMethod == 'wallet'
-                            ? 'wallet_payment'.tr
-                            : order.paymentMethod == 'partial_payment'
-                                ? 'partial_payment'.tr
-                                : order.paymentMethod == 'offline_payment'
-                                    ? 'offline_payment'.tr
-                                    : 'digital_payment'.tr,
-                    style: robotoMedium.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall),
-                  ),
-                ),
-              ]),
-              Divider(height: Dimensions.paddingSizeLarge, color: Theme.of(context).disabledColor.withOpacity(0.30)),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall),
-                child: Row(children: [
-                  Text('${parcel ? 'charge_pay_by'.tr : 'item'.tr}:', style: robotoRegular),
-                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                  Text(
-                    parcel ? order.chargePayer!.tr : orderController.orderDetails!.length.toString(),
-                    style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),
-                  ),
+              //? Delivery
+              Row(
+                children: [
+                  Text(order.orderType!.tr, style: robotoMedium),
                   const Expanded(child: SizedBox()),
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeExtraSmall),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                    ),
+                    child: Text(
+                      order.paymentMethod == 'cash_on_delivery'
+                          ? 'cash_on_delivery'.tr
+                          : order.paymentMethod == 'wallet'
+                              ? 'wallet_payment'.tr
+                              : order.paymentMethod == 'partial_payment'
+                                  ? 'partial_payment'.tr
+                                  : order.paymentMethod == 'offline_payment'
+                                      ? 'offline_payment'.tr
+                                      : 'digital_payment'.tr,
+                      style: robotoMedium.copyWith(color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeExtraSmall),
+                    ),
+                  ),
+                ],
+              ),
+              Divider(height: Dimensions.paddingSizeLarge, color: Theme.of(context).disabledColor.withOpacity(0.30)),
+              //? items
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall),
+                child: Row(
+                  children: [
+                    Text('${parcel ? 'charge_pay_by'.tr : 'item'.tr}:', style: robotoRegular),
+                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                    Text(
+                      parcel ? order.chargePayer!.tr : orderController.orderDetails!.length.toString(),
+                      style: robotoMedium.copyWith(color: Theme.of(context).primaryColor),
+                    ),
+                    const Expanded(child: SizedBox()),
+                    //? order status
+                    Container(
                       height: 7,
                       width: 7,
                       decoration: BoxDecoration(
@@ -179,27 +191,39 @@ class OrderInfoWidget extends StatelessWidget {
                                 ? Colors.yellow
                                 : Colors.green,
                         shape: BoxShape.circle,
-                      )),
-                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                  Text(
-                    order.orderStatus == 'delivered' ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(order.delivered!)}' : order.orderStatus!.tr,
-                    style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                  ),
-                ]),
+                      ),
+                    ),
+                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                    Text(
+                      order.orderStatus == 'delivered'
+                          ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(
+                              order.delivered!,
+                            )}'
+                          : order.orderStatus!.tr,
+                      style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                    ),
+                  ],
+                ),
               ),
+              //? cutlery
               Get.find<SplashController>().getModuleConfig(order.moduleType).newVariation!
-                  ? Column(children: [
-                      Divider(height: Dimensions.paddingSizeLarge, color: Theme.of(context).disabledColor.withOpacity(0.30)),
-                      Row(children: [
-                        Text('${'cutlery'.tr}: ', style: robotoRegular),
-                        const Expanded(child: SizedBox()),
-                        Text(
-                          order.cutlery! ? 'yes'.tr : 'no'.tr,
-                          style: robotoRegular,
+                  ? Column(
+                      children: [
+                        Divider(height: Dimensions.paddingSizeLarge, color: Theme.of(context).disabledColor.withOpacity(0.30)),
+                        Row(
+                          children: [
+                            Text('${'cutlery'.tr}: ', style: robotoRegular),
+                            const Expanded(child: SizedBox()),
+                            Text(
+                              order.cutlery! ? 'yes'.tr : 'no'.tr,
+                              style: robotoRegular,
+                            ),
+                          ],
                         ),
-                      ]),
-                    ])
+                      ],
+                    )
                   : const SizedBox(),
+                  //?
               order.unavailableItemNote != null
                   ? Column(
                       children: [
@@ -561,118 +585,118 @@ class OrderInfoWidget extends StatelessWidget {
           //         style: robotoMedium)
           //     : const SizedBox(),
           isDesktop ? const SizedBox(height: Dimensions.paddingSizeDefault) : const SizedBox(),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(isDesktop ? Dimensions.radiusDefault : 0),
-              boxShadow: isDesktop ? const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)] : [],
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                !isDesktop
-                    ? Text(
-                        parcel
-                            ? 'parcel_category'.tr
-                            : Get.find<SplashController>().getModuleConfig(order.moduleType).showRestaurantText!
-                                ? 'restaurant_details'.tr
-                                : 'store_details'.tr,
-                        style: robotoMedium)
-                    : const SizedBox(),
-                !isDesktop ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
-                (parcel && order.parcelCategory == null)
-                    ? Text('no_parcel_category_data_found'.tr, style: robotoMedium)
-                    : (!parcel && order.store == null)
-                        ? Center(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
-                              child: Text('no_restaurant_data_found'.tr, maxLines: 1, overflow: TextOverflow.ellipsis, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
-                            ),
-                          )
-                        : Row(
-                            children: [
-                              ClipOval(
-                                child: CustomImage(
-                                  image: (parcel && order.parcelCategory != null && order.parcelCategory!.image != null)
-                                      ? '${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}/${order.parcelCategory!.image}'
-                                      : (order.store != null && order.store!.logo != null)
-                                          ? '${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${order.store!.logo}'
-                                          : 'assets/images/house.png',
-                                  // image: parcel ? '${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}/${order.parcelCategory!.image}' : '${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${order.store!.logo}',
-                                  height: 35,
-                                  width: 35,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              const SizedBox(width: Dimensions.paddingSizeSmall),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      parcel ? order.parcelCategory!.name! : order.store!.name!,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                                    ),
-                                    Text(
-                                      parcel ? order.parcelCategory!.description! : order.store?.address ?? '',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              (!parcel && order.orderType == 'take_away' && (order.orderStatus == 'pending' || order.orderStatus == 'accepted' || order.orderStatus == 'confirmed' || order.orderStatus == 'processing' || order.orderStatus == 'handover' || order.orderStatus == 'picked_up'))
-                                  ? TextButton.icon(
-                                      onPressed: () async {
-                                        if (!parcel) {
-                                          String url = 'https://www.google.com/maps/dir/?api=1&destination=${order.store!.latitude}'
-                                              ',${order.store!.longitude}&mode=d';
-                                          if (await canLaunchUrlString(url)) {
-                                            await launchUrlString(url);
-                                          } else {
-                                            showCustomSnackBar('unable_to_launch_google_map'.tr);
-                                          }
-                                        }
-                                      },
-                                      icon: const Icon(Icons.directions),
-                                      label: Text('direction'.tr),
-                                    )
-                                  : const SizedBox(),
-                              (!parcel && order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refunded')
-                                  ? InkWell(
-                                      onTap: () async {
-                                        await Get.toNamed(
-                                          RouteHelper.getChatRoute(
-                                            notificationBody: NotificationBody(orderId: order.id, restaurantId: order.store!.vendorId),
-                                            user: User(id: order.store!.vendorId, fName: order.store!.name, lName: '', image: order.store!.logo),
-                                          ),
-                                        );
-                                      },
-                                      child: Image.asset(Images.chatOrderDetails, height: 20, width: 20),
-                                    )
-                                  : const SizedBox(),
-                              !isGuestLoggedIn && (Get.find<SplashController>().configModel!.refundActiveStatus! && order.orderStatus == 'delivered' && !parcel && (parcel || (orderController.orderDetails!.isNotEmpty && orderController.orderDetails![0].itemCampaignId == null)))
-                                  ? InkWell(
-                                      onTap: () => Get.toNamed(RouteHelper.getRefundRequestRoute(order.id.toString())),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Theme.of(context).primaryColor, width: 1),
-                                          borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall, vertical: Dimensions.paddingSizeSmall),
-                                        child: Text('refund_this_order'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)),
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                            ],
-                          ),
-              ],
-            ),
-          ),
+          // Container(
+          //   decoration: BoxDecoration(
+          //     color: Theme.of(context).cardColor,
+          //     borderRadius: BorderRadius.circular(isDesktop ? Dimensions.radiusDefault : 0),
+          //     boxShadow: isDesktop ? const [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)] : [],
+          //   ),
+          //   padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       !isDesktop
+          //           ? Text(
+          //               parcel
+          //                   ? 'parcel_category'.tr
+          //                   : Get.find<SplashController>().getModuleConfig(order.moduleType).showRestaurantText!
+          //                       ? 'restaurant_details'.tr
+          //                       : 'store_details'.tr,
+          //               style: robotoMedium)
+          //           : const SizedBox(),
+          //       !isDesktop ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
+          //       (parcel && order.parcelCategory == null)
+          //           ? Text('no_parcel_category_data_found'.tr, style: robotoMedium)
+          //           : (!parcel && order.store == null)
+          //               ? Center(
+          //                   child: Padding(
+          //                     padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
+          //                     child: Text('no_restaurant_data_found'.tr, maxLines: 1, overflow: TextOverflow.ellipsis, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
+          //                   ),
+          //                 )
+          //               : Row(
+          //                   children: [
+          //                     ClipOval(
+          //                       child: CustomImage(
+          //                         image: (parcel && order.parcelCategory != null && order.parcelCategory!.image != null)
+          //                             ? '${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}/${order.parcelCategory!.image}'
+          //                             : (order.store != null && order.store!.logo != null)
+          //                                 ? '${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${order.store!.logo}'
+          //                                 : 'assets/images/house.png',
+          //                         // image: parcel ? '${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}/${order.parcelCategory!.image}' : '${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${order.store!.logo}',
+          //                         height: 35,
+          //                         width: 35,
+          //                         fit: BoxFit.cover,
+          //                       ),
+          //                     ),
+          //                     const SizedBox(width: Dimensions.paddingSizeSmall),
+          //                     Expanded(
+          //                       child: Column(
+          //                         crossAxisAlignment: CrossAxisAlignment.start,
+          //                         children: [
+          //                           Text(
+          //                             parcel ? order.parcelCategory!.name! : order.store!.name!,
+          //                             maxLines: 1,
+          //                             overflow: TextOverflow.ellipsis,
+          //                             style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+          //                           ),
+          //                           Text(
+          //                             parcel ? order.parcelCategory!.description! : order.store?.address ?? '',
+          //                             maxLines: 1,
+          //                             overflow: TextOverflow.ellipsis,
+          //                             style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+          //                           ),
+          //                         ],
+          //                       ),
+          //                     ),
+          //                     (!parcel && order.orderType == 'take_away' && (order.orderStatus == 'pending' || order.orderStatus == 'accepted' || order.orderStatus == 'confirmed' || order.orderStatus == 'processing' || order.orderStatus == 'handover' || order.orderStatus == 'picked_up'))
+          //                         ? TextButton.icon(
+          //                             onPressed: () async {
+          //                               if (!parcel) {
+          //                                 String url = 'https://www.google.com/maps/dir/?api=1&destination=${order.store!.latitude}'
+          //                                     ',${order.store!.longitude}&mode=d';
+          //                                 if (await canLaunchUrlString(url)) {
+          //                                   await launchUrlString(url);
+          //                                 } else {
+          //                                   showCustomSnackBar('unable_to_launch_google_map'.tr);
+          //                                 }
+          //                               }
+          //                             },
+          //                             icon: const Icon(Icons.directions),
+          //                             label: Text('direction'.tr),
+          //                           )
+          //                         : const SizedBox(),
+          //                     (!parcel && order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refunded')
+          //                         ? InkWell(
+          //                             onTap: () async {
+          //                               await Get.toNamed(
+          //                                 RouteHelper.getChatRoute(
+          //                                   notificationBody: NotificationBody(orderId: order.id, restaurantId: order.store!.vendorId),
+          //                                   user: User(id: order.store!.vendorId, fName: order.store!.name, lName: '', image: order.store!.logo),
+          //                                 ),
+          //                               );
+          //                             },
+          //                             child: Image.asset(Images.chatOrderDetails, height: 20, width: 20),
+          //                           )
+          //                         : const SizedBox(),
+          //                     !isGuestLoggedIn && (Get.find<SplashController>().configModel!.refundActiveStatus! && order.orderStatus == 'delivered' && !parcel && (parcel || (orderController.orderDetails!.isNotEmpty && orderController.orderDetails![0].itemCampaignId == null)))
+          //                         ? InkWell(
+          //                             onTap: () => Get.toNamed(RouteHelper.getRefundRequestRoute(order.id.toString())),
+          //                             child: Container(
+          //                               decoration: BoxDecoration(
+          //                                 border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+          //                                 borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+          //                               ),
+          //                               padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall, vertical: Dimensions.paddingSizeSmall),
+          //                               child: Text('refund_this_order'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)),
+          //                             ),
+          //                           )
+          //                         : const SizedBox(),
+          //                   ],
+          //                 ),
+          //     ],
+          //   ),
+          // ),
 
           const SizedBox(height: Dimensions.paddingSizeSmall),
 

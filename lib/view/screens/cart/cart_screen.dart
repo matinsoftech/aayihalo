@@ -3,8 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
 import 'package:sixam_mart/controller/coupon_controller.dart';
 import 'package:sixam_mart/controller/location_controller.dart';
-import 'package:sixam_mart/controller/location_controller.dart';
-import 'package:sixam_mart/controller/location_controller.dart';
 import 'package:sixam_mart/controller/splash_controller.dart';
 import 'package:sixam_mart/controller/store_controller.dart';
 import 'package:sixam_mart/data/model/response/item_model.dart';
@@ -199,15 +197,15 @@ class _CartScreenState extends State<CartScreen> {
                                                                             onPressed: controller.isLoading
                                                                                 ? () {}
                                                                                 : () {
-                                                                                    if (_coupounCodeController.text == null || _coupounCodeController.text == '') {
+                                                                                    if (_coupounCodeController.text == '') {
                                                                                       showCustomSnackBar('Please enter the coupon code');
                                                                                     } else {
-                                                                                      print("couponcode" + _coupounCodeController.text);
-                                                                                      print("subtotal" + cartController.subTotal.toString());
-                                                                                      print("storeid" + cartController.cartList[0].item!.storeId.toString());
+                                                                                      print("couponcode${_coupounCodeController.text}");
+                                                                                      print("subtotal${cartController.subTotal}");
+                                                                                      print("storeid${cartController.cartList[0].item!.storeId}");
 
                                                                                       final discount = controller.applyCoupon(_coupounCodeController.text, cartController.subTotal, 0.0, cartController.cartList[0].item!.storeId);
-                                                                                      print("discountprovided" + discount.toString());
+                                                                                      print("discountprovided$discount");
                                                                                       if (discount == 0.0) {
                                                                                         showCustomSnackBar('Invalid Coupon Code');
                                                                                       } else {
@@ -300,15 +298,15 @@ class _CartScreenState extends State<CartScreen> {
 
                                                   // cancellation policy
 
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                  const Padding(
+                                                    padding: EdgeInsets.all(8.0),
                                                     child: Card(
                                                       elevation: 5,
                                                       child: SizedBox(
-                                                        child: Container(
+                                                        child: SizedBox(
                                                             height: 180,
                                                             width: double.infinity,
-                                                            child: const Padding(
+                                                            child: Padding(
                                                               padding: EdgeInsets.all(16),
                                                               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                                                 SizedBox(height: 10),

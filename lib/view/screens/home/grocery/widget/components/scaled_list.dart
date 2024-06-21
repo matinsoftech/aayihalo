@@ -13,10 +13,8 @@ class ScaledList extends StatefulWidget {
     this.marginWidthRatio = 0.1,
     this.selectedCardHeightRatio = 0.4,
     this.unSelectedCardHeightRatio = 0.3,
-  })  : assert(cardWidthRatio + marginWidthRatio >= 0.5,
-  " Card width + margin width should exceed 0.5 of the screen"),
-        assert(selectedCardHeightRatio > unSelectedCardHeightRatio,
-        " selectedCardHeight should alwayes excceed the unSelectedCardHeight to show desire effect");
+  })  : assert(cardWidthRatio + marginWidthRatio >= 0.5, " Card width + margin width should exceed 0.5 of the screen"),
+        assert(selectedCardHeightRatio > unSelectedCardHeightRatio, " selectedCardHeight should alwayes excceed the unSelectedCardHeight to show desire effect");
 
   final Widget Function(int index, int selectedIndex) itemBuilder;
 
@@ -48,27 +46,19 @@ class _ScaledListState extends State<ScaledList> {
   @override
   void initState() {
     _scrollController = ScrollController();
-    final double fullCardWidth =
-        widget.cardWidthRatio + widget.marginWidthRatio;
+    final double fullCardWidth = widget.cardWidthRatio + widget.marginWidthRatio;
     _scrollController!.addListener(() {
       final double offset = _scrollController!.offset;
-      double deltaReverse =
-          (((_selectedIndex + 2) * fullCardWidth) - 1) * parentWidth;
+      double deltaReverse = (((_selectedIndex + 2) * fullCardWidth) - 1) * parentWidth;
 
-      double deltaForward =
-          (((_selectedIndex - 1) * (fullCardWidth)) + widget.marginWidthRatio) *
-              parentWidth;
+      double deltaForward = (((_selectedIndex - 1) * (fullCardWidth)) + widget.marginWidthRatio) * parentWidth;
 
-      if (offset > deltaReverse &&
-          _scrollController!.position.userScrollDirection ==
-              ScrollDirection.reverse) {
+      if (offset > deltaReverse && _scrollController!.position.userScrollDirection == ScrollDirection.reverse) {
         setState(() {
           _selectedIndex += 1;
         });
       }
-      if (offset < deltaForward &&
-          _scrollController!.position.userScrollDirection ==
-              ScrollDirection.forward) {
+      if (offset < deltaForward && _scrollController!.position.userScrollDirection == ScrollDirection.forward) {
         setState(() {
           _selectedIndex -= 1;
         });
@@ -109,19 +99,14 @@ class _ScaledListState extends State<ScaledList> {
                             Align(
                               alignment: Alignment.topLeft,
                               child: Card(
-                                margin: const EdgeInsets.only(
-                                    left: 0, right: 0, top: 5, bottom: 25),
+                                margin: const EdgeInsets.only(left: 0, right: 0, top: 5, bottom: 25),
                                 elevation: 3,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Container(
                                   width: parentWidth * widget.cardWidthRatio,
-                                  height: _selectedIndex == index
-                                      ? widget.selectedCardHeightRatio *
-                                      parentHeight!
-                                      : widget.unSelectedCardHeightRatio *
-                                      parentHeight!,
+                                  height: _selectedIndex == index ? widget.selectedCardHeightRatio * parentHeight! : widget.unSelectedCardHeightRatio * parentHeight!,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white,
@@ -129,9 +114,7 @@ class _ScaledListState extends State<ScaledList> {
                                 ),
                               ),
                             ),
-                            Positioned.fill(
-                                child:
-                                widget.itemBuilder(index, _selectedIndex))
+                            Positioned.fill(child: widget.itemBuilder(index, _selectedIndex))
                           ],
                         ),
                         const SizedBox(width: 15)
@@ -167,9 +150,7 @@ class _ScaledListState extends State<ScaledList> {
           minHeight: 5,
           value: (0 + index + 1) / length,
           //backgroundColor: Colors.white,
-          valueColor: AlwaysStoppedAnimation<Color>(index == _selectedIndex
-              ? const Color(0xff1B7FED)
-              : const Color(0xff1B7FED).withOpacity(0.5)),
+          valueColor: AlwaysStoppedAnimation<Color>(index == _selectedIndex ? const Color(0xff1B7FED) : const Color(0xff1B7FED).withOpacity(0.5)),
         ),
       ),
     );

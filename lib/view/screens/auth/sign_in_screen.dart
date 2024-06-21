@@ -16,7 +16,6 @@ import 'package:sixam_mart/view/screens/auth/verify_otp_screen.dart';
 import 'package:sixam_mart/view/screens/auth/widget/condition_check_box.dart';
 import 'package:sixam_mart/view/screens/auth/widget/guest_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class SignInScree extends StatefulWidget {
@@ -36,7 +35,7 @@ class SignInScreeState extends State<SignInScree> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _countryDialCode;
-  bool _canExit = GetPlatform.isWeb ? true : false;
+  final bool _canExit = GetPlatform.isWeb ? true : false;
 
   // @override
   // void initState() {
@@ -249,7 +248,7 @@ class SignInScreeState extends State<SignInScree> {
                                   String phone = _phoneController.text.trim();
                                   String password =
                                       _passwordController.text.trim();
-                                  String numberWithCountryCode = '+977' + phone;
+                                  String numberWithCountryCode = '+977$phone';
                                   PhoneValid phoneValid =
                                       await CustomValidator.isPhoneValid(
                                           numberWithCountryCode);
@@ -362,6 +361,8 @@ class SignInScreeState extends State<SignInScree> {
 }
 
 class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
+
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
@@ -568,7 +569,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   String phone = _phoneController.text.trim();
                                   String password =
                                       _passwordController.text.trim();
-                                  String numberWithCountryCode = '+977' + phone;
+                                  String numberWithCountryCode = '+977$phone';
                                   PhoneValid phoneValid =
                                       await CustomValidator.isPhoneValid(
                                           numberWithCountryCode);

@@ -25,6 +25,7 @@ class ModuleView extends StatefulWidget {
 }
 
 class _ModuleViewState extends State<ModuleView> {
+  @override
   initState() {
     super.initState();
     widget.splashController.switchModule(0, true);

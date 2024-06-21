@@ -79,7 +79,7 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                                   if (!ResponsiveHelper.isDesktop(context)) {
                                     await Get.toNamed(RouteHelper.getSignInRoute(Get.currentRoute));
                                   } else {
-                                    Get.dialog(SignInScreen());
+                                    Get.dialog(const SignInScreen());
                                   }
                                 },
                                 child: Text(

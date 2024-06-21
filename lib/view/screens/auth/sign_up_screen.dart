@@ -291,7 +291,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                             onTap: () {
                               if(ResponsiveHelper.isDesktop(context)){
                                 Get.back();
-                                Get.dialog( SignInScreen());
+                                Get.dialog( const SignInScreen());
                               }else{
                                 if(Get.currentRoute == RouteHelper.signUp) {
                                   Get.back();

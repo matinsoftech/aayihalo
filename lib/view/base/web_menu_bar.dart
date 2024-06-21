@@ -247,7 +247,7 @@ class WebMenuBar extends StatelessWidget implements PreferredSizeWidget {
                   if (authController.isLoggedIn()) {
                     Get.toNamed(RouteHelper.getProfileRoute());
                   }else{
-                    Get.dialog( SignInScreen());
+                    Get.dialog( const SignInScreen());
                   }
                 },
                 child: Container(

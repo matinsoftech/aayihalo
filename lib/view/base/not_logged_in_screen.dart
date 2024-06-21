@@ -48,7 +48,7 @@ class NotLoggedInScreen extends StatelessWidget {
                 if(!ResponsiveHelper.isDesktop(context)) {
                   await Get.toNamed(RouteHelper.getSignInRoute(Get.currentRoute));
                 }else{
-                  Get.dialog( SignInScreen()).then((value) => callBack(true));
+                  Get.dialog( const SignInScreen()).then((value) => callBack(true));
                 }
                 if(Get.find<OrderController>().showBottomSheet) {
                   Get.find<OrderController>().showRunningOrders();

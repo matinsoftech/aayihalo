@@ -95,8 +95,8 @@ class _WebMostPopularItemViewState extends State<WebMostPopularItemView> {
                 padding: const EdgeInsets.only(left: Dimensions.paddingSizeExtraLarge),
                 itemCount: itemList.length,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeExtraLarge, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeExtraSmall),
+                  return const Padding(
+                    padding: EdgeInsets.only(bottom: Dimensions.paddingSizeExtraLarge, right: Dimensions.paddingSizeDefault, top: Dimensions.paddingSizeExtraSmall),
                     child:  Text("hello")
                     // ItemCard(
                     //   isPopularItem: isShop ? false : true,

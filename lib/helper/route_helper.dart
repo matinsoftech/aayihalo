@@ -364,7 +364,7 @@ class RouteHelper {
     GetPage(name: onBoarding, page: () => const OnBoardingScreen()),
     GetPage(
         name: signIn,
-        page: () => SignInScreen(
+        page: () => const SignInScreen(
             // exitFromApp: Get.parameters['page'] == signUp || Get.parameters['page'] == splash || Get.parameters['page'] == onBoarding,
             // backFromThis: Get.parameters['page'] != splash && Get.parameters['page'] != onBoarding,
             )),

@@ -134,7 +134,7 @@ class CartItemWidget extends StatelessWidget {
                               '${endingPrice!= null ? ' - ${PriceConverter.convertPrice(endingPrice, discount: discount, discountType: discountType)}' : ''}',
                           style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall), textDirection: TextDirection.ltr,
                         ),
-                        SizedBox(width: discount! > 0 ? Dimensions.paddingSizeExtraSmall : 0),
+                        SizedBox(width: discount > 0 ? Dimensions.paddingSizeExtraSmall : 0),
 
                         discount > 0 ? Text(
                           '${PriceConverter.convertPrice(startingPrice)}'
@@ -158,7 +158,7 @@ class CartItemWidget extends StatelessWidget {
                         ]),
                       ) : const SizedBox() : const SizedBox(),
 
-                      ResponsiveHelper.isDesktop(context) ? variationText!.isNotEmpty ? Padding(
+                      ResponsiveHelper.isDesktop(context) ? variationText.isNotEmpty ? Padding(
                         padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
                         child: Row(children: [
                           Text(ResponsiveHelper.isDesktop(context) ? '' : '${'variations'.tr}: ', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall)),
@@ -226,7 +226,7 @@ class CartItemWidget extends StatelessWidget {
                   ]),
                 ) : const SizedBox() : const SizedBox(),
 
-                !ResponsiveHelper.isDesktop(context) ? variationText!.isNotEmpty ? Padding(
+                !ResponsiveHelper.isDesktop(context) ? variationText.isNotEmpty ? Padding(
                   padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
                   child: Row(children: [
                     SizedBox(width: ResponsiveHelper.isDesktop(context) ? 100 : 80),

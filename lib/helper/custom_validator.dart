@@ -10,7 +10,7 @@ class CustomValidator {
     bool isValid = !(GetPlatform.isAndroid && !kIsWeb);
     if(GetPlatform.isAndroid && !kIsWeb) {
       try {
-        PhoneNumber phoneNumber = await PhoneNumber.parse(number);
+        PhoneNumber phoneNumber = PhoneNumber.parse(number);
         phone = '+${phoneNumber.countryCode}${phoneNumber.isoCode}';
         isValid = true;
       } catch (_) {}

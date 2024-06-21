@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sixam_mart/controller/item_controller.dart';
 import 'package:sixam_mart/data/api/api_client.dart';
 import 'package:sixam_mart/util/app_constants.dart';
 

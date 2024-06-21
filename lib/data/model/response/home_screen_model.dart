@@ -988,6 +988,10 @@ class HomeScreenDataModel {
     required this.customerAddresses,
     required this.specialProducts,
     required this.popularProducts,
+    required this.justforyouItems,
+    required this.topBanners,
+    required this.midBanners,
+    required this.bottomBanner,
   });
 
   final NearestStore? nearestStore;
@@ -998,6 +1002,10 @@ class HomeScreenDataModel {
   final List<CustomerAddress> customerAddresses;
   final List<Product> specialProducts;
   final List<Product> popularProducts;
+  final List<Product> justforyouItems;
+  final List<Banner> topBanners;
+  final List<Banner> midBanners;
+  final BottomBanner? bottomBanner;
 
   factory HomeScreenDataModel.fromJson(Map<String, dynamic> json) {
     return HomeScreenDataModel(
@@ -1009,10 +1017,110 @@ class HomeScreenDataModel {
       customerAddresses: json["customer_addresses"] == null ? [] : List<CustomerAddress>.from(json["customer_addresses"]!.map((x) => CustomerAddress.fromJson(x))),
       specialProducts: json["special_products"] == null ? [] : List<Product>.from(json["special_products"]!.map((x) => Product.fromJson(x))),
       popularProducts: json["popular_products"] == null ? [] : List<Product>.from(json["popular_products"]!.map((x) => Product.fromJson(x))),
+      justforyouItems: json["justforyou_items"] == null ? [] : List<Product>.from(json["justforyou_items"]!.map((x) => Product.fromJson(x))),
+      topBanners: json["top_banners"] == null ? [] : List<Banner>.from(json["top_banners"]!.map((x) => Banner.fromJson(x))),
+      midBanners: json["mid_banners"] == null ? [] : List<Banner>.from(json["mid_banners"]!.map((x) => Banner.fromJson(x))),
+      bottomBanner: json["bottom_banner"] == null ? null : BottomBanner.fromJson(json["bottom_banner"]),
     );
   }
 }
 
+//new added
+class BottomBanner {
+  BottomBanner({
+    required this.id,
+    required this.moduleId,
+    required this.key,
+    required this.value,
+    required this.type,
+    required this.status,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.translations,
+  });
+
+  final int? id;
+  final int? moduleId;
+  final String? key;
+  final dynamic value;
+  final String? type;
+  final int? status;
+  final dynamic createdAt;
+  final DateTime? updatedAt;
+  final List<dynamic> translations;
+
+  factory BottomBanner.fromJson(Map<String, dynamic> json) {
+    return BottomBanner(
+      id: json["id"],
+      moduleId: json["module_id"],
+      key: json["key"],
+      value: json["value"],
+      type: json["type"],
+      status: json["status"],
+      createdAt: json["created_at"],
+      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
+      translations: json["translations"] == null ? [] : List<dynamic>.from(json["translations"]!.map((x) => x)),
+    );
+  }
+}
+
+class Banner {
+  Banner({
+    required this.id,
+    required this.title,
+    required this.type,
+    required this.bannerPosition,
+    required this.image,
+    required this.status,
+    required this.data,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.zoneId,
+    required this.moduleId,
+    required this.featured,
+    required this.defaultLink,
+    required this.createdBy,
+    required this.translations,
+  });
+
+  final int? id;
+  final String? title;
+  final String? type;
+  final String? bannerPosition;
+  final String? image;
+  final bool? status;
+  final int? data;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? zoneId;
+  final int? moduleId;
+  final bool? featured;
+  final dynamic defaultLink;
+  final String? createdBy;
+  final List<Translation> translations;
+
+  factory Banner.fromJson(Map<String, dynamic> json) {
+    return Banner(
+      id: json["id"],
+      title: json["title"],
+      type: json["type"],
+      bannerPosition: json["banner_position"],
+      image: json["image"],
+      status: json["status"],
+      data: json["data"],
+      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
+      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
+      zoneId: json["zone_id"],
+      moduleId: json["module_id"],
+      featured: json["featured"],
+      defaultLink: json["default_link"],
+      createdBy: json["created_by"],
+      translations: json["translations"] == null ? [] : List<Translation>.from(json["translations"]!.map((x) => Translation.fromJson(x))),
+    );
+  }
+}
+
+//mew model added
 class CustomerAddress {
   CustomerAddress({
     required this.id,

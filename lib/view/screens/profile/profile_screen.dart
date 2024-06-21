@@ -113,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 if (!ResponsiveHelper.isDesktop(context)) {
                                                   await Get.toNamed(RouteHelper.getSignInRoute(Get.currentRoute));
                                                 } else {
-                                                  Get.dialog(SignInScreen());
+                                                  Get.dialog(const SignInScreen());
                                                 }
                                               },
                                               child: Text(
@@ -137,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             if (!ResponsiveHelper.isDesktop(context)) {
                                               await Get.toNamed(RouteHelper.getSignInRoute(Get.currentRoute));
                                             } else {
-                                              Get.dialog(SignInScreen());
+                                              Get.dialog(const SignInScreen());
                                             }
                                           },
                                           child: Container(
