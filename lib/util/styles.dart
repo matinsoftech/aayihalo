@@ -26,8 +26,11 @@ final robotoBlack = TextStyle(
   fontWeight: FontWeight.w900,
   fontSize: Dimensions.fontSizeDefault,
 );
-
+const opensSans = TextStyle(
+  fontFamily: 'OpenSans',
+);
 final BoxDecoration riderContainerDecoration = BoxDecoration(
   borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusSmall)),
-  color: Theme.of(Get.context!).primaryColor.withOpacity(0.1), shape: BoxShape.rectangle,
+  color: Theme.of(Get.context!).primaryColor.withOpacity(0.1),
+  shape: BoxShape.rectangle,
 );

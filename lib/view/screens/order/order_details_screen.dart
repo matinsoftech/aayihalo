@@ -168,7 +168,7 @@ class OrderDetailsScreenState extends State<OrderDetailsScreen> {
               double subTotal = itemsPrice + addOns;
               double total = itemsPrice + addOns - discount + (taxIncluded ? 0 : tax) + deliveryCharge - couponDiscount + dmTips + additionalCharge;
 
-              print('-----check order details : ${orderController.orderDetails != null} && ${order != null}');
+              // print('-----check order details : ${orderController.orderDetails != null} && ${order != null}');
               return orderController.orderDetails != null && order != null
                   ? Column(
                       children: [

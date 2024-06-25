@@ -84,7 +84,7 @@ class OrderView extends StatelessWidget {
                                     // print('first data :${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${paginatedOrderModel.orders![index].store != null ? paginatedOrderModel.orders![index].store!.logo : ''}');
                                     // print('first data : ${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}'
                                     //     '/${paginatedOrderModel.orders![index].parcelCategory != null ? paginatedOrderModel.orders![index].parcelCategory!.image : ''}');
-                                    // get to order detail screen
+                                    //? get to order detail screen
                                     return InkWell(
                                       onTap: () {
                                         Get.toNamed(
@@ -112,40 +112,41 @@ class OrderView extends StatelessWidget {
                                             Row(
                                               children: [
                                                 Stack(children: [
-                                                  Container(
-                                                    height: ResponsiveHelper.isDesktop(context) ? 80 : 60,
-                                                    width: ResponsiveHelper.isDesktop(context) ? 80 : 60,
-                                                    alignment: Alignment.center,
-                                                    decoration: isParcel
-                                                        ? BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                                            color: Theme.of(context).primaryColor.withOpacity(0.2),
-                                                          )
-                                                        : null,
-                                                    child: ClipRRect(
-                                                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                                      child: CustomImage(
-                                                        image:
+                                                  // Container(
+                                                  //   height: ResponsiveHelper.isDesktop(context) ? 80 : 60,
+                                                  //   width: ResponsiveHelper.isDesktop(context) ? 80 : 60,
+                                                  //   alignment: Alignment.center,
+                                                  //   decoration: isParcel
+                                                  //       ? BoxDecoration(
+                                                  //           borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                                  //           color: Theme.of(context).primaryColor.withOpacity(0.2),
+                                                  //         )
+                                                  //       : null,
+                                                  //   child: ClipRRect(
+                                                  //     borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                                  //     child: CustomImage(
+                                                  //       image:
 
-                                                            // isParcel
-                                                            //     ? '${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}'
-                                                            //         '/${paginatedOrderModel.orders![index].parcelCategory != null ? paginatedOrderModel.orders![index].parcelCategory!.image : ''}'
-                                                            //     :
-                                                            '${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${paginatedOrderModel.orders![index].store != null ? paginatedOrderModel.orders![index].store!.logo : ''}',
-                                                        height: isParcel
-                                                            ? 35
-                                                            : ResponsiveHelper.isDesktop(context)
-                                                                ? 80
-                                                                : 60,
-                                                        width: isParcel
-                                                            ? 35
-                                                            : ResponsiveHelper.isDesktop(context)
-                                                                ? 80
-                                                                : 60,
-                                                        fit: isParcel ? null : BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
+                                                  //           // isParcel
+                                                  //           //     ? '${Get.find<SplashController>().configModel!.baseUrls!.parcelCategoryImageUrl}'
+                                                  //           //         '/${paginatedOrderModel.orders![index].parcelCategory != null ? paginatedOrderModel.orders![index].parcelCategory!.image : ''}'
+                                                  //           //     :
+                                                  //           '${Get.find<SplashController>().configModel!.baseUrls!.storeImageUrl}/${paginatedOrderModel.orders![index].store != null ? paginatedOrderModel.orders![index].store!.logo : ''}',
+                                                  //       height: isParcel
+                                                  //           ? 35
+                                                  //           : ResponsiveHelper.isDesktop(context)
+                                                  //               ? 80
+                                                  //               : 60,
+                                                  //       width: isParcel
+                                                  //           ? 35
+                                                  //           : ResponsiveHelper.isDesktop(context)
+                                                  //               ? 80
+                                                  //               : 60,
+                                                  //       fit: isParcel ? null : BoxFit.cover,
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
+
                                                   isParcel
                                                       ? Positioned(
                                                           left: 0,
@@ -248,9 +249,12 @@ class OrderView extends StatelessWidget {
                                                     isRunning
                                                         ? InkWell(
                                                             // get to order tracking page
-                                                            onTap: () => Get.toNamed(
-                                                              RouteHelper.getOrderTrackingRoute(paginatedOrderModel!.orders![index].id, null),
-                                                            ),
+
+                                                            onTap: () {
+                                                              Get.toNamed(
+                                                                RouteHelper.getOrderTrackingRoute(paginatedOrderModel!.orders![index].id, null),
+                                                              );
+                                                            },
                                                             child: Container(
                                                               padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeSmall : Dimensions.paddingSizeExtraSmall),
                                                               decoration: ResponsiveHelper.isDesktop(context)

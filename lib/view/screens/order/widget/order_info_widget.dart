@@ -112,14 +112,16 @@ class OrderInfoWidget extends StatelessWidget {
               ),
               Divider(height: Dimensions.paddingSizeLarge, color: Theme.of(context).disabledColor.withOpacity(0.30)),
               //order date
-              Row(children: [
-                Text('order_date'.tr, style: robotoRegular),
-                const Expanded(child: SizedBox()),
-                Text(
-                  DateConverter.dateTimeStringToDateTime(order.createdAt!),
-                  style: robotoRegular,
-                ),
-              ]),
+              Row(
+                children: [
+                  Text('order_date'.tr, style: robotoRegular),
+                  const Expanded(child: SizedBox()),
+                  Text(
+                    DateConverter.dateTimeStringToDateTime(order.createdAt!),
+                    style: robotoRegular,
+                  ),
+                ],
+              ),
               //? scheduled
               order.scheduled == 1 ? Divider(height: Dimensions.paddingSizeLarge, color: Theme.of(context).disabledColor.withOpacity(0.30)) : const SizedBox(),
               order.scheduled == 1
@@ -223,7 +225,7 @@ class OrderInfoWidget extends StatelessWidget {
                       ],
                     )
                   : const SizedBox(),
-                  //?
+              //?
               order.unavailableItemNote != null
                   ? Column(
                       children: [
@@ -321,6 +323,8 @@ class OrderInfoWidget extends StatelessWidget {
           ),
 
           isDesktop ? const SizedBox() : const SizedBox(height: Dimensions.paddingSizeSmall),
+
+          //? item info
           !isDesktop
               ? (parcel || orderController.orderDetails!.isNotEmpty)
                   ? Container(
@@ -464,74 +468,75 @@ class OrderInfoWidget extends StatelessWidget {
                   ]),
                 )
               : const SizedBox(),
+          //? when delivery man is assigned this widget is displayed with chat with delivery driver
+          // (order.deliveryMan != null && isDesktop) ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
+          // (order.deliveryMan != null && isDesktop) ? Text('delivery_man_details'.tr, style: robotoMedium) : const SizedBox(),
+          // (order.deliveryMan != null && isDesktop) ? const SizedBox(height: Dimensions.paddingSizeLarge) : const SizedBox(),
+          // order.deliveryMan != null
+          //     ? Container(
+          //         decoration: BoxDecoration(
+          //           color: Theme.of(context).cardColor,
+          //           borderRadius: BorderRadius.circular(isDesktop ? Dimensions.radiusDefault : 0),
+          //           boxShadow: [isDesktop ? const BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1) : const BoxShadow()],
+          //         ),
+          //         padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
+          //         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          //           Text('delivery_man_details'.tr, style: robotoMedium),
+          //           const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+          //           Row(children: [
+          //             ClipOval(
+          //                 child: CustomImage(
+          //               image: '${Get.find<SplashController>().configModel!.baseUrls!.deliveryManImageUrl}/${order.deliveryMan!.image}',
+          //               height: 35,
+          //               width: 35,
+          //               fit: BoxFit.cover,
+          //             )),
+          //             const SizedBox(width: Dimensions.paddingSizeSmall),
+          //             Expanded(
+          //                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          //               Text(
+          //                 '${order.deliveryMan!.fName} ${order.deliveryMan!.lName}',
+          //                 maxLines: 1,
+          //                 overflow: TextOverflow.ellipsis,
+          //                 style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+          //               ),
+          //               // RatingBar(
+          //               //   rating: order.deliveryMan!.avgRating, size: 10,
+          //               //   ratingCount: order.deliveryMan!.ratingCount,
+          //               // ),
+          //             ])),
+          //             (order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refunded')
+          //                 ? Row(children: [
+          //                     InkWell(
+          //                       onTap: () async {
+          //                         timerCancel();
+          //                         await Get.toNamed(RouteHelper.getChatRoute(
+          //                           notificationBody: NotificationBody(deliverymanId: order.deliveryMan!.id, orderId: int.parse(order.id.toString())),
+          //                           user: User(id: order.deliveryMan!.id, fName: order.deliveryMan!.fName, lName: order.deliveryMan!.lName, image: order.deliveryMan!.image),
+          //                         ));
+          //                         startApiCall();
+          //                       },
+          //                       child: Image.asset(Images.chatOrderDetails, height: 20, width: 20),
+          //                     ),
+          //                     const SizedBox(width: Dimensions.paddingSizeSmall),
+          //                     InkWell(
+          //                       onTap: () async {
+          //                         if (await canLaunchUrlString('tel:${order.deliveryMan!.phone}')) {
+          //                           launchUrlString('tel:${order.deliveryMan!.phone}', mode: LaunchMode.externalApplication);
+          //                         } else {
+          //                           showCustomSnackBar('${'can_not_launch'.tr} ${order.deliveryMan!.phone}');
+          //                         }
+          //                       },
+          //                       child: Image.asset(Images.phoneOrderDetails, height: 20, width: 20),
+          //                     ),
+          //                   ])
+          //                 : const SizedBox(),
+          //           ]),
+          //         ]),
+          //       )
+          //     : const SizedBox(),
 
-          (order.deliveryMan != null && isDesktop) ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
-          (order.deliveryMan != null && isDesktop) ? Text('delivery_man_details'.tr, style: robotoMedium) : const SizedBox(),
-          (order.deliveryMan != null && isDesktop) ? const SizedBox(height: Dimensions.paddingSizeLarge) : const SizedBox(),
-          order.deliveryMan != null
-              ? Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(isDesktop ? Dimensions.radiusDefault : 0),
-                    boxShadow: [isDesktop ? const BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1) : const BoxShadow()],
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeSmall),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('delivery_man_details'.tr, style: robotoMedium),
-                    const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                    Row(children: [
-                      ClipOval(
-                          child: CustomImage(
-                        image: '${Get.find<SplashController>().configModel!.baseUrls!.deliveryManImageUrl}/${order.deliveryMan!.image}',
-                        height: 35,
-                        width: 35,
-                        fit: BoxFit.cover,
-                      )),
-                      const SizedBox(width: Dimensions.paddingSizeSmall),
-                      Expanded(
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(
-                          '${order.deliveryMan!.fName} ${order.deliveryMan!.lName}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                        ),
-                        // RatingBar(
-                        //   rating: order.deliveryMan!.avgRating, size: 10,
-                        //   ratingCount: order.deliveryMan!.ratingCount,
-                        // ),
-                      ])),
-                      (order.orderStatus != 'delivered' && order.orderStatus != 'failed' && order.orderStatus != 'canceled' && order.orderStatus != 'refunded')
-                          ? Row(children: [
-                              InkWell(
-                                onTap: () async {
-                                  timerCancel();
-                                  await Get.toNamed(RouteHelper.getChatRoute(
-                                    notificationBody: NotificationBody(deliverymanId: order.deliveryMan!.id, orderId: int.parse(order.id.toString())),
-                                    user: User(id: order.deliveryMan!.id, fName: order.deliveryMan!.fName, lName: order.deliveryMan!.lName, image: order.deliveryMan!.image),
-                                  ));
-                                  startApiCall();
-                                },
-                                child: Image.asset(Images.chatOrderDetails, height: 20, width: 20),
-                              ),
-                              const SizedBox(width: Dimensions.paddingSizeSmall),
-                              InkWell(
-                                onTap: () async {
-                                  if (await canLaunchUrlString('tel:${order.deliveryMan!.phone}')) {
-                                    launchUrlString('tel:${order.deliveryMan!.phone}', mode: LaunchMode.externalApplication);
-                                  } else {
-                                    showCustomSnackBar('${'can_not_launch'.tr} ${order.deliveryMan!.phone}');
-                                  }
-                                },
-                                child: Image.asset(Images.phoneOrderDetails, height: 20, width: 20),
-                              ),
-                            ])
-                          : const SizedBox(),
-                    ]),
-                  ]),
-                )
-              : const SizedBox(),
-          SizedBox(height: order.deliveryMan != null ? Dimensions.paddingSizeLarge : 0),
+          // SizedBox(height: order.deliveryMan != null ? Dimensions.paddingSizeLarge : 0),
 
           isDesktop ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
           (parcel && isDesktop)

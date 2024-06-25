@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:sixam_mart/controller/auth_controller.dart';
@@ -17,6 +16,7 @@ import 'package:sixam_mart/controller/notification_controller.dart';
 import 'package:sixam_mart/controller/onboarding_controller.dart';
 import 'package:sixam_mart/controller/order_controller.dart';
 import 'package:sixam_mart/controller/item_controller.dart';
+import 'package:sixam_mart/controller/order_tracking_controller.dart';
 import 'package:sixam_mart/controller/parcel_controller.dart';
 import 'package:sixam_mart/controller/rider_controller.dart';
 import 'package:sixam_mart/controller/store_controller.dart';
@@ -104,6 +104,7 @@ Future<Map<String, Map<String, String>>> init() async {
   Get.lazyPut(() => SearchingController(searchRepo: Get.find()));
   Get.lazyPut(() => CouponController(couponRepo: Get.find()));
   Get.lazyPut(() => OrderController(orderRepo: Get.find()));
+  Get.lazyPut(() => OrderTrackingController(orderRepo: Get.find()));
   Get.lazyPut(() => NotificationController(notificationRepo: Get.find()));
   Get.lazyPut(() => CampaignController(campaignRepo: Get.find()));
   Get.lazyPut(() => ParcelController(parcelRepo: Get.find()));
@@ -116,8 +117,8 @@ Future<Map<String, Map<String, String>>> init() async {
 
   // Retrieving localized data
   Map<String, Map<String, String>> languages = {};
-  for(LanguageModel languageModel in AppConstants.languages) {
-    String jsonStringValues =  await rootBundle.loadString('assets/language/${languageModel.languageCode}.json');
+  for (LanguageModel languageModel in AppConstants.languages) {
+    String jsonStringValues = await rootBundle.loadString('assets/language/${languageModel.languageCode}.json');
     Map<String, dynamic> mappedJson = jsonDecode(jsonStringValues);
     Map<String, String> json = {};
     mappedJson.forEach((key, value) {
