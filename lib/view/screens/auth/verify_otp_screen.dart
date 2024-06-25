@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:sixam_mart/controller/auth_controller.dart';
+import 'package:sixam_mart/controller/auth_controller/resend_otp_timer_controller.dart';
 import 'package:sixam_mart/controller/cart_controller.dart';
 import 'package:sixam_mart/controller/localization_controller.dart';
 import 'package:sixam_mart/controller/location_controller.dart';
@@ -17,7 +19,7 @@ import 'package:sixam_mart/view/screens/auth/widget/guest_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
-
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 // class VerifyOTPScreen extends StatefulWidget {
 //   final bool exitFromApp;
 //   final bool backFromThis;
@@ -33,7 +35,7 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 // class VerifyOTPScreenState extends State<VerifyOTPScreen> {
 //   final FocusNode _phoneFocus = FocusNode();
 //   final FocusNode _passwordFocus = FocusNode();
-//   final TextEditingController _codeController = TextEditingController();
+//   final TextEditingController codeController = TextEditingController();
 //   final TextEditingController _passwordController = TextEditingController();
 //   String? _countryDialCode;
 
@@ -134,7 +136,7 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //                                     ? 'phone'.tr
 //                                     : 'Enter otp sent to your phone'.tr,
 //                                 hintText: '',
-//                                 controller: _codeController,
+//                                 controller: codeController,
 //                                 focusNode: _phoneFocus,
 //                                 nextFocus: _passwordFocus,
 //                                 inputType: TextInputType.phone,
@@ -205,7 +207,7 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //                                         ? 'login'.tr
 //                                         : 'sign_in'.tr,
 //                                 onPressed: () =>
-//                                     _login(authController, code: _codeController.text.trim(), phone: widget.phoneNumber ),
+//                                     _login(authController, code: codeController.text.trim(), phone: widget.phoneNumber ),
 //                                 isLoading: authController.isLoading,
 //                                 radius: ResponsiveHelper.isDesktop(context)
 //                                     ? Dimensions.radiusSmall
@@ -275,56 +277,68 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 //   }
 
 // }
+// class VerifyOTPScreen extends StatelessWidget {
+//   final String phoneNumber;
+//   final String countryCode;
+//   const VerifyOTPScreen({required this.phoneNumber, required this.countryCode, super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }
 
 class VerifyOTPScreen extends StatelessWidget {
+  final String phoneNumber;
   final String countryCode;
-  VerifyOTPScreen({
+  const VerifyOTPScreen({
     super.key,
     required this.phoneNumber,
     required this.countryCode,
   });
 
-  final String phoneNumber;
-
-  final TextEditingController _codeController = TextEditingController();
-  // final TextEditingController _passwordController = TextEditingController();
-
-  void _login(AuthController authController, {required String phone, required String code}) async {
-    if (phone.isEmpty) {
-      showCustomSnackBar('enter_phone_number'.tr);
-    } else if (code.isEmpty) {
-      showCustomSnackBar('invalid_phone_number'.tr);
-    } else {
-      authController.verifyOtp(phone: phone, otp: code).then((status) async {
-        if (status.isSuccess) {
-          Get.find<CartController>().getCartDataOnline();
-          if (authController.isActiveRememberMe) {
-            authController.saveUserNumberAndPassword(
-              phone,
-              "password",
-              "+977",
-            );
-          } else {
-            authController.clearUserNumberAndPassword();
-          }
-          String token = status.message!.substring(1, status.message!.length);
-          if (Get.find<SplashController>().configModel!.customerVerification! && int.parse(status.message![0]) == 0) {
-            List<int> encoded = utf8.encode("password");
-            String data = base64Encode(encoded);
-          } else {
-            Get.find<LocationController>().navigateToLocationScreen('sign-in', offNamed: true);
-          }
-
-          Get.to(const SplashScreen(body: null));
-        } else {
-          showCustomSnackBar(status.message);
-        }
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    TextEditingController codeController = TextEditingController();
+    final OTPTimerController otpTimerController = Get.put(OTPTimerController());
+
+    void login(AuthController authController, {required String phone, required String code}) async {
+      if (phone.isEmpty) {
+        showCustomSnackBar('enter_phone_number'.tr);
+      } else if (code.isEmpty) {
+        showCustomSnackBar('invalid_phone_number'.tr);
+      } else {
+        await authController.verifyOtp(phone: phone, otp: code).then(
+          (status) async {
+            if (status.isSuccess) {
+              Get.find<CartController>().getCartDataOnline();
+              if (authController.isActiveRememberMe) {
+                authController.saveUserNumberAndPassword(
+                  phone,
+                  "password",
+                  "+977",
+                );
+              } else {
+                authController.clearUserNumberAndPassword();
+              }
+              // String token = status.message!.substring(1, status.message!.length);
+              if (Get.find<SplashController>().configModel!.customerVerification! && int.parse(status.message![0]) == 0) {
+                // List<int> encoded = utf8.encode("password");
+                // String data = base64Encode(encoded);
+              } else {
+                Get.find<LocationController>().navigateToLocationScreen('sign-in', offNamed: true);
+              }
+
+              // Get.to(const SplashScreen(body: null));
+            } else {
+              showCustomSnackBar(status.message);
+            }
+          },
+        );
+      }
+    }
+
+    otpTimerController.startCountdownTimer();
     return Scaffold(
       backgroundColor: ResponsiveHelper.isDesktop(context) ? Colors.transparent : Theme.of(context).cardColor,
       // appBar: AppBar(
@@ -356,7 +370,7 @@ class VerifyOTPScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Container(
                   height: Get.size.height * 0.75,
-                  width: Get.size.width * 0.86,
+                  width: Get.size.width * 0.89,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16.0),
@@ -366,15 +380,15 @@ class VerifyOTPScreen extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       Positioned(
-                        top: 100,
+                        top: 70,
                         child: Image.asset(
                           'assets/image/otp_tick.png',
-                          height: 132,
-                          width: 132,
+                          height: 140,
+                          width: 140,
                         ),
                       ),
                       Positioned(
-                        top: 186,
+                        top: 160,
                         child: Text(
                           'OTP',
                           style: opensSans.copyWith(
@@ -385,7 +399,7 @@ class VerifyOTPScreen extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        top: 246,
+                        top: 230,
                         child: Text(
                           'Verification',
                           style: opensSans.copyWith(
@@ -395,7 +409,7 @@ class VerifyOTPScreen extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        top: 300,
+                        top: 278,
                         child: Text(
                           'Otp set to',
                           style: opensSans.copyWith(
@@ -406,7 +420,7 @@ class VerifyOTPScreen extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        top: 350,
+                        top: 338,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -430,6 +444,93 @@ class VerifyOTPScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+
+                      //? otp field
+                      Positioned(
+                        bottom: 200,
+                        // left: 6,
+                        child: OtpTextField(
+                          numberOfFields: 6,
+                          showFieldAsBox: true,
+                          borderWidth: 0.0,
+                          fieldWidth: 52,
+                          filled: true,
+                          fillColor: Theme.of(context).primaryColorLight,
+                          borderRadius: BorderRadius.circular(16.0),
+                          margin: const EdgeInsets.all(4),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          keyboardType: TextInputType.number,
+                          onSubmit: (String verificationCode) {
+                            // verificationCodeValue = verificationCode;
+                            codeController.text = verificationCode;
+                            Get.showOverlay(
+                              asyncFunction: () async {
+                                login(authController, code: codeController.text.trim(), phone: phoneNumber);
+                              },
+                              loadingWidget: Center(
+                                child: CircularProgressIndicator.adaptive(
+                                  valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      //? timer field
+
+                      Positioned(
+                        bottom: 100,
+                        child: Obx(
+                          () {
+                            int inMinute = otpTimerController.remainingTimeInSeconds.value ~/ 60;
+                            int inSecond = otpTimerController.remainingTimeInSeconds.value % 60;
+                            String timerText = '${inMinute.toString().padLeft(2, '0')} : ${inSecond.toString().padLeft(2, '0')}';
+                            return Text(
+                              timerText,
+                              style: opensSans.copyWith(
+                                fontSize: 14 + (Get.size.width * 0.02),
+                                color: const Color(0xFF000000),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 66,
+                        child: Text(
+                          "Didn't receive OTP?",
+                          style: robotoRegular,
+                        ),
+                      ),
+                      Obx(
+                        () => Positioned(
+                          bottom: 12,
+                          child: TextButton(
+                            onPressed: () {
+                              Get.showOverlay(
+                                asyncFunction: () async {
+                                  await authController.loginWithPhoneNumber(phoneNumber);
+                                  otpTimerController.resetTimer();
+                                },
+                                loadingWidget: Center(
+                                  child: CircularProgressIndicator.adaptive(
+                                    valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Send OTP',
+                              style: robotoBold.copyWith(
+                                fontSize: 18,
+                                color: otpTimerController.remainingTimeInSeconds.value == 0 ? const Color(0xFF000000) : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -487,7 +588,7 @@ class VerifyOTPScreen extends StatelessWidget {
           //                     CustomTextField(
           //                       titleText: ResponsiveHelper.isDesktop(context) ? 'phone'.tr : 'Enter otp sent to your phone'.tr,
           //                       hintText: '',
-          //                       controller: _codeController,
+          //                       controller: codeController,
 
           //                       inputType: TextInputType.phone,
 
@@ -536,7 +637,7 @@ class VerifyOTPScreen extends StatelessWidget {
           //                       height: ResponsiveHelper.isDesktop(context) ? 45 : null,
           //                       width: ResponsiveHelper.isDesktop(context) ? 180 : null,
           //                       buttonText: ResponsiveHelper.isDesktop(context) ? 'login'.tr : 'sign_in'.tr,
-          //                       onPressed: () => _login(authController, code: _codeController.text.trim(), phone: phoneNumber),
+          //                       onPressed: () => _login(authController, code: codeController.text.trim(), phone: phoneNumber),
           //                       isLoading: authController.isLoading,
           //                       radius: ResponsiveHelper.isDesktop(context) ? Dimensions.radiusSmall : Dimensions.radiusDefault,
           //                       isBold: !ResponsiveHelper.isDesktop(context),

@@ -319,7 +319,7 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                                           onYesPressed: () {
                                             Get.find<UserController>().clearUserInfo();
                                             Get.find<AuthController>().clearSharedData();
-                                            Get.find<AuthController>().socialLogout();
+                                            // Get.find<AuthController>().socialLogout();
                                             Get.find<WishListController>().removeWishes();
                                             if (ResponsiveHelper.isDesktop(context)) {
                                               Get.offAllNamed(RouteHelper.getInitialRoute());
@@ -345,7 +345,15 @@ class _MenuScreenNewState extends State<MenuScreenNew> {
                                     children: [
                                       Row(
                                         children: [
-                                          Image.asset('assets/aihalyo/logout.png', height: 16, width: 16),
+                                          SizedBox(
+                                            height: 28,
+                                            width: 28,
+                                            child: Image.asset(
+                                              'assets/aihalyo/logout.png',
+                                              fit: BoxFit.cover,
+                                              filterQuality: FilterQuality.high,
+                                            ),
+                                          ),
                                           const SizedBox(width: Dimensions.paddingSizeSmall),
                                           Expanded(
                                             child: Text(

@@ -78,7 +78,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 18.0),
                             child: Container(
                               height: Get.size.height * 0.75,
-                              width: Get.size.width * 0.86,
+                              width: Get.size.width * 0.89,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(16.0),
