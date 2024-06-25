@@ -8,8 +8,7 @@ class CustomStepper extends StatelessWidget {
   final bool haveRightBar;
   final String title;
   final bool rightActive;
-  const CustomStepper({Key? key, required this.title, required this.isActive, required this.haveLeftBar, required this.haveRightBar,
-    required this.rightActive}) : super(key: key);
+  const CustomStepper({Key? key, required this.title, required this.isActive, required this.haveLeftBar, required this.haveRightBar, required this.rightActive}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,23 +16,34 @@ class CustomStepper extends StatelessWidget {
     Color right = rightActive ? Theme.of(context).primaryColor : Theme.of(context).disabledColor;
 
     return Expanded(
-      child: Column(children: [
-
-        Row(children: [
-          Expanded(child: haveLeftBar ? Divider(color: color, thickness: 2) : const SizedBox()),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: isActive ? 0 : 5),
-            child: Icon(isActive ? Icons.check_circle : Icons.blur_circular, color: color, size: isActive ? 25 : 15),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(child: haveLeftBar ? Divider(color: color, thickness: 2) : const SizedBox()),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: isActive ? 0 : 5),
+                child: Icon(isActive ? Icons.check_circle : Icons.blur_circular, color: color, size: isActive ? 25 : 15),
+              ),
+              Expanded(child: haveRightBar ? Divider(color: right, thickness: 2) : const SizedBox()),
+            ],
           ),
-          Expanded(child: haveRightBar ? Divider(color: right, thickness: 2) : const SizedBox()),
-        ]),
-
-        Text(
-          '$title\n', maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
-          style: robotoMedium.copyWith(color: color, fontSize: Dimensions.fontSizeExtraSmall),
-        ),
-
-      ]),
+          Text(
+            '$title\n',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: robotoMedium.copyWith(color: color, fontSize: Dimensions.fontSizeExtraSmall),
+          ),
+          // Text(
+          //   // DateConverter.dateTimeStringToDateTime(order.createdAt!),
+          //   'Date',
+          //   overflow: TextOverflow.ellipsis,
+          //   textAlign: TextAlign.center,
+          //   style: robotoMedium.copyWith(color: color, fontSize: Dimensions.fontSizeExtraSmall),
+          // ),
+        ],
+      ),
     );
   }
 }

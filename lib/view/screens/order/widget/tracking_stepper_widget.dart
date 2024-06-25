@@ -31,50 +31,38 @@ class TrackingStepperWidget extends StatelessWidget {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
       ),
-      child: Row(children: [
-        CustomStepper(
-          title: 'order_placed'.tr,
-          isActive: state > -1,
-          haveLeftBar: false,
-          haveRightBar: true,
-          rightActive: state > 0,
-        ),
-        // CustomStepper(
-        //   title: 'Acknowledged',
-        //   isActive: state > 0,
-        //   haveLeftBar: true,
-        //   haveRightBar: true,
-        //   rightActive: state > 1,
-        // ),
-        CustomStepper(
-          title: 'Processing',
-          isActive: state > 1,
-          haveLeftBar: true,
-          haveRightBar: true,
-          rightActive: state > 2,
-        ),
-        CustomStepper(
-          title: takeAway ? 'ready_for_handover'.tr : 'Out for Delivery',
-          isActive: state > 2,
-          haveLeftBar: true,
-          haveRightBar: true,
-          rightActive: state > 3,
-        ),
-        // CustomStepper(
-        //   title: 'Order Arrived',
-        //   isActive: state > 3,
-        //   haveLeftBar: true,
-        //   haveRightBar: true,
-        //   rightActive: state > 4,
-        // ),
-        CustomStepper(
-          title: 'delivered'.tr,
-          isActive: state > 4,
-          haveLeftBar: true,
-          haveRightBar: false,
-          rightActive: state > 5,
-        ),
-      ]),
+      child: Row(
+        children: [
+          CustomStepper(
+            title: 'order_placed'.tr,
+            isActive: state > -1,
+            haveLeftBar: false,
+            haveRightBar: true,
+            rightActive: state > 0,
+          ),
+          CustomStepper(
+            title: 'Processing',
+            isActive: state > 1,
+            haveLeftBar: true,
+            haveRightBar: true,
+            rightActive: state > 2,
+          ),
+          CustomStepper(
+            title: takeAway ? 'ready_for_handover'.tr : 'Out for Delivery',
+            isActive: state > 2,
+            haveLeftBar: true,
+            haveRightBar: true,
+            rightActive: state > 3,
+          ),
+          CustomStepper(
+            title: 'delivered'.tr,
+            isActive: state > 4,
+            haveLeftBar: true,
+            haveRightBar: false,
+            rightActive: state > 5,
+          ),
+        ],
+      ),
     );
   }
 }

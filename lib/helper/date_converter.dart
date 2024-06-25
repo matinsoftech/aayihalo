@@ -31,6 +31,11 @@ class DateConverter {
   static String dateTimeStringToDateTime(String dateTime) {
     return DateFormat('dd MMM yyyy  ${_timeFormatter()}').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime));
   }
+  static String newDateTimeStringToDateTime(String dateTime) {
+     DateTime parsedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime);
+    return DateFormat('dd MMM yyyy hh:mm a').format(parsedDateTime);
+  }
+
 
   static String dateTimeStringToDateOnly(String dateTime) {
     return DateFormat('dd MMM yyyy').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime));

@@ -277,12 +277,17 @@ import 'package:sixam_mart/view/screens/splash/splash_screen.dart';
 // }
 
 class VerifyOTPScreen extends StatelessWidget {
-  VerifyOTPScreen({super.key, required this.phoneNumber});
+  final String countryCode;
+  VerifyOTPScreen({
+    super.key,
+    required this.phoneNumber,
+    required this.countryCode,
+  });
 
   final String phoneNumber;
 
   final TextEditingController _codeController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  // final TextEditingController _passwordController = TextEditingController();
 
   void _login(AuthController authController, {required String phone, required String code}) async {
     if (phone.isEmpty) {
@@ -322,173 +327,274 @@ class VerifyOTPScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ResponsiveHelper.isDesktop(context) ? Colors.transparent : Theme.of(context).cardColor,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: Icon(Icons.arrow_back_ios_rounded, color: Theme.of(context).textTheme.bodyLarge!.color),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: const [SizedBox()],
-      ),
+      // appBar: AppBar(
+      //   leading: IconButton(
+      //     onPressed: () => Get.back(),
+      //     icon: Icon(Icons.arrow_back_ios_rounded, color: Theme.of(context).textTheme.bodyLarge!.color),
+      //   ),
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      //   actions: const [SizedBox()],
+      // ),
       endDrawer: const MenuDrawer(),
       endDrawerEnableOpenDragGesture: false,
-      body: SafeArea(
-          child: Scrollbar(
-        child: Center(
-          child: Container(
-            height: ResponsiveHelper.isDesktop(context) ? 690 : null,
-            width: context.width > 700 ? 500 : context.width,
-            padding: context.width > 700 ? const EdgeInsets.symmetric(horizontal: 0) : const EdgeInsets.all(Dimensions.paddingSizeExtremeLarge),
-            decoration: context.width > 700
-                ? BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                    boxShadow: ResponsiveHelper.isDesktop(context) ? null : [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300]!, blurRadius: 5, spreadRadius: 1)],
-                  )
-                : null,
-            child: GetBuilder<AuthController>(builder: (authController) {
-              return Center(
-                child: SingleChildScrollView(
+      body: SafeArea(child: GetBuilder<AuthController>(
+        builder: (authController) {
+          return Container(
+            width: Get.size.width,
+            height: Get.size.height,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.high,
+                image: AssetImage(
+                  Images.backGroundImage,
+                ),
+              ),
+            ),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Container(
+                  height: Get.size.height * 0.75,
+                  width: Get.size.width * 0.86,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
                   child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.center,
                     children: [
-                      ResponsiveHelper.isDesktop(context)
-                          ? Positioned(
-                              top: 0,
-                              right: 0,
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () => Get.back(),
-                                  icon: const Icon(Icons.clear),
-                                ),
+                      Positioned(
+                        top: 100,
+                        child: Image.asset(
+                          'assets/image/otp_tick.png',
+                          height: 132,
+                          width: 132,
+                        ),
+                      ),
+                      Positioned(
+                        top: 186,
+                        child: Text(
+                          'OTP',
+                          style: opensSans.copyWith(
+                            fontSize: 42 + (Get.size.width * 0.02),
+                            color: Theme.of(Get.context!).primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 246,
+                        child: Text(
+                          'Verification',
+                          style: opensSans.copyWith(
+                            fontSize: 30 + (Get.size.width * 0.02),
+                            color: const Color(0xFF000000),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 300,
+                        child: Text(
+                          'Otp set to',
+                          style: opensSans.copyWith(
+                            fontSize: 20 + (Get.size.width * 0.02),
+                            color: const Color(0xFF000000),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 350,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              countryCode,
+                              style: opensSans.copyWith(
+                                fontSize: 14 + (Get.size.width * 0.02),
+                                color: const Color(0xFF000000),
+                                fontWeight: FontWeight.w500,
                               ),
-                            )
-                          : const SizedBox(),
-                      Padding(
-                        padding: ResponsiveHelper.isDesktop(context) ? const EdgeInsets.all(40) : EdgeInsets.zero,
-                        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          Image.asset(Images.logo, width: 125),
-
-                          const SizedBox(height: Dimensions.paddingSizeExtraLarge),
-
-                          Align(
-                            alignment: Get.find<LocalizationController>().isLtr ? Alignment.topLeft : Alignment.topRight,
-                            child: Text('Verify OTP'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
-                          ),
-                          const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                          CustomTextField(
-                            titleText: ResponsiveHelper.isDesktop(context) ? 'phone'.tr : 'Enter otp sent to your phone'.tr,
-                            hintText: '',
-                            controller: _codeController,
-
-                            inputType: TextInputType.phone,
-
-                            showTitle: ResponsiveHelper.isDesktop(context),
-                            // onCountryChanged: (CountryCode countryCode) {
-                            //   _countryDialCode = countryCode.dialCode;
-                            // },
-                            // countryDialCode: _countryDialCode ??
-                            //     Get.find<LocalizationController>()
-                            //         .locale
-                            //         .countryCode,
-                          ),
-
-                          const SizedBox(
-                            height: Dimensions.paddingSizeExtraLarge,
-                          ),
-
-                          Row(
-                            children: [
-                              Expanded(
-                                child: ListTile(
-                                  onTap: () => authController.toggleRememberMe(),
-                                  leading: Checkbox(
-                                    visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                                    activeColor: Theme.of(context).primaryColor,
-                                    value: authController.isActiveRememberMe,
-                                    onChanged: (bool? isChecked) => authController.toggleRememberMe(),
-                                  ),
-                                  title: Text('remember_me'.tr),
-                                  contentPadding: EdgeInsets.zero,
-                                  visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-                                  dense: true,
-                                  horizontalTitleGap: 0,
-                                ),
+                            ),
+                            const SizedBox(width: Dimensions.paddingSizeSmall),
+                            Text(
+                              phoneNumber,
+                              style: opensSans.copyWith(
+                                fontSize: 14 + (Get.size.width * 0.02),
+                                color: const Color(0xFF000000),
+                                fontWeight: FontWeight.w500,
                               ),
-                            ],
-                          ),
-
-                          const SizedBox(height: Dimensions.paddingSizeLarge),
-
-                          Align(alignment: Alignment.center, child: ConditionCheckBox(authController: authController, fromSignUp: false)),
-
-                          const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                          CustomButton(
-                            height: ResponsiveHelper.isDesktop(context) ? 45 : null,
-                            width: ResponsiveHelper.isDesktop(context) ? 180 : null,
-                            buttonText: ResponsiveHelper.isDesktop(context) ? 'login'.tr : 'sign_in'.tr,
-                            onPressed: () => _login(authController, code: _codeController.text.trim(), phone: phoneNumber),
-                            isLoading: authController.isLoading,
-                            radius: ResponsiveHelper.isDesktop(context) ? Dimensions.radiusSmall : Dimensions.radiusDefault,
-                            isBold: !ResponsiveHelper.isDesktop(context),
-                            fontSize: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeExtraSmall : null,
-                          ),
-                          const SizedBox(height: Dimensions.paddingSizeExtraLarge),
-
-                          // ResponsiveHelper.isDesktop(context) ? const SizedBox() : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
-
-                          //   InkWell(
-                          //     onTap: () {
-                          //       if(ResponsiveHelper.isDesktop(context)){
-                          //         Get.back();
-                          //         Get.dialog(const SignUpScreen());
-                          //       }else{
-                          //         Get.toNamed(RouteHelper.getSignUpRoute());
-                          //       }
-                          //     },
-                          //     child: Padding(
-                          //       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                          //       child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
-                          //     ),
-                          //   ),
-                          // ]),
-                          // const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                          ResponsiveHelper.isDesktop(context) ? const SizedBox() : const GuestButton(),
-
-                          // ResponsiveHelper.isDesktop(context) ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
-
-                          //   InkWell(
-                          //     onTap: () {
-                          //       if(ResponsiveHelper.isDesktop(context)){
-                          //         Get.back();
-                          //         Get.dialog(const SignUpScreen());
-                          //       }else{
-                          //         Get.toNamed(RouteHelper.getSignUpRoute());
-                          //       }
-                          //     },
-                          //     child: Padding(
-                          //       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                          //       child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
-                          //     ),
-                          //   ),
-                          // ]) :  const SizedBox(),
-                        ]),
-                      )
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              );
-            }),
+              ),
+            ),
+          );
+        },
+      )
+
+          //     Scrollbar(
+          //   child: Center(
+          //     child: Container(
+          //       height: ResponsiveHelper.isDesktop(context) ? 690 : null,
+          //       width: context.width > 700 ? 500 : context.width,
+          //       padding: context.width > 700 ? const EdgeInsets.symmetric(horizontal: 0) : const EdgeInsets.all(Dimensions.paddingSizeExtremeLarge),
+          //       decoration: context.width > 700
+          //           ? BoxDecoration(
+          //               color: Theme.of(context).cardColor,
+          //               borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+          //               boxShadow: ResponsiveHelper.isDesktop(context) ? null : [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300]!, blurRadius: 5, spreadRadius: 1)],
+          //             )
+          //           : null,
+          //       child: GetBuilder<AuthController>(builder: (authController) {
+          //         return Center(
+          //           child: SingleChildScrollView(
+          //             child: Stack(
+          //               children: [
+          //                 ResponsiveHelper.isDesktop(context)
+          //                     ? Positioned(
+          //                         top: 0,
+          //                         right: 0,
+          //                         child: Align(
+          //                           alignment: Alignment.topRight,
+          //                           child: IconButton(
+          //                             padding: EdgeInsets.zero,
+          //                             onPressed: () => Get.back(),
+          //                             icon: const Icon(Icons.clear),
+          //                           ),
+          //                         ),
+          //                       )
+          //                     : const SizedBox(),
+          //                 Padding(
+          //                   padding: ResponsiveHelper.isDesktop(context) ? const EdgeInsets.all(40) : EdgeInsets.zero,
+          //                   child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          //                     Image.asset(Images.logo, width: 125),
+
+          //                     const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+
+          //                     Align(
+          //                       alignment: Get.find<LocalizationController>().isLtr ? Alignment.topLeft : Alignment.topRight,
+          //                       child: Text('Verify OTP'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
+          //                     ),
+          //                     const SizedBox(height: Dimensions.paddingSizeDefault),
+
+          //                     CustomTextField(
+          //                       titleText: ResponsiveHelper.isDesktop(context) ? 'phone'.tr : 'Enter otp sent to your phone'.tr,
+          //                       hintText: '',
+          //                       controller: _codeController,
+
+          //                       inputType: TextInputType.phone,
+
+          //                       showTitle: ResponsiveHelper.isDesktop(context),
+          //                       // onCountryChanged: (CountryCode countryCode) {
+          //                       //   _countryDialCode = countryCode.dialCode;
+          //                       // },
+          //                       // countryDialCode: _countryDialCode ??
+          //                       //     Get.find<LocalizationController>()
+          //                       //         .locale
+          //                       //         .countryCode,
+          //                     ),
+
+          //                     const SizedBox(
+          //                       height: Dimensions.paddingSizeExtraLarge,
+          //                     ),
+
+          //                     Row(
+          //                       children: [
+          //                         Expanded(
+          //                           child: ListTile(
+          //                             onTap: () => authController.toggleRememberMe(),
+          //                             leading: Checkbox(
+          //                               visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          //                               activeColor: Theme.of(context).primaryColor,
+          //                               value: authController.isActiveRememberMe,
+          //                               onChanged: (bool? isChecked) => authController.toggleRememberMe(),
+          //                             ),
+          //                             title: Text('remember_me'.tr),
+          //                             contentPadding: EdgeInsets.zero,
+          //                             visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+          //                             dense: true,
+          //                             horizontalTitleGap: 0,
+          //                           ),
+          //                         ),
+          //                       ],
+          //                     ),
+
+          //                     const SizedBox(height: Dimensions.paddingSizeLarge),
+
+          //                     Align(alignment: Alignment.center, child: ConditionCheckBox(authController: authController, fromSignUp: false)),
+
+          //                     const SizedBox(height: Dimensions.paddingSizeDefault),
+
+          //                     CustomButton(
+          //                       height: ResponsiveHelper.isDesktop(context) ? 45 : null,
+          //                       width: ResponsiveHelper.isDesktop(context) ? 180 : null,
+          //                       buttonText: ResponsiveHelper.isDesktop(context) ? 'login'.tr : 'sign_in'.tr,
+          //                       onPressed: () => _login(authController, code: _codeController.text.trim(), phone: phoneNumber),
+          //                       isLoading: authController.isLoading,
+          //                       radius: ResponsiveHelper.isDesktop(context) ? Dimensions.radiusSmall : Dimensions.radiusDefault,
+          //                       isBold: !ResponsiveHelper.isDesktop(context),
+          //                       fontSize: ResponsiveHelper.isDesktop(context) ? Dimensions.fontSizeExtraSmall : null,
+          //                     ),
+          //                     const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+
+          //                     // ResponsiveHelper.isDesktop(context) ? const SizedBox() : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          //                     //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
+
+          //                     //   InkWell(
+          //                     //     onTap: () {
+          //                     //       if(ResponsiveHelper.isDesktop(context)){
+          //                     //         Get.back();
+          //                     //         Get.dialog(const SignUpScreen());
+          //                     //       }else{
+          //                     //         Get.toNamed(RouteHelper.getSignUpRoute());
+          //                     //       }
+          //                     //     },
+          //                     //     child: Padding(
+          //                     //       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+          //                     //       child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
+          //                     //     ),
+          //                     //   ),
+          //                     // ]),
+          //                     // const SizedBox(height: Dimensions.paddingSizeSmall),
+
+          //                     ResponsiveHelper.isDesktop(context) ? const SizedBox() : const GuestButton(),
+
+          //                     // ResponsiveHelper.isDesktop(context) ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          //                     //   Text('do_not_have_account'.tr, style: robotoRegular.copyWith(color: Theme.of(context).hintColor)),
+
+          //                     //   InkWell(
+          //                     //     onTap: () {
+          //                     //       if(ResponsiveHelper.isDesktop(context)){
+          //                     //         Get.back();
+          //                     //         Get.dialog(const SignUpScreen());
+          //                     //       }else{
+          //                     //         Get.toNamed(RouteHelper.getSignUpRoute());
+          //                     //       }
+          //                     //     },
+          //                     //     child: Padding(
+          //                     //       padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+          //                     //       child: Text('sign_up'.tr, style: robotoMedium.copyWith(color: Theme.of(context).primaryColor)),
+          //                     //     ),
+          //                     //   ),
+          //                     // ]) :  const SizedBox(),
+          //                   ]),
+          //                 )
+          //               ],
+          //             ),
+          //           ),
+          //         );
+          //       }),
+          //     ),
+          //   ),
+          // ),
           ),
-        ),
-      )),
     );
   }
 }

@@ -270,14 +270,14 @@ class FoodCategoryView extends StatelessWidget {
             child: categoryController.categoryList != null
                 ? Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
                           vertical: Dimensions.paddingSizeSmall,
                           horizontal: 16,
                         ),
                         // child: Text('campaigns'.tr, style: robotoMedium.copyWith(fontSize: 24)),
                         child: TitleWidget(
-                          title: 'Categories'.tr,
+                          title: 'Browse By Category',
                           // onTap: () {
                           //   Get.to(CategoryViewAllScreen(
                           //     categories: categoryController.categoryList!,
@@ -292,7 +292,7 @@ class FoodCategoryView extends StatelessWidget {
                           for (int i = 0; i < categoryController.categoryList!.length; i++)
                             Padding(
                               padding: const EdgeInsets.all(
-                                8,
+                                4,
                               ),
                               child: InkWell(
                                 onTap: () => Get.toNamed(
@@ -304,50 +304,52 @@ class FoodCategoryView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                                 child: SizedBox(
                                   width: 80,
-                                  child: Column(children: [
-                                    Container(
-                                      height: 75,
-                                      width: 75,
-                                      margin: EdgeInsets.only(
-                                        left: i == 0 ? 0 : Dimensions.paddingSizeExtraSmall,
-                                        right: Dimensions.paddingSizeExtraSmall,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          Dimensions.radiusLarge,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 75,
+                                        width: 75,
+                                        margin: EdgeInsets.only(
+                                          left: i == 0 ? 0 : Dimensions.paddingSizeExtraSmall,
+                                          right: Dimensions.paddingSizeExtraSmall,
                                         ),
-                                        border: Border.all(
-                                          color: Theme.of(context).dividerColor,
-                                          width: 1,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            Dimensions.radiusLarge,
+                                          ),
+                                          border: Border.all(
+                                            color: Theme.of(context).dividerColor,
+                                            width: 1,
+                                          ),
+                                          // image: DecorationImage(
+                                          //   image: CachedNetworkImageProvider(
+                                          //     '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![i].image}',
+                                          //   ),
+                                          // ),
+                                          // color: const Color(0xFFFAFCEF),
                                         ),
-                                        // image: DecorationImage(
-                                        //   image: CachedNetworkImageProvider(
-                                        //     '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![i].image}',
-                                        //   ),
-                                        // ),
-                                        color: const Color(0xFFFAFCEF),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl: '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![i].image}',
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl: '${Get.find<SplashController>().configModel!.baseUrls!.categoryImageUrl}/${categoryController.categoryList![i].image}',
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        right: i == 0 ? Dimensions.paddingSizeExtraSmall : 0,
+                                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          right: i == 0 ? Dimensions.paddingSizeExtraSmall : 0,
+                                        ),
+                                        child: Text(
+                                          categoryController.categoryList![i].name!,
+                                          style: robotoMedium.copyWith(fontSize: 12),
+                                          maxLines: Get.find<LocalizationController>().isLtr ? 2 : 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
-                                      child: Text(
-                                        categoryController.categoryList![i].name!,
-                                        style: robotoMedium.copyWith(fontSize: 11),
-                                        maxLines: Get.find<LocalizationController>().isLtr ? 2 : 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ]),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

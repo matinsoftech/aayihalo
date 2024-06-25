@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 class StoreModel {
   int? totalSize;
   String? limit;
@@ -78,51 +77,51 @@ class Store {
   int? itemCount;
   List<Items>? items;
 
-  Store(
-      {this.id,
-        this.name,
-        this.phone,
-        this.email,
-        this.logo,
-        this.latitude,
-        this.longitude,
-        this.address,
-        this.minimumOrder,
-        this.currency,
-        this.freeDelivery,
-        this.coverPhoto,
-        this.delivery,
-        this.takeAway,
-        this.scheduleOrder,
-        this.avgRating,
-        this.tax,
-        this.featured,
-        this.zoneId,
-        this.ratingCount,
-        this.selfDeliverySystem,
-        this.posSystem,
-        this.minimumShippingCharge,
-        this.maximumShippingCharge,
-        this.perKmShippingCharge,
-        this.open,
-        this.active,
-        this.deliveryTime,
-        this.categoryIds,
-        this.veg,
-        this.nonVeg,
-        this.moduleId,
-        this.orderPlaceToScheduleInterval,
-        this.discount,
-        this.schedules,
-        this.vendorId,
-        this.prescriptionOrder,
-        this.cutlery,
-        this.slug,
-        this.announcementActive,
-        this.announcementMessage,
-        this.itemCount,
-        this.items,
-      });
+  Store({
+    this.id,
+    this.name,
+    this.phone,
+    this.email,
+    this.logo,
+    this.latitude,
+    this.longitude,
+    this.address,
+    this.minimumOrder,
+    this.currency,
+    this.freeDelivery,
+    this.coverPhoto,
+    this.delivery,
+    this.takeAway,
+    this.scheduleOrder,
+    this.avgRating,
+    this.tax,
+    this.featured,
+    this.zoneId,
+    this.ratingCount,
+    this.selfDeliverySystem,
+    this.posSystem,
+    this.minimumShippingCharge,
+    this.maximumShippingCharge,
+    this.perKmShippingCharge,
+    this.open,
+    this.active,
+    this.deliveryTime,
+    this.categoryIds,
+    this.veg,
+    this.nonVeg,
+    this.moduleId,
+    this.orderPlaceToScheduleInterval,
+    this.discount,
+    this.schedules,
+    this.vendorId,
+    this.prescriptionOrder,
+    this.cutlery,
+    this.slug,
+    this.announcementActive,
+    this.announcementMessage,
+    this.itemCount,
+    this.items,
+  });
 
   Store.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -140,7 +139,10 @@ class Store {
     delivery = json['delivery'];
     takeAway = json['take_away'];
     scheduleOrder = json['schedule_order'];
-    avgRating = json['avg_rating'].toDouble();
+    avgRating:
+    json['avg_rating'] != null ? json['avg_rating'].toDouble() : 0.0;
+    // avgRating = json['avg_rating'].toDouble();
+
     tax = json['tax']?.toDouble();
     ratingCount = json['rating_count'];
     selfDeliverySystem = json['self_delivery_system'];
@@ -249,19 +251,7 @@ class Discount {
   String? createdAt;
   String? updatedAt;
 
-  Discount(
-      {this.id,
-        this.startDate,
-        this.endDate,
-        this.startTime,
-        this.endTime,
-        this.minPurchase,
-        this.maxDiscount,
-        this.discount,
-        this.discountType,
-        this.storeId,
-        this.createdAt,
-        this.updatedAt});
+  Discount({this.id, this.startDate, this.endDate, this.startTime, this.endTime, this.minPurchase, this.maxDiscount, this.discount, this.discountType, this.storeId, this.createdAt, this.updatedAt});
 
   Discount.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -303,12 +293,7 @@ class Schedules {
   String? openingTime;
   String? closingTime;
 
-  Schedules(
-      {this.id,
-        this.storeId,
-        this.day,
-        this.openingTime,
-        this.closingTime});
+  Schedules({this.id, this.storeId, this.day, this.openingTime, this.closingTime});
 
   Schedules.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -337,19 +322,19 @@ class Refund {
   String? customerNote;
   String? adminNote;
 
-  Refund(
-      {this.id,
-        this.orderId,
-        this.image,
-        this.customerReason,
-        this.customerNote,
-        this.adminNote,
-      });
+  Refund({
+    this.id,
+    this.orderId,
+    this.image,
+    this.customerReason,
+    this.customerNote,
+    this.adminNote,
+  });
 
   Refund.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     orderId = json['order_id'];
-    if(json['image'] != null){
+    if (json['image'] != null) {
       image = [];
       jsonDecode(json['image']).forEach((v) => image!.add(v));
     }
@@ -409,45 +394,45 @@ class Items {
   int? isApproved;
   String? unitType;
 
-  Items(
-      {this.id,
-        this.name,
-        this.description,
-        this.image,
-        this.categoryId,
-        this.categoryIds,
-        this.variations,
-        this.addOns,
-        this.attributes,
-        this.choiceOptions,
-        this.price,
-        this.tax,
-        this.taxType,
-        this.discount,
-        this.discountType,
-        this.availableTimeStarts,
-        this.availableTimeEnds,
-        this.veg,
-        this.status,
-        this.storeId,
-        this.createdAt,
-        this.updatedAt,
-        this.orderCount,
-        this.avgRating,
-        this.ratingCount,
-        this.rating,
-        this.moduleId,
-        this.stock,
-        this.unitId,
-        this.images,
-        this.foodVariations,
-        this.slug,
-        this.recommended,
-        this.organic,
-        this.maximumCartQuantity,
-        this.isApproved,
-        this.unitType,
-      });
+  Items({
+    this.id,
+    this.name,
+    this.description,
+    this.image,
+    this.categoryId,
+    this.categoryIds,
+    this.variations,
+    this.addOns,
+    this.attributes,
+    this.choiceOptions,
+    this.price,
+    this.tax,
+    this.taxType,
+    this.discount,
+    this.discountType,
+    this.availableTimeStarts,
+    this.availableTimeEnds,
+    this.veg,
+    this.status,
+    this.storeId,
+    this.createdAt,
+    this.updatedAt,
+    this.orderCount,
+    this.avgRating,
+    this.ratingCount,
+    this.rating,
+    this.moduleId,
+    this.stock,
+    this.unitId,
+    this.images,
+    this.foodVariations,
+    this.slug,
+    this.recommended,
+    this.organic,
+    this.maximumCartQuantity,
+    this.isApproved,
+    this.unitType,
+  });
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];

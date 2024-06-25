@@ -33,36 +33,39 @@ class CustomTextField extends StatefulWidget {
   final bool isPhone;
   final String? countryDialCode;
   final Function(CountryCode countryCode)? onCountryChanged;
-
-  const CustomTextField(
-      {Key? key,
-      this.titleText = 'Write something...',
-      this.hintText = '',
-      this.controller,
-      this.focusNode,
-      this.nextFocus,
-      this.isEnabled = true,
-      this.inputType = TextInputType.text,
-      this.inputAction = TextInputAction.next,
-      this.maxLines = 1,
-      this.onSubmit,
-      this.onChanged,
-      this.prefixImage,
-      this.prefixIcon,
-      this.suffixIcon,
-      this.capitalization = TextCapitalization.none,
-      this.isPassword = false,
-      this.prefixSize = Dimensions.paddingSizeSmall,
-      this.textAlign = TextAlign.start,
-      this.isAmount = false,
-      this.isNumber = false,
-      this.showTitle = false,
-      this.showBorder = true,
-      this.iconSize = 18,
-      this.isPhone = false,
-      this.countryDialCode,
-      this.onCountryChanged,
-      }) : super(key: key);
+  final bool isFillColor;
+  final bool showCountryCode;
+  const CustomTextField({
+    Key? key,
+    this.titleText = 'Write something...',
+    this.hintText = '',
+    this.controller,
+    this.focusNode,
+    this.nextFocus,
+    this.isEnabled = true,
+    this.inputType = TextInputType.text,
+    this.inputAction = TextInputAction.next,
+    this.maxLines = 1,
+    this.onSubmit,
+    this.onChanged,
+    this.prefixImage,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.capitalization = TextCapitalization.none,
+    this.isPassword = false,
+    this.prefixSize = Dimensions.paddingSizeSmall,
+    this.textAlign = TextAlign.start,
+    this.isAmount = false,
+    this.isNumber = false,
+    this.showTitle = false,
+    this.showBorder = true,
+    this.iconSize = 18,
+    this.isPhone = false,
+    this.countryDialCode,
+    this.onCountryChanged,
+    this.isFillColor = false,
+    this.showCountryCode = false,
+  }) : super(key: key);
 
   @override
   CustomTextFieldState createState() => CustomTextFieldState();
@@ -72,20 +75,49 @@ class CustomTextFieldState extends State<CustomTextField> {
   bool _obscureText = true;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.controller != null) {
+      widget.controller!.addListener(_checkLength);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (widget.controller != null) {
+      widget.controller!.removeListener(_checkLength);
+    }
+    super.dispose();
+  }
+
+  void _checkLength() {
+    if (widget.controller!.text.length == 10) {
+      widget.focusNode?.unfocus();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         widget.showTitle ? Text(widget.titleText, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)) : const SizedBox(),
-        SizedBox(height: widget.showTitle ? ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeExtraSmall : 0),
-
+        SizedBox(
+            height: widget.showTitle
+                ? ResponsiveHelper.isDesktop(context)
+                    ? Dimensions.paddingSizeDefault
+                    : Dimensions.paddingSizeExtraSmall
+                : 0),
         TextField(
           maxLines: widget.maxLines,
           controller: widget.controller,
           focusNode: widget.focusNode,
           textAlign: widget.textAlign,
-          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
+          style: robotoRegular.copyWith(
+            fontSize: Dimensions.fontSizeExtraLarge,
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
           textInputAction: widget.inputAction,
           keyboardType: widget.isAmount ? TextInputType.number : widget.inputType,
           cursorColor: Theme.of(context).primaryColor,
@@ -93,70 +125,128 @@ class CustomTextFieldState extends State<CustomTextField> {
           enabled: widget.isEnabled,
           autofocus: false,
           obscureText: widget.isPassword ? _obscureText : false,
-          inputFormatters: widget.inputType == TextInputType.phone ? <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp('[0-9]'))]
-              : widget.isAmount ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))] : widget.isNumber ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))] : null,
+          inputFormatters: widget.inputType == TextInputType.phone
+              ? <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp('[0-9]'))]
+              : widget.isAmount
+                  ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))]
+                  : widget.isNumber
+                      ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))]
+                      : null,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: 0.3, color: Theme.of(context).primaryColor),
+              borderSide: BorderSide(
+                style: widget.showBorder ? BorderStyle.solid : BorderStyle.none,
+                width: 0.3,
+                color: Theme.of(context).primaryColorLight,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: 1, color: Theme.of(context).primaryColor),
+              borderSide: BorderSide(
+                style: widget.showBorder ? BorderStyle.solid : BorderStyle.none,
+                width: 1,
+                color: Theme.of(context).primaryColorLight,
+              ),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              borderSide: BorderSide(style: widget.showBorder ? BorderStyle.solid : BorderStyle.none, width: 0.3, color: Theme.of(context).primaryColor),
+              borderSide: BorderSide(
+                style: widget.showBorder ? BorderStyle.solid : BorderStyle.none,
+                width: 0.3,
+                color: Theme.of(context).primaryColorLight,
+              ),
             ),
-            isDense: true,
+            // isDense: true,
             hintText: widget.hintText.isEmpty || !ResponsiveHelper.isDesktop(context) ? widget.titleText : widget.hintText,
-            fillColor: Theme.of(context).cardColor,
-            hintStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).hintColor),
+            fillColor: widget.isFillColor ? Theme.of(context).primaryColorLight : null,
+            hintStyle: robotoRegular.copyWith(
+              fontSize: Dimensions.fontSizeLarge,
+              color: Theme.of(context).cardColor,
+              fontWeight: FontWeight.w600,
+            ),
             filled: true,
-            prefixIcon: widget.isPhone ? SizedBox(width: 95, child: Row(children: [
-              Container(
-                width: 85,height: 50,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(Dimensions.radiusSmall),
-                    bottomLeft: Radius.circular(Dimensions.radiusSmall),
-                  ),
-                ),
-                margin: const EdgeInsets.only(right: 0),
-                padding: const EdgeInsets.only(left: 5),
-                child: Center(
-                child: CodePickerWidget(
-                  boxDecoration: BoxDecoration(color: Theme.of(context).cardColor),
-                  flagWidth: 25,
-                  padding: EdgeInsets.zero,
-                  onChanged: widget.onCountryChanged,
-                  initialSelection: widget.countryDialCode,
-                  favorite: [widget.countryDialCode!],
-                  textStyle: robotoRegular.copyWith(
-                    fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).textTheme.bodyMedium!.color,
-                  ),
-                ),
-                )),
-
-              Container(
-                height: 20, width: 2,
-                color: Theme.of(context).disabledColor,
-              )
-            ]),
-            ) : widget.prefixImage != null && widget.prefixIcon == null ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: widget.prefixSize),
-              child: Image.asset(widget.prefixImage!, height: 20, width: 20),
-            ) : widget.prefixImage == null && widget.prefixIcon != null ? Icon(widget.prefixIcon, size: widget.iconSize) : null,
-            suffixIcon: widget.isPassword ? IconButton(
-              icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Theme.of(context).hintColor.withOpacity(0.3)),
-              onPressed: _toggle,
-            ) : (widget.suffixIcon != null) ? Icon(widget.suffixIcon, color: Theme.of(context).primaryColor) : null,
+            prefixIcon: widget.isPhone
+                ? SizedBox(
+                    width: 95,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 85,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(Dimensions.radiusSmall),
+                              bottomLeft: Radius.circular(Dimensions.radiusSmall),
+                            ),
+                          ),
+                          margin: const EdgeInsets.only(right: 0),
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Center(
+                            child: CodePickerWidget(
+                              boxDecoration: BoxDecoration(color: Theme.of(context).cardColor),
+                              flagWidth: 20,
+                              padding: EdgeInsets.zero,
+                              onChanged: widget.onCountryChanged,
+                              initialSelection: widget.countryDialCode,
+                              favorite: [widget.countryDialCode!],
+                              textStyle: robotoRegular.copyWith(
+                                fontSize: Dimensions.fontSizeDefault,
+                                color: Theme.of(context).textTheme.bodyMedium!.color,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 20,
+                          width: 2,
+                          color: Theme.of(context).disabledColor,
+                        )
+                      ],
+                    ),
+                  )
+                : widget.prefixImage != null && widget.prefixIcon == null
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(horizontal: widget.prefixSize),
+                        child: Image.asset(widget.prefixImage!, height: 20, width: 20),
+                      )
+                    : widget.prefixImage == null && widget.prefixIcon != null
+                        ? Icon(widget.prefixIcon, size: widget.iconSize)
+                        : widget.showCountryCode
+                            ? Padding(
+                                padding: const EdgeInsets.only(left: 10, top: 14, right: 8),
+                                child: Text(
+                                  '${widget.countryDialCode}',
+                                  style: robotoMedium.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              )
+                            : null,
+            suffixIcon: widget.isPassword
+                ? IconButton(
+                    icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Theme.of(context).hintColor.withOpacity(0.3)),
+                    onPressed: _toggle,
+                  )
+                : (widget.suffixIcon != null)
+                    ? Icon(widget.suffixIcon, color: Theme.of(context).primaryColor)
+                    : null,
           ),
-          onSubmitted: (text) => widget.nextFocus != null ? FocusScope.of(context).requestFocus(widget.nextFocus)
-              : widget.onSubmit != null ? widget.onSubmit!(text) : null,
-          onChanged: widget.onChanged as void Function(String)?,
+          onSubmitted: (text) => widget.nextFocus != null
+              ? FocusScope.of(context).requestFocus(widget.nextFocus)
+              : widget.onSubmit != null
+                  ? widget.onSubmit!(text)
+                  : null,
+          // onChanged: widget.onChanged as void Function(String)?,
+          onChanged: (text) {
+            if (widget.onChanged != null) {
+              widget.onChanged!(text);
+            }
+            if (text.length == 10) {
+              widget.focusNode?.unfocus();
+            }
+          },
         ),
-
       ],
     );
   }

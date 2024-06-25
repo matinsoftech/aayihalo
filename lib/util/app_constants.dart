@@ -12,7 +12,7 @@ class AppConstants {
   static const String appName = 'AAYIHALO';
   static const double appVersion = 2.5;
 
-  static const String fontFamily = 'Roboto';
+  static const String fontFamily = 'OpenSans';
   static const bool payInWevView = false;
   static const int balanceInputLen = 10;
   static const String webHostedUrl = 'https://6ammart-web.6amtech.com';

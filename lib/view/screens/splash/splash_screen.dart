@@ -133,22 +133,24 @@ class SplashScreenState extends State<SplashScreen> {
       Get.find<AuthController>().clearSharedAddress();
     }
 
-    return Scaffold(
-      key: _globalKey,
-      body: GetBuilder<SplashController>(builder: (splashController) {
-        return Center(
-          child: splashController.hasConnection
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(Images.logo, width: 200),
-                    const SizedBox(height: Dimensions.paddingSizeSmall),
-                    // Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),
-                  ],
+    return SafeArea(
+      child: Scaffold(
+        key: _globalKey,
+        body: GetBuilder<SplashController>(builder: (splashController) {
+          return splashController.hasConnection
+              ? SizedBox(
+                  height: Get.size.height,
+                  width: Get.size.width,
+                  child: Image.asset(
+                    Images.logo,
+                    fit: BoxFit.fitHeight,
+                  ),
                 )
-              : NoInternetScreen(child: SplashScreen(body: widget.body)),
-        );
-      }),
+              : NoInternetScreen(
+                  child: SplashScreen(body: widget.body),
+                );
+        }),
+      ),
     );
   }
 }
