@@ -33,11 +33,14 @@ class PortionWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.asset(
-                  icon,
-                  height: 16,
-                  width: 16,
-                  fit: BoxFit.cover,
+                SizedBox(
+                  height: 28,
+                  width: 28,
+                  child: Image.asset(
+                    icon,
+                    fit: BoxFit.cover,
+                    filterQuality: FilterQuality.high,
+                  ),
                 ),
                 const SizedBox(width: Dimensions.paddingSizeSmall),
                 Expanded(child: Text(title, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge))),

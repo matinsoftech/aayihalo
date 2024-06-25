@@ -1,5 +1,6 @@
 class Images {
-  static const String logo = 'assets/image/logo.png';
+  static const String splashLogo = 'assets/image/logo.png';
+  static const String logo = 'assets/aihalyo/primary_logo.png';
   static const String placeholder = 'assets/image/placeholder.jpg';
   static const String notificationPlaceholder = 'assets/image/notification_placeholder.jpg';
   static const String arabic = 'assets/image/arabic.png';
@@ -26,7 +27,7 @@ class Images {
   static const String message = 'assets/image/message.png';
   static const String location = 'assets/image/location.png';
   static const String policy = 'assets/image/policy.png';
-  static const String support = 'assets/aihalyo/logout.png';
+  static const String support = 'assets/image/support.png';
   static const String terms = 'assets/image/terms.png';
   static const String emptyBox = 'assets/image/empty_box.png';
   static const String emptyCart = 'assets/image/empty_cart.png';

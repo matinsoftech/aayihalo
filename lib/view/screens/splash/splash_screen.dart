@@ -142,7 +142,7 @@ class SplashScreenState extends State<SplashScreen> {
                   height: Get.size.height,
                   width: Get.size.width,
                   child: Image.asset(
-                    Images.logo,
+                    Images.splashLogo,
                     fit: BoxFit.fitHeight,
                   ),
                 )
